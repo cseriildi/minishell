@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:28:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/16 18:18:27 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/17 12:38:01 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*get_word(char *text, char *separator)
 
 	sep_len = ft_strlen(separator);
 	i = 0;
-	while (text[i] && ft_strncmp(*text + i, separator, sep_len))
+	while (text[i] && ft_strncmp(text + i, separator, sep_len))
 		i++;
 	if (i == 0)
 	{
