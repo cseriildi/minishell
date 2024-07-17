@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 13:34:25 by icseri            #+#    #+#             */
-/*   Updated: 2024/04/10 18:55:38 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/17 15:28:03 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ char	*ft_strdup(const char *s)
 {
 	char	*duplicate;
 
+	if (!s)
+		return (NULL);
 	duplicate = ft_calloc(ft_strlen(s) + 1, 1);
 	if (duplicate == NULL)
 		return (NULL);
