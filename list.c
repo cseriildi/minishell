@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:32 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/17 14:20:59 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/17 16:35:26 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ t_token	*create_new_token(char *content, int type)
 	new_node = malloc(sizeof(t_list));
 	if (new_node == NULL)
 		return (NULL);
-	new_node->content = ft_strdup(content);
+	if (!content /*|| !*content*/)
+		new_node->content = ft_strdup("");
+	else
+		new_node->content = ft_strdup(content);
 	if (new_node->content == NULL)
 	{
 		free(new_node);
@@ -50,16 +53,18 @@ void	add_token_to_back(t_token **lst, t_token *new)
 
 void	free_tokens(t_token **tokens)
 {
-	int	i;
+	t_token	*current;
+	t_token	*next;
 
-	i = 0;
 	if (!tokens)
 		return ;
-	while (tokens[i])
+	current = *tokens;
+	while (current != NULL)
 	{
-		free(tokens[i]->content);
-		free(tokens[i]);
-		i++;
+		next = current->next;
+		free(current->content);
+		free(current);
+		current = next;
 	}
 	free(tokens);
 }

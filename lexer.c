@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/17 14:20:10 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/17 17:29:39 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 char	*get_assignment(char *var_name)
 {
 	char	*content;
-
-	content = ft_strchr(getenv(var_name), '=');
+	
+	content = getenv(var_name);
+	if (content == NULL)
+		return (NULL);
 	return (++content);
 }
 
@@ -184,8 +186,6 @@ char	*word(char *text, t_token **tokens)
 	int		i;
 
 	i = 0;
-	while (text[i] && text[i] == ' ')
-		i++;
 	content = get_word(text, " ");
 	if (content == NULL)
 		return (NULL);
@@ -226,11 +226,14 @@ t_token	**lexer(char *text)
 {
 	t_token	**tokens;
 
+	if (!text)
+		return (NULL);
 	tokens = malloc(sizeof(t_token *));
 	if (!tokens)
 		return (NULL);
+	*tokens = NULL;
 	while (*text)
 		text = get_next_token(text, tokens);
-	add_token_to_back(tokens, create_new_token("", END));
+	add_token_to_back(tokens, create_new_token("END", END));
 	return (tokens);
 }
