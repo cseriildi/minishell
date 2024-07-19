@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/17 14:16:23 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/19 17:41:07 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@
 typedef enum s_token_type
 {
 	END,
-	NONE,
 	WORD,
-	ASSIGNMENT_WORD,
 	RED_IN,
 	RED_OUT,
 	PIPE,
@@ -54,10 +52,54 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct s_var
+{
+	t_token	**tokens;
+	char	*line;
+	int		index;
+	pid_t	pid;
+}	t_var;
+
+typedef enum s_err
+{
+	ERROR_MISUSE = 2,
+	READLINE_FAIL,
+	CANNOT_OPEN_FILE,
+	MALLOC_FAIL,
+	VARIABLE_NOT_FOUND,
+	PIPE_FAIL,
+	DUP2_FAIL,
+	FORK_FAIL,
+	UNLINK_FAIL,
+	COMMAND_NOT_FOUND = 127
+}	t_err;
+
+//list
 t_token	*create_new_token(char *content, int type);
 void	add_token_to_back(t_token **lst, t_token *new);
 void	free_tokens(t_token **tokens);
-t_token	**lexer(char *text);
+
+//lexer
+void	lexer(t_var *data);
+
+//utils
 char	*get_word(char *text, char *separator);
+void	safe_exit(t_var *data, int exit_code);
+
+//check line
+void	check_brackets(t_var *data);
+
+//word
+void	single_quote(t_var *data);
+char	*fix_content(char *content, t_var *data);
+void	double_quote(t_var *data);
+void	word(t_var *data);
+
+//other types
+void	redirection(t_var *data);
+void	input(t_var *data);
+void	pipes(t_var *data);
+void	braces(t_var *data);
+void	and_sign(t_var *data);
 
 #endif
