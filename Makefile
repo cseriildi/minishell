@@ -6,13 +6,13 @@
 #    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/07/17 13:19:15 by icseri           ###   ########.fr        #
+#    Updated: 2024/07/19 14:02:20 by icseri           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-SRCS = main.c list.c utils.c lexer.c
+SRCS = main.c list.c utils.c lexer.c check_line.c word.c other_types.c
 
 OBJS = ${SRCS:.c=.o}
 
