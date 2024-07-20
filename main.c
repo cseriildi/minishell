@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/19 17:41:19 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 11:15:32 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	init(t_var *data)
 {
 	data->tokens = NULL;
 	data->line = NULL;
+	data->exit_code = 0;
 }
 
 int	main(int argc, char **argv)
@@ -65,9 +66,11 @@ int	main(int argc, char **argv)
 		}
 		else
 		{
-			wait(NULL);
+			waitpid(data->pid, &data->exit_status, 0);
+			if (WIFEXITED(data->exit_status))
+				data->exit_code = WEXITSTATUS(data->exit_status);
 			continue ;
 		}
 	}
-	return (EXIT_SUCCESS);
+	safe_exit(data, EXIT_SUCCESS);
 }

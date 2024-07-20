@@ -6,11 +6,11 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:02:02 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/19 17:11:19 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 11:35:11 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "lexer.h"
 
 void	redirection(t_var *data)
 {

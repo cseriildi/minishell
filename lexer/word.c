@@ -6,11 +6,11 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:54:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/19 17:44:03 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 12:33:06 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "lexer.h"
 
 void	single_quote(t_var *data)
 {
@@ -25,7 +25,7 @@ void	single_quote(t_var *data)
 		safe_exit(data, MALLOC_FAIL);
 	data->index += ft_strlen(content) + 1;
 	new_token = create_new_token(content, WORD);
-	free(content);
+	ft_free(&content);
 	if (!new_token)
 		safe_exit(data, MALLOC_FAIL);
 	add_token_to_back(data->tokens, new_token);
@@ -39,49 +39,61 @@ char	*fix_content(char *content, t_var *data)
 	char	*tmp;
 	char	*expanded_var;
 
-	first = get_word(content, "$");
-	if (!first)
+	while (ft_strchr(content, '$') != NULL)
 	{
-		free(content);
-		safe_exit(data, MALLOC_FAIL);
+		first = get_word(content, "$");
+		if (!first)
+		{
+			ft_free(&content);
+			safe_exit(data, MALLOC_FAIL);
+		}
+		var_name = get_word(ft_strchr(content, '$') + 1, " ()$|><\'\"&");
+		if (!var_name)
+		{
+			ft_free(&content);
+			ft_free(&first);
+			safe_exit(data, MALLOC_FAIL);
+		}
+		if (*var_name == '?')
+			expanded_var = ft_itoa(data->exit_code);
+		else if (getenv(var_name) == NULL)
+			expanded_var = ft_strdup("");
+		else
+			expanded_var = ft_strdup(getenv(var_name));
+		if (!expanded_var)
+		{
+			ft_free(&content);
+			ft_free(&first);
+			ft_free(&var_name);
+			safe_exit(data, MALLOC_FAIL);
+		}
+		tmp = ft_strjoin(first, expanded_var);
+		ft_free(&expanded_var);
+		if (!tmp)
+		{
+			ft_free(&content);
+			ft_free(&first);
+			ft_free(&var_name);
+			safe_exit(data, MALLOC_FAIL);
+		}
+		if (*var_name == '?')
+			last = ft_strdup(content + ft_strlen(first) + 2);
+		else
+			last = ft_strdup(content + ft_strlen(first) + ft_strlen(var_name) + 1);
+		ft_free(&content);
+		ft_free(&first);
+		ft_free(&var_name);
+		if (!last)
+		{
+			ft_free(&tmp);
+			safe_exit(data, MALLOC_FAIL);
+		}
+		content = ft_strjoin(tmp, last);
+		ft_free(&tmp);
+		ft_free(&last);
+		if (!content)
+			safe_exit(data, MALLOC_FAIL);
 	}
-	var_name = get_word(ft_strchr(content, '$') + 1, " ()$|><\'\"&");
-	if (!var_name)
-	{
-		free(content);
-		free(first);
-		safe_exit(data, MALLOC_FAIL);
-	}
-	expanded_var = getenv(var_name);
-	if (!expanded_var)
-	{
-		free(content);
-		free(first);
-		free(var_name);
-		safe_exit(data, VARIABLE_NOT_FOUND);
-	}
-	tmp = ft_strjoin(first, expanded_var);
-	if (!tmp)
-	{
-		free(content);
-		free(first);
-		free(var_name);
-		safe_exit(data, MALLOC_FAIL);
-	}
-	last = ft_strdup(content + ft_strlen(first) + ft_strlen(var_name) + 1);
-	free(content);
-	free(first);
-	free(var_name);
-	if (!last)
-	{
-		free(tmp);
-		safe_exit(data, MALLOC_FAIL);
-	}
-	content = ft_strjoin(tmp, last);
-	free(tmp);
-	free(last);
-	if (!content)
-		safe_exit(data, MALLOC_FAIL);
 	return (content);
 }
 
@@ -97,10 +109,9 @@ void	double_quote(t_var *data)
 	if (!content)
 		safe_exit(data, MALLOC_FAIL);
 	data->index += ft_strlen(content) + 1;
-	while (ft_strchr(content, '$') != NULL)
-		content = fix_content(content, data);
+	content = fix_content(content, data);
 	new_token = create_new_token(content, WORD);
-	free(content);
+	ft_free(&content);
 	if (!new_token)
 		safe_exit(data, MALLOC_FAIL);
 	add_token_to_back(data->tokens, new_token);
@@ -110,31 +121,16 @@ void	word(t_var *data)
 {
 	t_token	*new_token;
 	char	*content;
-	char	*expanded_var;
 
-	if (data->line[data->index] == '$')
-	{
-		data->index++;
-		content = get_word(data->line + data->index, " ()$|><\'\"&");
-		if (!content)
-			safe_exit(data, MALLOC_FAIL);
-		expanded_var = getenv(content);
-		if (!expanded_var)
-		{
-			free(content);
-			safe_exit(data, VARIABLE_NOT_FOUND);
-		}
-		new_token = create_new_token(expanded_var, WORD);
-	}
-	else
-	{
-		content = get_word(data->line + data->index, " ()$|><\'\"&");
-		if (!content)
-			safe_exit(data, MALLOC_FAIL);
-		new_token = create_new_token(content, WORD);
-	}
+	content = get_word(data->line + data->index, " ()|><\'\"&");
+	if (!content)
+		safe_exit(data, MALLOC_FAIL);
 	data->index += ft_strlen(content);
-	free(content);
+	content = fix_content(content, data);
+	if (!content)
+		safe_exit(data, MALLOC_FAIL);
+	new_token = create_new_token(content, WORD);
+	ft_free(&content);
 	if (!new_token)
 		safe_exit(data, MALLOC_FAIL);
 	add_token_to_back(data->tokens, new_token);
