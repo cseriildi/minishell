@@ -6,11 +6,11 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:32 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/19 17:24:58 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 11:53:53 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "lexer.h"
 
 t_token	*create_new_token(char *content, int type)
 {
@@ -43,25 +43,4 @@ void	add_token_to_back(t_token **lst, t_token *new)
 			curr->next = new;
 		}
 	}
-}
-
-void	free_tokens(t_token **tokens)
-{
-	t_token	*current;
-	t_token	*next;
-
-	if (!tokens)
-		return ;
-	if (*tokens)
-	{
-		current = *tokens;
-		while (current != NULL)
-		{
-			next = current->next;
-			free(current->content);
-			free(current);
-			current = next;
-		}
-	}
-	free(tokens);
 }

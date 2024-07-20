@@ -5,31 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/16 15:28:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/19 17:42:49 by icseri           ###   ########.fr       */
+/*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
+/*   Updated: 2024/07/20 12:37:18 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_word(char *text, char *separator)
+void	free_tokens(t_token **tokens)
 {
-	char	*word;
-	int		i;
-	int		j;
+	t_token	*current;
+	t_token	*next;
 
-	i = 0;
-	while (text[i])
+	if (!tokens)
+		return ;
+	if (*tokens)
 	{
-		j = 0;
-		while (separator[j] && separator[j] != text[i])
-			j++;
-		if (separator[j] && separator[j] == text[i])
-			break ;
-		i++;
+		current = *tokens;
+		while (current != NULL)
+		{
+			next = current->next;
+			ft_free(&current->content);
+			free(current);
+			current = next;
+		}
 	}
-	word = ft_substr(text, 0, i);
-	return (word);
+	free(tokens);
 }
 
 void	safe_exit(t_var *data, int exit_code)
@@ -37,10 +38,33 @@ void	safe_exit(t_var *data, int exit_code)
 	if (data)
 	{
 		if (data->line)
-			free(data->line);
+			ft_free(&data->line);
 		if (data->tokens)
 			free_tokens(data->tokens);
 		free(data);
 	}
 	exit(exit_code);
+}
+
+void	check_brackets(t_var *data)
+{
+	t_token	*head;
+	t_token	*current;
+	int		count;
+
+	count = 0;
+	head = *data->tokens;
+	current = head;
+	while (current != NULL)
+	{
+		if (current->type == L_BRACKET)
+			count++;
+		if (current->type == R_BRACKET)
+			count--;
+		if (count < 0)
+			safe_exit(data, ERROR_MISUSE);
+		current = current->next;
+	}
+	if (count != 0)
+		safe_exit(data, ERROR_MISUSE);
 }
