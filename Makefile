@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
+#    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/07/20 15:40:46 by icseri           ###   ########.fr        #
+#    Updated: 2024/07/20 17:27:31 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,8 @@ SRCS = main.c \
 		parser/parse.c \
 		parser/parsing_table_utils.c \
 		parser/shift_reduce.c \
-		parser/stack_utils.c
+		parser/stack_utils.c \
+		parser/stack_free.c
 #		builtins/cd.c \
 		builtins/echo.c \
 		builtins/env.c \

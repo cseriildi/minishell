@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shift_reduce.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:06:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/07/20 16:06:16 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 16:56:56 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	reduce(t_stack **stack, t_table *p_table, t_table *entry)
 	int		i;
 	int		next_state;
 
-	//printf("REDUCE\n");
+	/* printf("REDUCE\n"); */
 	i = 0;
 	popped = NULL;
 	while (i / 2 < entry->nb_reduce && (*stack)->next != NULL)
@@ -74,17 +74,12 @@ int	reduce(t_stack **stack, t_table *p_table, t_table *entry)
 		stack_add_front(&popped, temp);
 		i++;
 	}
-	//print_stack(*stack);
 	if (popped != NULL)
 	{
-		//print_p_table(entry);
 		if (push_reduction(stack, entry->next_s))
 		{
 			next_state = get_next_state(p_table, *stack);
-			//printf("next tate: %d\n", next_state);
 			temp = new_stack_node_state(next_state);
-			//print_stack(temp);
-			//print_stack(*stack);
 			if (temp == NULL)
 				return (0);
 			stack_add_front(stack, temp);
