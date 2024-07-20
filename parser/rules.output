@@ -1,0 +1,609 @@
+Grammar
+
+    0 $accept: and_or $end
+
+    1 and_or: pipe_sequence
+    2       | and_or AND pipe_sequence
+    3       | and_or OR pipe_sequence
+
+    4 pipe_sequence: command
+    5              | pipe_sequence PIPE command
+
+    6 command: simple_command
+    7        | subshell
+    8        | subshell redirect_list
+
+    9 subshell: L_BRACKET and_or R_BRACKET
+
+   10 simple_command: cmd_prefix cmd_word cmd_suffix
+   11               | cmd_prefix cmd_word
+   12               | cmd_prefix
+   13               | cmd_name cmd_suffix
+   14               | cmd_name
+
+   15 cmd_name: WORD
+
+   16 cmd_word: WORD
+
+   17 cmd_prefix: io_redirect
+   18           | cmd_prefix io_redirect
+
+   19 cmd_suffix: io_redirect
+   20           | cmd_suffix io_redirect
+   21           | WORD
+   22           | cmd_suffix WORD
+
+   23 redirect_list: io_redirect
+   24              | redirect_list io_redirect
+
+   25 io_redirect: io_file
+   26            | io_here
+
+   27 io_file: RED_OUT filename
+   28        | RED_IN filename
+   29        | APPEND filename
+
+   30 filename: WORD
+
+   31 io_here: HERE_DOC here_end
+
+   32 here_end: WORD
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    WORD (258) 15 16 21 22 30 32
+    RED_IN (259) 28
+    RED_OUT (260) 27
+    PIPE (261) 5
+    HERE_DOC (262) 31
+    APPEND (263) 29
+    AND (264) 2
+    OR (265) 3
+    L_BRACKET (266) 9
+    R_BRACKET (267) 9
+
+
+Nonterminals, with rules where they appear
+
+    $accept (13)
+        on left: 0
+    and_or (14)
+        on left: 1 2 3
+        on right: 0 2 3 9
+    pipe_sequence (15)
+        on left: 4 5
+        on right: 1 2 3 5
+    command (16)
+        on left: 6 7 8
+        on right: 4 5
+    subshell (17)
+        on left: 9
+        on right: 7 8
+    simple_command (18)
+        on left: 10 11 12 13 14
+        on right: 6
+    cmd_name (19)
+        on left: 15
+        on right: 13 14
+    cmd_word (20)
+        on left: 16
+        on right: 10 11
+    cmd_prefix (21)
+        on left: 17 18
+        on right: 10 11 12 18
+    cmd_suffix (22)
+        on left: 19 20 21 22
+        on right: 10 13 20 22
+    redirect_list (23)
+        on left: 23 24
+        on right: 8 24
+    io_redirect (24)
+        on left: 25 26
+        on right: 17 18 19 20 23 24
+    io_file (25)
+        on left: 27 28 29
+        on right: 25
+    filename (26)
+        on left: 30
+        on right: 27 28 29
+    io_here (27)
+        on left: 31
+        on right: 26
+    here_end (28)
+        on left: 32
+        on right: 31
+
+
+State 0
+
+    0 $accept: • and_or $end
+
+    WORD       shift, and go to state 1
+    RED_IN     shift, and go to state 2
+    RED_OUT    shift, and go to state 3
+    HERE_DOC   shift, and go to state 4
+    APPEND     shift, and go to state 5
+    L_BRACKET  shift, and go to state 6
+
+    and_or          go to state 7
+    pipe_sequence   go to state 8
+    command         go to state 9
+    subshell        go to state 10
+    simple_command  go to state 11
+    cmd_name        go to state 12
+    cmd_prefix      go to state 13
+    io_redirect     go to state 14
+    io_file         go to state 15
+    io_here         go to state 16
+
+
+State 1
+
+   15 cmd_name: WORD •
+
+    $default  reduce using rule 15 (cmd_name)
+
+
+State 2
+
+   28 io_file: RED_IN • filename
+
+    WORD  shift, and go to state 17
+
+    filename  go to state 18
+
+
+State 3
+
+   27 io_file: RED_OUT • filename
+
+    WORD  shift, and go to state 17
+
+    filename  go to state 19
+
+
+State 4
+
+   31 io_here: HERE_DOC • here_end
+
+    WORD  shift, and go to state 20
+
+    here_end  go to state 21
+
+
+State 5
+
+   29 io_file: APPEND • filename
+
+    WORD  shift, and go to state 17
+
+    filename  go to state 22
+
+
+State 6
+
+    9 subshell: L_BRACKET • and_or R_BRACKET
+
+    WORD       shift, and go to state 1
+    RED_IN     shift, and go to state 2
+    RED_OUT    shift, and go to state 3
+    HERE_DOC   shift, and go to state 4
+    APPEND     shift, and go to state 5
+    L_BRACKET  shift, and go to state 6
+
+    and_or          go to state 23
+    pipe_sequence   go to state 8
+    command         go to state 9
+    subshell        go to state 10
+    simple_command  go to state 11
+    cmd_name        go to state 12
+    cmd_prefix      go to state 13
+    io_redirect     go to state 14
+    io_file         go to state 15
+    io_here         go to state 16
+
+
+State 7
+
+    0 $accept: and_or • $end
+    2 and_or: and_or • AND pipe_sequence
+    3       | and_or • OR pipe_sequence
+
+    $end  shift, and go to state 24
+    AND   shift, and go to state 25
+    OR    shift, and go to state 26
+
+
+State 8
+
+    1 and_or: pipe_sequence •
+    5 pipe_sequence: pipe_sequence • PIPE command
+
+    PIPE  shift, and go to state 27
+
+    $default  reduce using rule 1 (and_or)
+
+
+State 9
+
+    4 pipe_sequence: command •
+
+    $default  reduce using rule 4 (pipe_sequence)
+
+
+State 10
+
+    7 command: subshell •
+    8        | subshell • redirect_list
+
+    RED_IN    shift, and go to state 2
+    RED_OUT   shift, and go to state 3
+    HERE_DOC  shift, and go to state 4
+    APPEND    shift, and go to state 5
+
+    $default  reduce using rule 7 (command)
+
+    redirect_list  go to state 28
+    io_redirect    go to state 29
+    io_file        go to state 15
+    io_here        go to state 16
+
+
+State 11
+
+    6 command: simple_command •
+
+    $default  reduce using rule 6 (command)
+
+
+State 12
+
+   13 simple_command: cmd_name • cmd_suffix
+   14               | cmd_name •
+
+    WORD      shift, and go to state 30
+    RED_IN    shift, and go to state 2
+    RED_OUT   shift, and go to state 3
+    HERE_DOC  shift, and go to state 4
+    APPEND    shift, and go to state 5
+
+    $default  reduce using rule 14 (simple_command)
+
+    cmd_suffix   go to state 31
+    io_redirect  go to state 32
+    io_file      go to state 15
+    io_here      go to state 16
+
+
+State 13
+
+   10 simple_command: cmd_prefix • cmd_word cmd_suffix
+   11               | cmd_prefix • cmd_word
+   12               | cmd_prefix •
+   18 cmd_prefix: cmd_prefix • io_redirect
+
+    WORD      shift, and go to state 33
+    RED_IN    shift, and go to state 2
+    RED_OUT   shift, and go to state 3
+    HERE_DOC  shift, and go to state 4
+    APPEND    shift, and go to state 5
+
+    $default  reduce using rule 12 (simple_command)
+
+    cmd_word     go to state 34
+    io_redirect  go to state 35
+    io_file      go to state 15
+    io_here      go to state 16
+
+
+State 14
+
+   17 cmd_prefix: io_redirect •
+
+    $default  reduce using rule 17 (cmd_prefix)
+
+
+State 15
+
+   25 io_redirect: io_file •
+
+    $default  reduce using rule 25 (io_redirect)
+
+
+State 16
+
+   26 io_redirect: io_here •
+
+    $default  reduce using rule 26 (io_redirect)
+
+
+State 17
+
+   30 filename: WORD •
+
+    $default  reduce using rule 30 (filename)
+
+
+State 18
+
+   28 io_file: RED_IN filename •
+
+    $default  reduce using rule 28 (io_file)
+
+
+State 19
+
+   27 io_file: RED_OUT filename •
+
+    $default  reduce using rule 27 (io_file)
+
+
+State 20
+
+   32 here_end: WORD •
+
+    $default  reduce using rule 32 (here_end)
+
+
+State 21
+
+   31 io_here: HERE_DOC here_end •
+
+    $default  reduce using rule 31 (io_here)
+
+
+State 22
+
+   29 io_file: APPEND filename •
+
+    $default  reduce using rule 29 (io_file)
+
+
+State 23
+
+    2 and_or: and_or • AND pipe_sequence
+    3       | and_or • OR pipe_sequence
+    9 subshell: L_BRACKET and_or • R_BRACKET
+
+    AND        shift, and go to state 25
+    OR         shift, and go to state 26
+    R_BRACKET  shift, and go to state 36
+
+
+State 24
+
+    0 $accept: and_or $end •
+
+    $default  accept
+
+
+State 25
+
+    2 and_or: and_or AND • pipe_sequence
+
+    WORD       shift, and go to state 1
+    RED_IN     shift, and go to state 2
+    RED_OUT    shift, and go to state 3
+    HERE_DOC   shift, and go to state 4
+    APPEND     shift, and go to state 5
+    L_BRACKET  shift, and go to state 6
+
+    pipe_sequence   go to state 37
+    command         go to state 9
+    subshell        go to state 10
+    simple_command  go to state 11
+    cmd_name        go to state 12
+    cmd_prefix      go to state 13
+    io_redirect     go to state 14
+    io_file         go to state 15
+    io_here         go to state 16
+
+
+State 26
+
+    3 and_or: and_or OR • pipe_sequence
+
+    WORD       shift, and go to state 1
+    RED_IN     shift, and go to state 2
+    RED_OUT    shift, and go to state 3
+    HERE_DOC   shift, and go to state 4
+    APPEND     shift, and go to state 5
+    L_BRACKET  shift, and go to state 6
+
+    pipe_sequence   go to state 38
+    command         go to state 9
+    subshell        go to state 10
+    simple_command  go to state 11
+    cmd_name        go to state 12
+    cmd_prefix      go to state 13
+    io_redirect     go to state 14
+    io_file         go to state 15
+    io_here         go to state 16
+
+
+State 27
+
+    5 pipe_sequence: pipe_sequence PIPE • command
+
+    WORD       shift, and go to state 1
+    RED_IN     shift, and go to state 2
+    RED_OUT    shift, and go to state 3
+    HERE_DOC   shift, and go to state 4
+    APPEND     shift, and go to state 5
+    L_BRACKET  shift, and go to state 6
+
+    command         go to state 39
+    subshell        go to state 10
+    simple_command  go to state 11
+    cmd_name        go to state 12
+    cmd_prefix      go to state 13
+    io_redirect     go to state 14
+    io_file         go to state 15
+    io_here         go to state 16
+
+
+State 28
+
+    8 command: subshell redirect_list •
+   24 redirect_list: redirect_list • io_redirect
+
+    RED_IN    shift, and go to state 2
+    RED_OUT   shift, and go to state 3
+    HERE_DOC  shift, and go to state 4
+    APPEND    shift, and go to state 5
+
+    $default  reduce using rule 8 (command)
+
+    io_redirect  go to state 40
+    io_file      go to state 15
+    io_here      go to state 16
+
+
+State 29
+
+   23 redirect_list: io_redirect •
+
+    $default  reduce using rule 23 (redirect_list)
+
+
+State 30
+
+   21 cmd_suffix: WORD •
+
+    $default  reduce using rule 21 (cmd_suffix)
+
+
+State 31
+
+   13 simple_command: cmd_name cmd_suffix •
+   20 cmd_suffix: cmd_suffix • io_redirect
+   22           | cmd_suffix • WORD
+
+    WORD      shift, and go to state 41
+    RED_IN    shift, and go to state 2
+    RED_OUT   shift, and go to state 3
+    HERE_DOC  shift, and go to state 4
+    APPEND    shift, and go to state 5
+
+    $default  reduce using rule 13 (simple_command)
+
+    io_redirect  go to state 42
+    io_file      go to state 15
+    io_here      go to state 16
+
+
+State 32
+
+   19 cmd_suffix: io_redirect •
+
+    $default  reduce using rule 19 (cmd_suffix)
+
+
+State 33
+
+   16 cmd_word: WORD •
+
+    $default  reduce using rule 16 (cmd_word)
+
+
+State 34
+
+   10 simple_command: cmd_prefix cmd_word • cmd_suffix
+   11               | cmd_prefix cmd_word •
+
+    WORD      shift, and go to state 30
+    RED_IN    shift, and go to state 2
+    RED_OUT   shift, and go to state 3
+    HERE_DOC  shift, and go to state 4
+    APPEND    shift, and go to state 5
+
+    $default  reduce using rule 11 (simple_command)
+
+    cmd_suffix   go to state 43
+    io_redirect  go to state 32
+    io_file      go to state 15
+    io_here      go to state 16
+
+
+State 35
+
+   18 cmd_prefix: cmd_prefix io_redirect •
+
+    $default  reduce using rule 18 (cmd_prefix)
+
+
+State 36
+
+    9 subshell: L_BRACKET and_or R_BRACKET •
+
+    $default  reduce using rule 9 (subshell)
+
+
+State 37
+
+    2 and_or: and_or AND pipe_sequence •
+    5 pipe_sequence: pipe_sequence • PIPE command
+
+    PIPE  shift, and go to state 27
+
+    $default  reduce using rule 2 (and_or)
+
+
+State 38
+
+    3 and_or: and_or OR pipe_sequence •
+    5 pipe_sequence: pipe_sequence • PIPE command
+
+    PIPE  shift, and go to state 27
+
+    $default  reduce using rule 3 (and_or)
+
+
+State 39
+
+    5 pipe_sequence: pipe_sequence PIPE command •
+
+    $default  reduce using rule 5 (pipe_sequence)
+
+
+State 40
+
+   24 redirect_list: redirect_list io_redirect •
+
+    $default  reduce using rule 24 (redirect_list)
+
+
+State 41
+
+   22 cmd_suffix: cmd_suffix WORD •
+
+    $default  reduce using rule 22 (cmd_suffix)
+
+
+State 42
+
+   20 cmd_suffix: cmd_suffix io_redirect •
+
+    $default  reduce using rule 20 (cmd_suffix)
+
+
+State 43
+
+   10 simple_command: cmd_prefix cmd_word cmd_suffix •
+   20 cmd_suffix: cmd_suffix • io_redirect
+   22           | cmd_suffix • WORD
+
+    WORD      shift, and go to state 41
+    RED_IN    shift, and go to state 2
+    RED_OUT   shift, and go to state 3
+    HERE_DOC  shift, and go to state 4
+    APPEND    shift, and go to state 5
+
+    $default  reduce using rule 10 (simple_command)
+
+    io_redirect  go to state 42
+    io_file      go to state 15
+    io_here      go to state 16
