@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 12:22:01 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 16:08:37 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 17:11:50 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,6 @@ typedef struct s_stack
 	int				state;
 	struct s_stack	*next;
 }	t_stack;
-
-typedef struct s_ast
-{
-	int				type;
-	char			*data;
-	struct s_ast	*child;
-	struct s_ast	*next;
-}	t_ast;
 
 //PARSE
 void	parse(t_table *p_table, t_token **token_list);
