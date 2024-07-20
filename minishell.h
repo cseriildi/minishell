@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 16:07:49 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 16:12:50 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 
 typedef enum s_token_type
 {
-	END = 0,
+	END,
 	NONE,
 	WORD,
 	ASSIGNMENT_WORD,

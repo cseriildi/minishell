@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:32 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 11:53:53 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 16:39:36 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_token	*create_new_token(char *content, int type)
 {
 	t_token	*new_node;
 
-	new_node = malloc(sizeof(t_list));
+	new_node = malloc(sizeof(t_token));
 	if (new_node == NULL)
 		return (NULL);
 	new_node->content = ft_strdup(content);
