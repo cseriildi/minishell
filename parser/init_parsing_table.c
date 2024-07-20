@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_parsing_table.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:08:11 by pvass             #+#    #+#             */
-/*   Updated: 2024/07/20 16:00:25 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 16:55:40 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,14 @@ t_table	*init_table(int fd)
 
 	table = NULL;
 	line = get_next_line(fd);
-	free(line);
-	line = get_next_line(fd);
 	if (line == NULL)
 		return (NULL);
+	free(line);
+	line = get_next_line(fd);
 	while (line != NULL)
 	{
 		args = ft_split(line, 9);
 		free(line);
-		if (args == NULL)
-			return (table_clear(&table), NULL);
 		temp = table_new(args);
 		free_tab(args);
 		if (temp == NULL)
@@ -57,16 +55,14 @@ t_table	*create_table(void)
 
 void	print_p_table(t_table *parsing_table)
 {
-	//t_table *temp;
-	//temp = parsing_table;
 	printf("TABLE: \n");
 	while (parsing_table != NULL)
 	{
-		printf("%d	%d	%d	%d	%d\n", parsing_table->state, parsing_table->event, parsing_table->action, parsing_table->next_s, parsing_table->nb_reduce);
+		printf("%d	%d	%d	%d	%d\n", parsing_table->state,
+			parsing_table->event, parsing_table->action,
+			parsing_table->next_s, parsing_table->nb_reduce);
 		parsing_table = parsing_table->next;
 	}
-	//table_clear(&temp);
-	//return (0);
 }
 
 /* int main ()

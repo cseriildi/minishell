@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 12:22:01 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 16:08:37 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 17:30:15 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ t_table	*table_new(char **args);
 void	table_add_back(t_table **lst, t_table *new);
 void	table_clear(t_table **lst);
 void	free_tab(char **tabb);
+void	free_table(t_table **p_table);
 
 //SHIFT REDUCE
 int		shift(t_stack **stack, t_token **token_list, int next_state);
@@ -92,6 +93,7 @@ void	stack_add_front(t_stack **stack, t_stack *new);
 t_stack	*pop_stack(t_stack **stack);
 void	del_stack_node(t_stack **stack);
 int		get_next_state(t_table *p_table, t_stack *stack);
+void	free_stack(t_stack **stack);
 
 //DEBUG UTILS
 void	print_stack(t_stack *stack);
