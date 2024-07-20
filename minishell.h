@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 11:51:44 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 15:33:51 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # include <curses.h>
 # include <term.h>
 # include <fcntl.h>
+
+# define PARSING_TABLE "./parser/parse_table_numbs"
 
 typedef enum s_token_type
 {
@@ -55,6 +57,7 @@ typedef struct s_token
 typedef struct s_var
 {
 	t_token	**tokens;
+	t_table	*p_table;
 	char	*line;
 	int		index;
 	pid_t	pid;

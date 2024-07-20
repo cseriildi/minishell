@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 11:15:32 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 15:30:49 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int	main(int argc, char **argv)
 			lexer(data);
 			check_brackets(data);
 			print_tokens(data->tokens);
+			data->p_table = create_table();
+			parse(p_table, data->tokens);
 			safe_exit(data, EXIT_SUCCESS);
 		}
 		else
