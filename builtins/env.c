@@ -6,8 +6,13 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:49 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 10:52:50 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 17:30:24 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "builtins.h"
+
+void	env(t_var *data)
+{
+	safe_exit(data, EXIT_SUCCESS);
+}

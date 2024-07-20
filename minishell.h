@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 16:12:50 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 17:20:14 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,15 @@ typedef struct s_table
 	int				next_s;
 	int				nb_reduce;
 	struct s_table	*next;
-}		t_table;
+}	t_table;
+
+typedef struct s_ast
+{
+	int				type;
+	char			*data;
+	struct s_ast	*child;
+	struct s_ast	*next;
+}	t_ast;
 
 typedef struct s_var
 {
@@ -101,5 +109,8 @@ t_table	*create_table(void);
 //utils
 void	safe_exit(t_var *data, int exit_code);
 void	check_brackets(t_var *data);
+
+//builtins
+void	builtin(t_var *data, t_ast *token);
 
 #endif
