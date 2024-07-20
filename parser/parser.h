@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 12:22:01 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 15:33:46 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 16:08:37 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,6 @@ typedef enum e_parser_element
 	P_HERE_END
 }	t_prs_elem;
 
-typedef struct s_table
-{
-	int				state;
-	int				event;
-	int				action;
-	int				next_s;
-	int				nb_reduce;
-	struct s_table	*next;
-}		t_table;
-
 typedef struct s_stack
 {
 	int				type;
@@ -81,48 +71,30 @@ typedef struct s_ast
 	struct s_ast	*next;
 }	t_ast;
 
-/* PARSE */
-
+//PARSE
 void	parse(t_table *p_table, t_token **token_list);
 
-/* TABLE UTILS */
-
-t_table *create_table();
-
+//TABLE UTILS
+t_table	*create_table(void);
 t_table	*table_new(char **args);
-
 void	table_add_back(t_table **lst, t_table *new);
-
 void	table_clear(t_table **lst);
-
 void	free_tab(char **tabb);
 
-/*SHIFT REDUCE*/
+//SHIFT REDUCE
+int		shift(t_stack **stack, t_token **token_list, int next_state);
+int		reduce(t_stack **stack, t_table *p_table, t_table *entry);
 
-int	shift(t_stack **stack, t_token **token_list, int next_state);
-
-int reduce(t_stack **stack, t_table *p_table, t_table *entry);
-
-/*STACK OP*/
-
-t_stack *init_stack();
-
+//STACK OP
+t_stack	*init_stack(void);
 t_stack	*new_stack_node(t_token *token);
-
 void	stack_add_front(t_stack **stack, t_stack *new);
-
-t_stack *pop_stack(t_stack **stack);
-
+t_stack	*pop_stack(t_stack **stack);
 void	del_stack_node(t_stack **stack);
+int		get_next_state(t_table *p_table, t_stack *stack);
 
-
-
-int get_next_state(t_table *p_table, t_stack *stack);
-
-/*DEBUG UTILS*/
-
+//DEBUG UTILS
 void	print_stack(t_stack *stack);
-
 void	print_p_table(t_table *parsing_table);
 
 #endif
