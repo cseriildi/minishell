@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/19 17:41:19 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/20 15:18:09 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	init(t_var *data)
 int	main(int argc, char **argv)
 {
 	t_var	*data;
+	t_table	*p_table;
 
 	(void)argv;
 	if (argc != 1)
@@ -61,6 +62,8 @@ int	main(int argc, char **argv)
 			lexer(data);
 			check_brackets(data);
 			print_tokens(data->tokens);
+			p_table = create_table();
+			parse(p_table, data->tokens);
 			safe_exit(data, EXIT_SUCCESS);
 		}
 		else
