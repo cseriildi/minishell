@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 15:48:59 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/22 15:29:06 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,12 @@ void	init(t_var *data)
 	data->p_table = NULL;
 	data->line = NULL;
 	data->exit_code = 0;
+	data->subshell_level = 1;
+	data->pwd = getcwd(NULL, 0);
+	if (!data->pwd)
+		safe_exit(data, MALLOC_FAIL);
+	data->promt = NULL;
+	init_env(data);
 }
 
 int	main(int argc, char **argv)
@@ -48,32 +54,21 @@ int	main(int argc, char **argv)
 	init(data);
 	while (true)
 	{
-		data->line = readline("> ");
+		get_promt(data);
+		data->line = readline(data->promt);
 		if (!data->line)
 			safe_exit(data, READLINE_FAIL);
 		if (ft_strncmp(data->line, "exit", 5) == 0)
 			safe_exit(data, EXIT_SUCCESS);
 		if (*data->line)
 			add_history(data->line);
-		data->pid = fork();
-		if (data->pid == -1)
-			safe_exit(data, FORK_FAIL);
-		else if (data->pid == 0)
-		{
-			lexer(data);
-			check_brackets(data);
-			print_tokens(data->tokens);
-			data->p_table = create_table();
-			parse(data->p_table, data->tokens);
-			safe_exit(data, EXIT_SUCCESS);
-		}
-		else
-		{
-			waitpid(data->pid, &data->exit_status, 0);
-			if (WIFEXITED(data->exit_status))
-				data->exit_code = WEXITSTATUS(data->exit_status);
-			continue ;
-		}
+		lexer(data);
+		check_brackets(data);
+		print_tokens(data->tokens);
+		data->p_table = create_table();
+		parse(data->p_table, data->tokens);
+		execute(data);
+		free_tokens(data);
 	}
 	safe_exit(data, EXIT_SUCCESS);
 }

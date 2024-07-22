@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 17:20:14 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/22 15:32:13 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,15 +74,27 @@ typedef struct s_ast
 	struct s_ast	*next;
 }	t_ast;
 
+typedef struct s_env
+{
+	char			*key;
+	char			*content;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_var
 {
 	t_token	**tokens;
 	t_table	*p_table;
+	t_ast	**tree;
 	char	*line;
 	int		index;
 	pid_t	pid;
 	int		exit_status;
 	int		exit_code;
+	char	*pwd;
+	char	*promt;
+	t_env	**env;
+	int		subshell_level;
 }	t_var;
 
 typedef enum s_err
@@ -109,8 +121,19 @@ t_table	*create_table(void);
 //utils
 void	safe_exit(t_var *data, int exit_code);
 void	check_brackets(t_var *data);
+void	get_promt(t_var *data);
+void	free_tokens(t_var *data);
+void	free_array(char **arr);
 
 //builtins
 void	builtin(t_var *data, t_ast *token);
+
+//executor
+void	execute(t_var *data);
+
+//env
+void	init_env(t_var *data);
+char	*ft_getenv(t_var *data, char *var_name);
+void	free_env(t_env **env);
 
 #endif

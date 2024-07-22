@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:54:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 12:33:06 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/22 14:00:51 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,8 @@ char	*fix_content(char *content, t_var *data)
 		}
 		if (*var_name == '?')
 			expanded_var = ft_itoa(data->exit_code);
-		else if (getenv(var_name) == NULL)
-			expanded_var = ft_strdup("");
 		else
-			expanded_var = ft_strdup(getenv(var_name));
+			expanded_var = ft_strdup(ft_getenv(data, var_name));
 		if (!expanded_var)
 		{
 			ft_free(&content);
