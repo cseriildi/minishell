@@ -6,17 +6,14 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:53:01 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 17:23:29 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/22 15:23:19 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	pwd(t_var *data)
+void	ft_pwd(t_var *data)
 {
-	char	*pwd;
-
-	pwd = getenv("PWD");
-	printf("%s", pwd);
-	safe_exit(data, EXIT_SUCCESS);
+	printf("%s\n", data->pwd);
+	exit(EXIT_SUCCESS);
 }

@@ -6,22 +6,22 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 12:37:18 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/22 15:20:27 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tokens(t_token **tokens)
+void	free_tokens(t_var *data)
 {
 	t_token	*current;
 	t_token	*next;
 
-	if (!tokens)
+	if (!data->tokens)
 		return ;
-	if (*tokens)
+	if (*data->tokens)
 	{
-		current = *tokens;
+		current = *data->tokens;
 		while (current != NULL)
 		{
 			next = current->next;
@@ -30,7 +30,21 @@ void	free_tokens(t_token **tokens)
 			current = next;
 		}
 	}
-	free(tokens);
+	free(data->tokens);
+	data->tokens = NULL;
+}
+
+void	free_array(char **arr)
+{
+	int	i;
+
+	i = 0;
+	if (arr)
+	{
+		while (arr && arr[i])
+			ft_free(&arr[i++]);
+		free(arr);
+	}
 }
 
 void	safe_exit(t_var *data, int exit_code)
@@ -40,7 +54,11 @@ void	safe_exit(t_var *data, int exit_code)
 		if (data->line)
 			ft_free(&data->line);
 		if (data->tokens)
-			free_tokens(data->tokens);
+			free_tokens(data);
+		ft_free(&data->pwd);
+		ft_free(&data->promt);
+		ft_free(&data->line);
+		free_env(data->env);
 		free(data);
 	}
 	exit(exit_code);
@@ -67,4 +85,11 @@ void	check_brackets(t_var *data)
 	}
 	if (count != 0)
 		safe_exit(data, ERROR_MISUSE);
+}
+
+void	get_promt(t_var *data)
+{
+	data->promt = ft_strjoin(data->pwd, " > ");
+	if (!data->promt)
+		safe_exit(data, MALLOC_FAIL);
 }
