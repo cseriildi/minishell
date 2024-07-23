@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/22 15:20:27 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/23 20:21:36 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	safe_exit(t_var *data, int exit_code)
 		ft_free(&data->pwd);
 		ft_free(&data->promt);
 		ft_free(&data->line);
-		free_env(data->env);
+		free_array(data->env);
 		free(data);
 	}
 	exit(exit_code);
@@ -93,3 +93,20 @@ void	get_promt(t_var *data)
 	if (!data->promt)
 		safe_exit(data, MALLOC_FAIL);
 }
+
+void	print_error(int count, ...)
+{
+	va_list	args;
+	char	*str;
+
+	va_start(args, count);
+	while (count--)
+	{
+		str = va_arg(args, char *);
+		if (str)
+			ft_putstr_fd(str, STDERR_FILENO);
+	}
+	va_end(args);
+	ft_putstr_fd("\n", STDERR_FILENO);
+}
+

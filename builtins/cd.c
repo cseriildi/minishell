@@ -3,51 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/22 15:55:59 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/23 19:35:50 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	cd_in_env(t_env **env, char *pwd, char *oldpwd)
+int	cd_in_env(t_var *data, char *pwd)
 {
-	t_env	*head;
-	t_env	*curr;
-
-	head = *env;
-	curr = head;
-	while (curr != NULL)
+	char	*tmp;
+	
+	if (replace_var(data, "PWD", pwd) == false)
 	{
-		if (ft_strncmp(curr->key, "PWD", 4) == 0)
-		{
-			ft_free(&curr->content);
-			curr->content = pwd;
-		}
-		if (ft_strncmp(curr->key, "OLDPWD", 4) == 0)
-		{
-			ft_free(&curr->content);
-			curr->content = oldpwd;
-		}
-		curr = curr->next;
+		tmp = ft_strjoin("PWD=", pwd);
+		if (!tmp)
+			return (MALLOC_FAIL);
+		if (add_var_to_env(data, tmp) == MALLOC_FAIL)
+			return (free(tmp), MALLOC_FAIL);
+		free(tmp);
 	}
+	if (replace_var(data, "OLDPWD", data->pwd) == false)
+	{
+		tmp = ft_strjoin("OLDPWD=", data->pwd);
+		if (!tmp)
+			return (MALLOC_FAIL);
+		if (add_var_to_env(data, tmp) == MALLOC_FAIL)
+			return (free(tmp), MALLOC_FAIL);
+		free(tmp);
+	}
+	return (EXIT_SUCCESS);
 }
 
 void	ft_cd(t_var *data, t_ast *token)
 {
 	char	*pwd;
-	char	*oldpwd;
 
-	oldpwd = data->pwd;
-/* 	if (access(token->data, F_OK) == -1)
-		exit(CANNOT_OPEN_FILE); */
-	chdir(token->data);
+	if (chdir(token->data) == -1)
+	{
+		print_error(4, "minishell: cd: ", token->data, ": ", strerror(errno));
+		data->exit_code = ERROR_MISUSE;
+	}
 	ft_free(&data->pwd);
 	pwd = getcwd(NULL, 0);
-	cd_in_env(data->env, pwd, oldpwd);
+	if (cd_in_env(data, pwd) == MALLOC_FAIL)
+	{
+		data->exit_code = MALLOC_FAIL;
+		ft_free(&pwd);
+		print_error(1, strerror(errno));
+	}
 	ft_free(&data->pwd);
 	data->pwd = pwd;
-	exit(EXIT_SUCCESS);
+	data->exit_code = EXIT_SUCCESS;
 }
