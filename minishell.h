@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/22 15:32:13 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/23 19:33:38 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_ast
 
 typedef struct s_env
 {
+	char			*line;
 	char			*key;
 	char			*content;
 	struct s_env	*next;
@@ -93,7 +94,7 @@ typedef struct s_var
 	int		exit_code;
 	char	*pwd;
 	char	*promt;
-	t_env	**env;
+	char	**env;
 	int		subshell_level;
 }	t_var;
 
@@ -103,11 +104,11 @@ typedef enum s_err
 	READLINE_FAIL,
 	CANNOT_OPEN_FILE,
 	MALLOC_FAIL,
-	VARIABLE_NOT_FOUND,
 	PIPE_FAIL,
 	DUP2_FAIL,
 	FORK_FAIL,
 	UNLINK_FAIL,
+	NON_NUMERIC_EXIT,
 	COMMAND_NOT_FOUND = 127
 }	t_err;
 
@@ -124,9 +125,10 @@ void	check_brackets(t_var *data);
 void	get_promt(t_var *data);
 void	free_tokens(t_var *data);
 void	free_array(char **arr);
+void	print_error(int count, ...);
 
 //builtins
-void	builtin(t_var *data, t_ast *token);
+bool	builtin(t_var *data, t_ast *token);
 
 //executor
 void	execute(t_var *data);

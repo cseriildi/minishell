@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/22 15:37:28 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/23 18:59:58 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,113 +14,77 @@
 
 char	*ft_getenv(t_var *data, char *var_name)
 {
-	t_env	*head;
-	t_env	*curr;
+	int	i;
+	int	len;
 
-	head = *data->env;
-	curr = head;
+	i = 0;
 	if (var_name && *var_name)
 	{
-		while (curr != NULL)
+		len = ft_strlen(var_name);
+		while (data->env[i])
 		{
-			if (ft_strncmp(curr->key, var_name, ft_strlen(var_name) + 1) == 0)
-				return (curr->content);
-			curr = curr->next;
+			if (ft_strncmp(data->env[i], var_name, len + 1) == 0
+				&& data->env[i][len] == '=')
+				return (data->env[i] + len + 1);
+			i++;
 		}
 	}
 	return ("");
 }
 
-t_env	*create_new_var(char *key, char *content)
+void init_env(t_var *data)
 {
-	t_env	*new_node;
+	extern char **environ;
+	int size;
+	int i;
 
-	new_node = malloc(sizeof(t_env));
-	if (new_node == NULL)
-		return (NULL);
-	new_node->next = NULL;
-	new_node->key = ft_strdup(key);
-	if (new_node->key == NULL)
-	{
-		free(new_node);
-		return (NULL);
-	}
-	new_node->content = ft_strdup(content);
-	if (new_node->content == NULL)
-	{
-		free(new_node->key);
-		free(new_node);
-		return (NULL);
-	}
-	return (new_node);
-}
-
-void	add_var_to_back(t_env **env, t_env *new)
-{
-	t_env	*curr;
-
-	if (env && new)
-	{
-		if (*env == NULL)
-			*env = new;
-		else
-		{
-			curr = *env;
-			while (curr->next)
-				curr = curr->next;
-			curr->next = new;
-		}
-	}
-}
-
-void	init_env(t_var *data)
-{
-	extern char	**environ;
-	int			i;
-	char		**line;
-	t_env		*new_var;
-
-	data->env = malloc(sizeof(t_env *));
+	size = 0;
+	while (environ && environ[size])
+		size++;
+	data->env = ft_calloc(size + 1, sizeof(char *));
 	if (!data->env)
 		safe_exit(data, MALLOC_FAIL);
-	*data->env = NULL;
 	i = 0;
-	while (environ && environ[i])
+	while (i < size)
 	{
-		line = ft_split(environ[i], '=');
-		if (!line)
+		data->env[i] = ft_strdup(environ[i]);
+		if (!data->env[i++])
 			safe_exit(data, MALLOC_FAIL);
-		if (line[1])
-			new_var = create_new_var(line[0], line[1]);
-		else
-			new_var = create_new_var(line[0], "");
-		free_array(line);
-		if (!new_var)
-			safe_exit(data, MALLOC_FAIL);
-		add_var_to_back(data->env, new_var);
-		i++;
 	}
 }
 
-void	free_env(t_env **env)
+char	*ft_strjoin2(char *str1, char *str2, char *delimiter)
 {
-	t_env	*current;
-	t_env	*next;
+	char	*tmp;
+	char	*new_str;
 
-	if (!env)
-		return ;
-	if (*env)
+	tmp = ft_strjoin(str1, delimiter);
+	if (!tmp)
+		return (NULL);
+	new_str = ft_strjoin(tmp, str2);
+	free(tmp);
+	if (!new_str)
+		return (NULL);
+	return (new_str);
+}
+
+bool	replace_var(t_var *data, char *key, char *content)
+{
+	int	i;
+
+	i = 0;
+	while (data->env && data->env[i])
 	{
-		current = *env;
-		while (current != NULL)
+		if (ft_strncmp(data->env[i], key, ft_strlen(key) + 1) == 0
+			&& data->env[i][ft_strlen(key)] == '=')
 		{
-			next = current->next;
-			ft_free(&current->content);
-			ft_free(&current->key);
-			free(current);
-			current = next;
+			free(data->env[i]);
+			data->env[i] = ft_strjoin2(key, content, "=");
+			if (!data->env[i])
+				data->exit_code = MALLOC_FAIL;
+			return (true);
 		}
+		i++;
 	}
-	free(env);
-	env = NULL;
+	return (false);
 }

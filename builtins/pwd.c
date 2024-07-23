@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:53:01 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/22 15:23:19 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/23 19:13:29 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 void	ft_pwd(t_var *data)
 {
 	printf("%s\n", data->pwd);
-	exit(EXIT_SUCCESS);
+	data->exit_code = EXIT_SUCCESS;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:49 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/22 18:55:00 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/23 19:10:11 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,10 @@
 
 void	ft_env(t_var *data)
 {
-	t_env	*head;
-	t_env	*curr;
+	int	i;
 
-	head = *data->env;
-	curr = head;
-	while (curr != NULL)
-	{
-		printf("%s=%s\n", curr->key, curr->content);
-		curr = curr->next;
-	}
-	exit(EXIT_SUCCESS);
+	i = -1;
+	while (data->env && data->env[++i])
+		printf("%s\n", data->env[i]);
+	data->exit_code = EXIT_SUCCESS;
 }

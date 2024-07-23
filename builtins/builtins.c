@@ -3,29 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:44:24 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/22 15:12:17 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/23 15:37:48 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	builtin(t_var *data, t_ast *token)
+bool	builtin(t_var *data, t_ast *token)
 {
 	if (ft_strncmp(token->data, "cd", 3) == 0)
-		ft_cd(data, token->child);
+		return (ft_cd(data, token->child), true);
 	else if (ft_strncmp(token->data, "echo", 5) == 0)
-		ft_echo(data, token->child);
+		return (ft_echo(data, token->child), true);
 	else if (ft_strncmp(token->data, "env", 4) == 0)
-		ft_env(data);
+		return (ft_env(data), true);
 	else if (ft_strncmp(token->data, "exit", 5) == 0)
-		ft_exit(data);
+		return (ft_exit(data, token->child), true);
 	else if (ft_strncmp(token->data, "export", 7) == 0)
-		ft_export(data, token->child);
+		return (ft_export(data, token->child), true);
 	else if (ft_strncmp(token->data, "pwd", 4) == 0)
-		ft_pwd(data);
+		return (ft_pwd(data), true);
 	else if (ft_strncmp(token->data, "unset", 6) == 0)
-		ft_unset(data, token->child);
+		return (ft_unset(data, token->child), true);
+	return (false);
 }

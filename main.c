@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/22 15:29:06 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/23 19:16:43 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,11 @@ int	main(int argc, char **argv)
 			add_history(data->line);
 		lexer(data);
 		check_brackets(data);
-		print_tokens(data->tokens);
-		data->p_table = create_table();
-		parse(data->p_table, data->tokens);
+		//print_tokens(data->tokens);
+		//data->p_table = create_table();
+		//parse(data->p_table, data->tokens);
 		execute(data);
 		free_tokens(data);
 	}
-	safe_exit(data, EXIT_SUCCESS);
+	safe_exit(data, data->exit_code);
 }

@@ -3,45 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:53:04 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/22 18:55:06 by icseri           ###   ########.fr       */
+/*   Updated: 2024/07/23 18:21:35 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	del_var(t_env **env, char *key)
-{
-	t_env	*current;
-	t_env	*prev;
-
-	if (env && *env && key && *key)
-	{
-		current = *env;
-		prev = NULL;
-		while (current != NULL)
-		{
-			if (ft_strncmp(current->key, key, ft_strlen(key) + 1) == 0)
-			{
-				if (prev == NULL)
-					*env = current->next;
-				else
-					prev->next = current->next;
-				ft_free(&current->content);
-				ft_free(&current->key);
-				free(current);
-				break ;
-			}
-			prev = current;
-			current = current->next;
-		}
-	}
-}
-
 void	ft_unset(t_var *data, t_ast *token)
 {
-	del_var(data->env, token->data);
-	exit(EXIT_SUCCESS);
+	int	i;
+	int	len;
+
+	len = 0;
+	if (token->data)
+		len = ft_strlen(token->data);
+	i = 0;
+	while (data->env && data->env[i])
+	{
+		if (ft_strncmp(data->env[i], token->data, len + 1) == 0
+			&& data->env[i][len] == '=')
+		{
+			free(data->env[i]);
+			data->env[i] = data->env[i + 1];
+			break ;
+		}
+		i++;
+	}
+	data->exit_code = EXIT_SUCCESS;
 }
