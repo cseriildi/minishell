@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/23 19:35:50 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/07/24 10:19:35 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	ft_cd(t_var *data, t_ast *token)
 {
 	char	*pwd;
 
+	data->exit_code = EXIT_SUCCESS;
 	if (chdir(token->data) == -1)
 	{
 		print_error(4, "minishell: cd: ", token->data, ": ", strerror(errno));
@@ -50,11 +51,9 @@ void	ft_cd(t_var *data, t_ast *token)
 	pwd = getcwd(NULL, 0);
 	if (cd_in_env(data, pwd) == MALLOC_FAIL)
 	{
+		print_error(2, "cd: ", strerror(errno));
 		data->exit_code = MALLOC_FAIL;
-		ft_free(&pwd);
-		print_error(1, strerror(errno));
 	}
 	ft_free(&data->pwd);
 	data->pwd = pwd;
-	data->exit_code = EXIT_SUCCESS;
 }
