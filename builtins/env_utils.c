@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/23 18:59:58 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/07/24 10:16:20 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ char	*ft_getenv(t_var *data, char *var_name)
 		len = ft_strlen(var_name);
 		while (data->env[i])
 		{
-			if (ft_strncmp(data->env[i], var_name, len + 1) == 0
+			if (ft_strncmp(data->env[i], var_name, len) == 0
 				&& data->env[i][len] == '=')
-				return (data->env[i] + len + 1);
+					return (data->env[i] + len + 1);
 			i++;
 		}
 	}
@@ -41,7 +41,7 @@ void init_env(t_var *data)
 	size = 0;
 	while (environ && environ[size])
 		size++;
-	data->env = ft_calloc(size + 1, sizeof(char *));
+	data->env = malloc(sizeof(char *) * (size + 1));
 	if (!data->env)
 		safe_exit(data, MALLOC_FAIL);
 	i = 0;
@@ -51,6 +51,7 @@ void init_env(t_var *data)
 		if (!data->env[i++])
 			safe_exit(data, MALLOC_FAIL);
 	}
+	data->env[i] = NULL;
 }
 
 char	*ft_strjoin2(char *str1, char *str2, char *delimiter)
@@ -87,4 +88,27 @@ bool	replace_var(t_var *data, char *key, char *content)
 		i++;
 	}
 	return (false);
+}
+int	add_var_to_env(t_var *data, char *line)
+{
+	int		size;
+	char	**new_env;
+
+	size = 0;
+	while (data->env && data->env[size])
+		size++;
+	new_env = ft_calloc(sizeof(char *), size + 2);
+	if (!new_env)
+		return (MALLOC_FAIL);
+	new_env[size] = ft_strdup(line);
+	if (!new_env[size])
+	{
+		free_array(new_env);
+		return (MALLOC_FAIL);
+	}
+	while (--size >= 0)
+		new_env[size] = data->env[size];
+	free(data->env);
+	data->env = new_env;
+	return (EXIT_SUCCESS);
 }

@@ -6,34 +6,79 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/23 20:22:48 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/07/24 10:19:59 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int	add_var_to_env(t_var *data, char *line)
+int compare_indices(int a,  int b, char **env)
 {
-	int		size;
-	char	**new_env;
-	int		i;
-
-	size = 0;
-	while (data->env && data->env[size])
-		size++;
-	new_env = ft_calloc(sizeof(char *), size + 2);
-	if (!new_env)
-		return (MALLOC_FAIL);
-	i = -1;
-	while (++i < size)
-		new_env[i] = data->env[i];
-	new_env[size] = ft_strdup(line);
-	if (!new_env[size])
-		return (free_array(new_env), MALLOC_FAIL);
-	free(data->env);
-	data->env = new_env;
-	return (EXIT_SUCCESS);
+	int i;
+	
+	i = 0;
+	while (env[a][i] && env[b][i] && env[a][i] == env[b][i])
+		i++;
+	return (env[a][i] - env[b][i]);
 }
+
+void bubble_sort_with_context(int *arr, int n, char **env)
+{
+    int i;
+	int j;
+	int temp;
+
+	i = -1;
+    while (++i < n - 1)
+	{
+        j = -1;
+		while (++j < n - i - 1)
+		{
+            if (compare_indices(arr[j], arr[j + 1], env) > 0)
+			{
+                temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+}
+
+void	print_export(char *line)
+{
+	int		i;
+	
+	i = 0;
+	ft_putstr_fd("declare -x ", 1);
+	while (line[i] && line[i] != '=')
+		ft_putchar_fd(line[i++], 1);
+	printf("=\"%s\"\n", line + i + 1);
+}
+void	no_arg_export(t_var *data)
+{
+	int count;
+	int *indices;
+	int	i;
+
+	count = 0;
+	while (data->env[count])
+		count++;
+	indices = malloc(count * sizeof(int));
+	if (indices == NULL)
+	{
+		print_error(2, "export: ", strerror(errno));
+		data->exit_code = MALLOC_FAIL;
+	}
+	i = -1;
+	while (++i < count)
+		indices[i] = i;
+	bubble_sort_with_context(indices, count, data->env);
+	i = -1;
+	while (++i < count)
+		print_export(data->env[indices[i]]);
+	free(indices);
+}
+
 bool	is_valid_var(t_var *data, char *line)
 {
 	int		i;
@@ -66,9 +111,10 @@ void	ft_export(t_var *data, t_ast *token)
 {
 	char	**line;
 	
+	data->exit_code = EXIT_SUCCESS;
 	if (!token->data)
 	{
-		//print all env in ascii order
+		no_arg_export(data);
 		return ;
 	}
 	if (is_valid_var(data, token->data) == false)
@@ -76,7 +122,7 @@ void	ft_export(t_var *data, t_ast *token)
 	line = ft_split(token->data, '=');
 	if (!line)
 	{
-		print_error(MALLOC_FAIL, NULL);
+		print_error(2, "export: ", strerror(errno));
 		data->exit_code = MALLOC_FAIL;
 		return ;
 	}
@@ -84,11 +130,10 @@ void	ft_export(t_var *data, t_ast *token)
 	{
 		if (add_var_to_env(data, token->data) == MALLOC_FAIL)
 		{
+			print_error(2, "export: ", strerror(errno));
 			data->exit_code = MALLOC_FAIL;
-			free_array(line);
-			return ;
 		}
 	}
+		
 	free_array(line);
-	data->exit_code = EXIT_SUCCESS;
 }

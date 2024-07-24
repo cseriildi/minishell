@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/23 20:23:31 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/07/24 10:11:50 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void	execute(t_var *data)
 {
-	printf("%s\n", ft_getenv(data, "hello2"));
+	printf("%s\n", ft_getenv(data, "PATH"));
 	data->tree = malloc(sizeof(t_ast *));
 	if (!data->tree)
 		safe_exit(data, MALLOC_FAIL);
 	*data->tree = malloc(sizeof(t_ast));
 	(*data->tree)->child = malloc(sizeof(t_ast));
 	(*data->tree)->child->next = malloc(sizeof(t_ast));
-	(*data->tree)->data = "export";
-	(*data->tree)->child->data = "hello2=world";
+	(*data->tree)->data = "unset";
+	(*data->tree)->child->data = "PATH";
 	(*data->tree)->child->next->data = " ";
 	if (builtin(data, *data->tree) == false)
 	{
@@ -42,6 +42,6 @@ void	execute(t_var *data)
 			printf("exit code: %d\n", data->exit_code);
 		}
 	}
-	printf("%s\n", ft_getenv(data, "hello2"));
+	printf("%s\n", ft_getenv(data, "PATH"));
 
 }
