@@ -41,6 +41,7 @@ int	get_next_state(t_table *p_table, t_stack *stack)
 {
 	int	next_state;
 
+	next_state = 0;
 	while (p_table != NULL)
 	{
 		if (p_table->state == stack->next->state)
@@ -69,6 +70,7 @@ void	parse(t_table *p_table, t_token **tokens)
 		return ;
 	while (run)
 	{
+		//print_stack(stack);
 		entry = get_entry(token_list, p_table, stack);
 		if (entry && entry->action == A_SHIFT)
 			run = shift(&stack, &token_list, entry->next_s);
@@ -85,7 +87,7 @@ void	parse(t_table *p_table, t_token **tokens)
 			printf("REJECT\n");
 		}
 	}
-	free_table(&p_table);
+	///free_table(&p_table);
 }
 
 /* int main ()
