@@ -74,11 +74,14 @@ int	reduce(t_stack **stack, t_table *p_table, t_table *entry)
 		stack_add_front(&popped, temp);
 		i++;
 	}
+	//printf("POPPED:\n");
+	//print_stack(popped);
 	if (popped != NULL)
 	{
 		if (push_reduction(stack, entry->next_s))
 		{
 			next_state = get_next_state(p_table, *stack);
+			//printf("NEXT STATE: %d\n", next_state);
 			temp = new_stack_node_state(next_state);
 			if (temp == NULL)
 				return (0);
