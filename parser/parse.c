@@ -79,11 +79,13 @@ void	parse(t_table *p_table, t_token **tokens)
 		else if (entry && entry->action == A_ACCEPT)
 		{
 			run = 0;
+			print_stack(stack);
 			printf("ACCEPT\n");
 		}
 		else
 		{
 			run = 0;
+			print_stack(stack);
 			printf("REJECT\n");
 		}
 	}
