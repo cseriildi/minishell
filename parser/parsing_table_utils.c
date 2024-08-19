@@ -91,7 +91,6 @@ void	free_table(t_table **p_table)
 	{
 		temp = *p_table;
 		*p_table = (*p_table)->next;
-		free(temp->next);
 		free(temp);
 	}
 }

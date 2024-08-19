@@ -58,7 +58,7 @@ int	push_reduction(t_stack **stack, int reduction)
 	return (1);
 }
 
-int	reduce(t_stack **stack, t_table *p_table, t_table *entry)
+int	reduce(t_stack **stack, t_table *p_table, t_table *entry, t_stack **result)
 {
 	t_stack	*popped;
 	t_stack	*temp;
@@ -72,10 +72,11 @@ int	reduce(t_stack **stack, t_table *p_table, t_table *entry)
 	{
 		temp = pop_stack(stack);
 		stack_add_front(&popped, temp);
+		stack_add_front(result, temp);
 		i++;
 	}
 	printf("POPPED:\n");
-	print_stack(popped);
+	print_stack(*result);
 	//printf("POPPED:\n");
 	//print_stack(popped);
 	if (popped != NULL)
@@ -90,6 +91,7 @@ int	reduce(t_stack **stack, t_table *p_table, t_table *entry)
 			stack_add_front(stack, temp);
 		}
 	}
+
 	if (i / 2 == entry->nb_reduce)
 		return (TRUE);
 	else

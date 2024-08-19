@@ -25,7 +25,6 @@ void	free_stack(t_stack **stack)
 		free(s->data);
 		temp = s;
 		s = s->next;
-		free(temp->next);
 		free(temp);
 	}
 }

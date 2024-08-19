@@ -25,7 +25,8 @@ SRCS = main.c \
 		parser/parsing_table_utils.c \
 		parser/shift_reduce.c \
 		parser/stack_utils.c \
-		parser/stack_free.c
+		parser/stack_free.c \
+		parser/transform.c
 #		builtins/cd.c \
 		builtins/echo.c \
 		builtins/env.c \

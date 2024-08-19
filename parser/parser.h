@@ -84,7 +84,7 @@ void	free_table(t_table **p_table);
 
 //SHIFT REDUCE
 int		shift(t_stack **stack, t_token **token_list, int next_state);
-int		reduce(t_stack **stack, t_table *p_table, t_table *entry);
+int		reduce(t_stack **stack, t_table *p_table, t_table *entry, t_stack **rl_key_sequence_length);
 
 //STACK OP
 t_stack	*init_stack(void);
@@ -98,5 +98,8 @@ void	free_stack(t_stack **stack);
 //DEBUG UTILS
 void	print_stack(t_stack *stack);
 void	print_p_table(t_table *parsing_table);
+
+//transform
+void	transform(t_stack *result, t_stack *stack);
 
 #endif
