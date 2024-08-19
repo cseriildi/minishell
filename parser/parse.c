@@ -61,11 +61,13 @@ void	parse(t_table *p_table, t_token **tokens)
 	t_stack	*stack;
 	t_table	*entry;
 	t_token	*token_list;
+	t_stack	*result;
 	int		run;
 
 	token_list = *tokens;
 	run = TRUE;
 	stack = init_stack();
+	result = NULL;
 	if (stack == NULL)
 		return ;
 	while (run)
@@ -75,12 +77,13 @@ void	parse(t_table *p_table, t_token **tokens)
 		if (entry && entry->action == A_SHIFT)
 			run = shift(&stack, &token_list, entry->next_s);
 		else if (entry && entry->action == A_REDUCE)
-			run = reduce(&stack, p_table, entry);
+			run = reduce(&stack, p_table, entry, &result);
 		else if (entry && entry->action == A_ACCEPT)
 		{
 			run = 0;
 			print_stack(stack);
 			printf("ACCEPT\n");
+			transform(result, stack);
 		}
 		else
 		{
@@ -89,7 +92,9 @@ void	parse(t_table *p_table, t_token **tokens)
 			printf("REJECT\n");
 		}
 	}
-	///free_table(&p_table);
+	free_table(&p_table);
+	free_stack(&stack);
+	free_stack(&result);
 }
 
 /* int main ()
