@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "parser.h" //cat < in | cat ???
 
 t_table	*get_entry(t_token *token, t_table *p_table, t_stack *stack)
 {
@@ -93,8 +93,8 @@ void	parse(t_table *p_table, t_token **tokens)
 		}
 	}
 	free_table(&p_table);
-	free_stack(&stack);
-	free_stack(&result);
+	//free_stack(&stack);
+	//free_stack(&result);
 }
 
 /* int main ()
