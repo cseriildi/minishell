@@ -63,13 +63,12 @@ typedef struct s_stack
 	struct s_stack	*next;
 }	t_stack;
 
-typedef struct s_ast
+typedef struct s_exec
 {
 	int				type;
-	char			*data;
-	struct s_ast	*child;
-	struct s_ast	*next;
-}	t_ast;
+	char			**data;
+	struct s_exec	*next;
+}	t_exec;
 
 //PARSE
 void	parse(t_table *p_table, t_token **token_list);
