@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/24 10:19:59 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/17 17:24:22 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,19 +107,20 @@ bool	is_valid_var(t_var *data, char *line)
 	return (true);
 }
 
-void	ft_export(t_var *data, t_ast *token)
+void	ft_export(t_var *data, char **cmd_list)
 {
 	char	**line;
 	
 	data->exit_code = EXIT_SUCCESS;
-	if (!token->data)
+	if (cmd_list[1] == NULL)
 	{
 		no_arg_export(data);
 		return ;
 	}
-	if (is_valid_var(data, token->data) == false)
+	//I have to loop through the cmd_list and add all not just the first
+	if (is_valid_var(data, cmd_list[1]) == false)
 		return ;
-	line = ft_split(token->data, '=');
+	line = ft_split(cmd_list[1], '=');
 	if (!line)
 	{
 		print_error(2, "export: ", strerror(errno));
@@ -128,7 +129,7 @@ void	ft_export(t_var *data, t_ast *token)
 	}
 	if (replace_var(data, line[0], line[1]) == false)
 	{
-		if (add_var_to_env(data, token->data) == MALLOC_FAIL)
+		if (add_var_to_env(data, cmd_list[1]) == MALLOC_FAIL)
 		{
 			print_error(2, "export: ", strerror(errno));
 			data->exit_code = MALLOC_FAIL;

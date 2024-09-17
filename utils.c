@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/23 20:21:36 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/17 16:41:31 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	safe_exit(t_var *data, int exit_code)
 	}
 	exit(exit_code);
 }
-
+/* 
 void	check_brackets(t_var *data)
 {
 	t_token	*head;
@@ -86,7 +86,7 @@ void	check_brackets(t_var *data)
 	if (count != 0)
 		safe_exit(data, ERROR_MISUSE);
 }
-
+ */
 void	get_promt(t_var *data)
 {
 	data->promt = ft_strjoin(data->pwd, " > ");
