@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
+#    By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/07/22 15:37:12 by icseri           ###   ########.fr        #
+#    Updated: 2024/09/17 12:44:38 by cseriildii       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,5 +60,7 @@ fclean: clean
 	@rm -rf ${NAME} ${BONUS_NAME}
 	
 re: fclean all
+
+built: all clean
 
 .PHONY: all clean fclean re
