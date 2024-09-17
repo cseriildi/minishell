@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/23 19:16:43 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/17 17:37:29 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	main(int argc, char **argv)
 		if (*data->line)
 			add_history(data->line);
 		lexer(data);
-		check_brackets(data);
+		//check_brackets(data);
 		//print_tokens(data->tokens);
 		//data->p_table = create_table();
 		//parse(data->p_table, data->tokens);

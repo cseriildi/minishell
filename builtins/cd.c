@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/24 10:19:35 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/17 16:44:58 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,40 @@ int	cd_in_env(t_var *data, char *pwd)
 	return (EXIT_SUCCESS);
 }
 
-void	ft_cd(t_var *data, t_ast *token)
+void	ft_cd(t_var *data, char **cmd_list)
 {
 	char	*pwd;
+	char	*dest;
 
 	data->exit_code = EXIT_SUCCESS;
-	if (chdir(token->data) == -1)
+	dest = cmd_list[1];
+	if (dest == NULL)
 	{
-		print_error(4, "minishell: cd: ", token->data, ": ", strerror(errno));
-		data->exit_code = ERROR_MISUSE;
+		dest = ft_getenv(data, "HOME");
+		if (ft_strncmp(dest, "", 2) == 0)
+		{
+			print_error(2, "minishell: cd: HOME not set");
+			data->exit_code = EXIT_FAILURE;
+			return ;
+		}
+	}
+	else if (cmd_list[2] != NULL)
+	{
+		print_error(2, "minishell: cd: too many arguments");
+		data->exit_code = EXIT_FAILURE;
+		return ;
+	}
+	if (chdir(dest) == -1)
+	{
+		print_error(4, "minishell: cd: ", dest, ": ", strerror(errno));
+		data->exit_code = EXIT_FAILURE;
+		return ;
 	}
 	ft_free(&data->pwd);
 	pwd = getcwd(NULL, 0);
 	if (cd_in_env(data, pwd) == MALLOC_FAIL)
 	{
-		print_error(2, "cd: ", strerror(errno));
+		print_error(2, "minishell: cd: ", strerror(errno));
 		data->exit_code = MALLOC_FAIL;
 	}
 	ft_free(&data->pwd);
