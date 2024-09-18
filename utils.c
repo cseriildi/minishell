@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/17 16:41:31 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/18 14:03:55 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,30 +63,7 @@ void	safe_exit(t_var *data, int exit_code)
 	}
 	exit(exit_code);
 }
-/* 
-void	check_brackets(t_var *data)
-{
-	t_token	*head;
-	t_token	*current;
-	int		count;
 
-	count = 0;
-	head = *data->tokens;
-	current = head;
-	while (current != NULL)
-	{
-		if (current->type == L_BRACKET)
-			count++;
-		if (current->type == R_BRACKET)
-			count--;
-		if (count < 0)
-			safe_exit(data, ERROR_MISUSE);
-		current = current->next;
-	}
-	if (count != 0)
-		safe_exit(data, ERROR_MISUSE);
-}
- */
 void	get_promt(t_var *data)
 {
 	data->promt = ft_strjoin(data->pwd, " > ");
@@ -109,4 +86,3 @@ void	print_error(int count, ...)
 	va_end(args);
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
-

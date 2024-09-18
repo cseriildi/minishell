@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:52 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/17 17:20:54 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/18 13:50:25 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	get_exit_code(char *str)
 	{
 		if (!ft_isdigit(str[i]))
 		{
-			print_error(3, "minishell: exit: ", str, ": numeric argument required");
+			print_error(3, "minishell: exit: ", str,
+				": numeric argument required");
 			return (ERROR_MISUSE);
 		}
 		i++;
@@ -31,7 +32,6 @@ int	get_exit_code(char *str)
 	//I have to handle long overflow, and the exit code should be % 256
 	return (ft_atoi(str));
 }
-
 
 void	ft_exit(t_var *data, char **cmd_list)
 {

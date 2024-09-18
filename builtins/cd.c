@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/17 16:44:58 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/18 13:47:29 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	cd_in_env(t_var *data, char *pwd)
 {
 	char	*tmp;
-	
+
 	if (replace_var(data, "PWD", pwd) == false)
 	{
 		tmp = ft_strjoin("PWD=", pwd);
@@ -44,6 +44,7 @@ void	ft_cd(t_var *data, char **cmd_list)
 
 	data->exit_code = EXIT_SUCCESS;
 	dest = cmd_list[1];
+	//handle when text is "" or " " or even "     "
 	if (dest == NULL)
 	{
 		dest = ft_getenv(data, "HOME");

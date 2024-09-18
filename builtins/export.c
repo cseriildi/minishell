@@ -6,58 +6,59 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/17 17:24:22 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/18 13:53:22 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-int compare_indices(int a,  int b, char **env)
+int	compare_indices(int a, int b, char **env)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
 	while (env[a][i] && env[b][i] && env[a][i] == env[b][i])
 		i++;
 	return (env[a][i] - env[b][i]);
 }
 
-void bubble_sort_with_context(int *arr, int n, char **env)
+void	bubble_sort_with_context(int *arr, int n, char **env)
 {
-    int i;
-	int j;
-	int temp;
+	int	i;
+	int	j;
+	int	temp;
 
 	i = -1;
-    while (++i < n - 1)
+	while (++i < n - 1)
 	{
-        j = -1;
+		j = -1;
 		while (++j < n - i - 1)
 		{
-            if (compare_indices(arr[j], arr[j + 1], env) > 0)
+			if (compare_indices(arr[j], arr[j + 1], env) > 0)
 			{
-                temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
-            }
-        }
-    }
+				temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
+		}
+	}
 }
 
 void	print_export(char *line)
 {
-	int		i;
-	
+	int	i;
+
 	i = 0;
 	ft_putstr_fd("declare -x ", 1);
 	while (line[i] && line[i] != '=')
 		ft_putchar_fd(line[i++], 1);
 	printf("=\"%s\"\n", line + i + 1);
 }
+
 void	no_arg_export(t_var *data)
 {
-	int count;
-	int *indices;
+	int	count;
+	int	*indices;
 	int	i;
 
 	count = 0;
@@ -91,7 +92,7 @@ bool	is_valid_var(t_var *data, char *line)
 		print_error(2, "export: not an identifier: ", var_name);
 		data->exit_code = ERROR_MISUSE;
 		return (false);
-	}	
+	}
 	while (line[i] && line[i] != '=')
 	{
 		if (!ft_isalnum(line[i]) && line[i] != '_')
@@ -110,7 +111,7 @@ bool	is_valid_var(t_var *data, char *line)
 void	ft_export(t_var *data, char **cmd_list)
 {
 	char	**line;
-	
+
 	data->exit_code = EXIT_SUCCESS;
 	if (cmd_list[1] == NULL)
 	{
@@ -135,6 +136,5 @@ void	ft_export(t_var *data, char **cmd_list)
 			data->exit_code = MALLOC_FAIL;
 		}
 	}
-		
 	free_array(line);
 }
