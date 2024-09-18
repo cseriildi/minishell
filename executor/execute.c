@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/17 17:51:53 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/18 13:56:04 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,22 @@ void	execute(t_var *data)
 	(*data->tree)->type = 1;
 	(*data->tree)->down = malloc(sizeof(t_exec));
 	(*data->tree)->next = NULL;
-	(*data->tree)->down->data = "echo";
-	(*data->tree)->down->down->data = "5";
-	(*data->tree)->down->down->down->data = NULL;
+	(*data->tree)->down->data = "/bin/ls";
+	(*data->tree)->down->type = WORD;
+	(*data->tree)->down->next = NULL;
+	(*data->tree)->down->down = malloc(sizeof(t_exec));
+	(*data->tree)->down->down->data = "out";
+	(*data->tree)->down->down->type = APPEND;
+	(*data->tree)->down->down->next = NULL;
+	(*data->tree)->down->down->down = malloc(sizeof(t_exec));
+	(*data->tree)->down->down->down->data = "out2";
+	(*data->tree)->down->down->down->type = RED_OUT;
+	(*data->tree)->down->down->down->next = NULL;
+	(*data->tree)->down->down->down->down = malloc(sizeof(t_exec));
+	(*data->tree)->down->down->down->down->data = NULL;
+	(*data->tree)->down->down->down->down->down = NULL;
+	(*data->tree)->down->down->down->down->next = NULL;
 	//end of dummy
-
 	if ((*data->tree)->next == NULL)
 		only_one_sequence(data, (*data->tree)->down);
 	else
@@ -60,7 +71,7 @@ void	only_one_sequence(t_var *data, t_exec *tree)
 			waitpid(data->pid, &data->exit_status, 0);
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
-			printf("This is just for debugging!!\nexit code: %d\n", data->exit_code);
+			printf("This is for debugging! exit code: %d\n", data->exit_code);
 		}
 	}
 }
@@ -98,7 +109,7 @@ void	middle_sequence(t_var *data, t_exec *tree)
 		close(data->pipe1_fd[1]);
 		data->pipe1_fd[0] = data->pipe2_fd[0];
 		data->pipe1_fd[1] = data->pipe2_fd[1];
-	}	
+	}
 }
 
 void	last_sequence(t_var *data, t_exec *tree)
@@ -114,24 +125,29 @@ void	last_sequence(t_var *data, t_exec *tree)
 	}
 	else
 	{
+		wait(NULL);
 		waitpid(data->pid, &data->exit_status, 0);
 		if (WIFEXITED(data->exit_status))
 			data->exit_code = WEXITSTATUS(data->exit_status);
-		printf("This is just for debugging!!\nexit code: %d\n", data->exit_code);
+		printf("This is for debugging nexit code: %d\n", data->exit_code);
 	}
 }
 
 void	exec_sequence(t_var *data, t_exec *tree, int read, int write)
 {
 	char	**cmd_list;
+	t_exec	*temp;
 
+	temp = tree;
 	cmd_list = create_cmd_list(data, tree);
-	while (tree != NULL && tree->type == WORD)
-		tree = tree->down;
-	while (tree != NULL)
+	while (temp != NULL && temp->type == WORD)
+		temp = temp->down;
+	temp = tree;
+	while (temp != NULL)
 	{
-		redirect(data, tree);
-		tree = tree->down;
+		//fix when there are multiple redirections in the same direction
+		redirect(data, temp);
+		temp = temp->down;
 	}
 	dup_pipes(data, read, write);
 	if (cmd_list != NULL)
@@ -155,7 +171,11 @@ void	redirect(t_var *data, t_exec *tree)
 			return ;
 		}
 		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			close(fd);
 			safe_exit(data, DUP2_FAIL);
+		}
+		close(fd);
 	}
 	else if (tree->type == RED_OUT)
 	{
@@ -167,7 +187,11 @@ void	redirect(t_var *data, t_exec *tree)
 			return ;
 		}
 		if (dup2(fd, STDOUT_FILENO) == -1)
+		{
+			close(fd);
 			safe_exit(data, DUP2_FAIL);
+		}
+		close(fd);
 	}
 	else if (tree->type == APPEND)
 	{
@@ -179,7 +203,11 @@ void	redirect(t_var *data, t_exec *tree)
 			return ;
 		}
 		if (dup2(fd, STDOUT_FILENO) == -1)
+		{
+			close(fd);
 			safe_exit(data, DUP2_FAIL);
+		}
+		close(fd);
 	}
 	else if (tree->type == HERE_DOC)
 	{
@@ -217,23 +245,27 @@ char	**create_cmd_list(t_var *data, t_exec *tree)
 {
 	int		i;
 	char	**cmd_list;
+	t_exec	*temp;
 
 	//I have to extend the variables and remove the quotes here
+	//Fix to work with relative path
+	temp = tree;
 	i = 0;
-	while (tree != NULL && tree->type == WORD)
+	while (temp != NULL && temp->type == WORD)
 	{
 		i++;
-		tree = tree->down;
+		temp = temp->down;
 	}
 	cmd_list = malloc(sizeof(char *) * (i + 1));
 	if (!cmd_list)
 		safe_exit(data, MALLOC_FAIL);
+	temp = tree;
 	i = 0;
-	while (tree != NULL && tree->type == WORD)
+	while (temp != NULL && temp->type == WORD)
 	{
-		cmd_list[i] = tree->data;
+		cmd_list[i] = temp->data;
 		i++;
-		tree = tree->down;
+		temp = temp->down;
 	}
 	cmd_list[i] = NULL;
 	return (cmd_list);
@@ -241,7 +273,10 @@ char	**create_cmd_list(t_var *data, t_exec *tree)
 
 bool	is_builtin(char *cmd)
 {
-	if (ft_strncmp(cmd, "echo", 5) && ft_strncmp(cmd, "cd", 3) && ft_strncmp(cmd, "pwd", 4) && ft_strncmp(cmd, "export", 7) && ft_strncmp(cmd, "unset", 5) && ft_strncmp(cmd, "env", 4) && ft_strncmp(cmd, "exit", 5))
+	if (ft_strncmp(cmd, "echo", 5) && ft_strncmp(cmd, "cd", 3)
+		&& ft_strncmp(cmd, "pwd", 4) && ft_strncmp(cmd, "export", 7)
+		&& ft_strncmp(cmd, "unset", 5) && ft_strncmp(cmd, "env", 4)
+		&& ft_strncmp(cmd, "exit", 5))
 		return (false);
 	return (true);
 }
