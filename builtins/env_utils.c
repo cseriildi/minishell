@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/24 10:16:20 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/18 13:46:59 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,18 @@ char	*ft_getenv(t_var *data, char *var_name)
 		{
 			if (ft_strncmp(data->env[i], var_name, len) == 0
 				&& data->env[i][len] == '=')
-					return (data->env[i] + len + 1);
+				return (data->env[i] + len + 1);
 			i++;
 		}
 	}
 	return ("");
 }
 
-void init_env(t_var *data)
+void	init_env(t_var *data)
 {
-	extern char **environ;
-	int size;
-	int i;
+	extern char	**environ;
+	int			size;
+	int			i;
 
 	size = 0;
 	while (environ && environ[size])
@@ -89,6 +89,7 @@ bool	replace_var(t_var *data, char *key, char *content)
 	}
 	return (false);
 }
+
 int	add_var_to_env(t_var *data, char *line)
 {
 	int		size;

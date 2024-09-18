@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/17 17:31:19 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/18 13:46:05 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ typedef struct s_exec
 	struct s_exec	*next;
 }	t_exec;
 
-
-
 typedef struct s_env
 {
 	char			*line;
@@ -92,8 +90,8 @@ typedef struct s_var
 	char	*line;
 	int		index;
 	pid_t	pid;
-	int 	pipe1_fd[2];
-	int 	pipe2_fd[2];
+	int		pipe1_fd[2];
+	int		pipe2_fd[2];
 	int		exit_status;
 	int		exit_code;
 	char	*pwd;
@@ -125,7 +123,6 @@ t_table	*create_table(void);
 
 //utils
 void	safe_exit(t_var *data, int exit_code);
-//void	check_brackets(t_var *data);
 void	get_promt(t_var *data);
 void	free_tokens(t_var *data);
 void	free_array(char **arr);

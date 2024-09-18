@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:54:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/17 12:47:27 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/18 14:00:31 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ char	*fix_content(char *content, t_var *data)
 		if (*var_name == '?')
 			last = ft_strdup(content + ft_strlen(first) + 2);
 		else
-			last = ft_strdup(content + ft_strlen(first) + ft_strlen(var_name) + 1);
+			last = ft_strdup(content 
+				+ ft_strlen(first) + ft_strlen(var_name) + 1);
 		ft_free(&content);
 		ft_free(&first);
 		ft_free(&var_name);
@@ -124,9 +125,6 @@ void	word(t_var *data)
 	if (!content)
 		safe_exit(data, MALLOC_FAIL);
 	data->index += ft_strlen(content);
-	/* content = fix_content(content, data);
-	if (!content)
-		safe_exit(data, MALLOC_FAIL); */
 	new_token = create_new_token(content, WORD);
 	ft_free(&content);
 	if (!new_token)

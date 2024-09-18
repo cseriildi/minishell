@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/17 12:49:08 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/18 13:58:16 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,12 @@
 
 void	get_next_token(t_var *data)
 {
-/* 	if (data->line[data->index] == '\"')
-		double_quote(data);
-	else if (data->line[data->index] == '\'')
-		single_quote(data);
-	else if (data->line[data->index] == '|')
+	if (data->line[data->index] == '|')
 		pipes(data);
-	else  */if (data->line[data->index] == '<')
+	else if (data->line[data->index] == '<')
 		input(data);
 	else if (data->line[data->index] == '>')
 		redirection(data);
-	/* else if (data->line[data->index] == '&')
-		and_sign(data);
-	else if (data->line[data->index] == ')' || data->line[data->index] == '(')
-		braces(data); */
 	else if (data->line[data->index])
 		word(data);
 }
