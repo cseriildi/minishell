@@ -6,7 +6,7 @@
 #    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/07/20 17:27:31 by pvass            ###   ########.fr        #
+#    Updated: 2024/09/19 15:14:10 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,10 @@ SRCS = main.c \
 		parser/shift_reduce.c \
 		parser/stack_utils.c \
 		parser/stack_free.c \
-		parser/transform.c
+		parser/basic_functions.c \
+		parser/create_exec_utils.c \
+		parser/arrange_exec.c \
+		parser/exec_utils.c
 #		builtins/cd.c \
 		builtins/echo.c \
 		builtins/env.c \

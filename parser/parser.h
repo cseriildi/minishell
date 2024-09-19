@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 12:22:01 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/20 17:30:15 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/19 15:13:19 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,8 @@ typedef struct s_stack
 typedef struct s_exec
 {
 	int				type;
-	char			**data;
+	char			*data;
+	struct s_exec	*down;
 	struct s_exec	*next;
 }	t_exec;
 
@@ -93,12 +94,25 @@ t_stack	*pop_stack(t_stack **stack);
 void	del_stack_node(t_stack **stack);
 int		get_next_state(t_table *p_table, t_stack *stack);
 void	free_stack(t_stack **stack);
+void	stack_reverse(t_stack **stack);
+t_stack	*copy_node(t_stack *node);
+void	swap_stack(t_stack **a, t_stack **b);
 
 //DEBUG UTILS
 void	print_stack(t_stack *stack);
 void	print_p_table(t_table *parsing_table);
 
-//transform
-void	transform(t_stack *result, t_stack *stack);
+int	check_red(int type);
+
+//EXEC
+t_exec	*create_exec(t_stack **res);
+void	print_exec(t_exec *exec);
+void	reverse_exec(t_exec **exec);
+int		exec_last_is_not_cmd(t_exec *exec);
+void	exec_add_back_under(t_exec **where_a, t_exec *what);
+void	exec_add_under(t_exec **where_a, t_exec *what);
+void	exec_add_back(t_exec **where_a, t_exec *what);
+void	free_exec_all(t_exec **exec);
+
 
 #endif
