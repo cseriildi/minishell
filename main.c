@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/18 13:45:09 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/19 14:13:02 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	main(int argc, char **argv)
 
 	(void)argv;
 	if (argc != 1)
-		return (1);
+		return (print_error(2, "too many arguments, rerun like ./minishell"), ERROR_MISUSE);
 	data = malloc(sizeof(t_var));
 	if (!data)
 		return (MALLOC_FAIL);

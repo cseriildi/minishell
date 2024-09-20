@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/17 17:48:00 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/19 14:05:43 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,6 @@ char	**create_cmd_list(t_var *data, t_exec *tree);
 void	exec_command(t_var *data, char **cmd_list);
 bool	is_builtin(char *cmd);
 void	redirect(t_var *data, t_exec *tree);
+char	**get_paths(t_var *data);
+char	*get_abs_cmd(t_var *data, char *cmd);
 #endif

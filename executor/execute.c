@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/18 13:56:04 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/19 15:24:24 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,39 +19,39 @@ void	execute(t_var *data)
 	if (!data->tree)
 		safe_exit(data, MALLOC_FAIL);
 	*data->tree = malloc(sizeof(t_exec));
-	(*data->tree)->data = "seq1";
-	(*data->tree)->type = 1;
-	(*data->tree)->down = malloc(sizeof(t_exec));
+	(*data->tree)->data = "cd";
+	(*data->tree)->type = WORD;
 	(*data->tree)->next = NULL;
-	(*data->tree)->down->data = "/bin/ls";
+	(*data->tree)->down = malloc(sizeof(t_exec));
+	(*data->tree)->down->data = "..";
 	(*data->tree)->down->type = WORD;
 	(*data->tree)->down->next = NULL;
 	(*data->tree)->down->down = malloc(sizeof(t_exec));
-	(*data->tree)->down->down->data = "out";
-	(*data->tree)->down->down->type = APPEND;
+	(*data->tree)->down->down->data = NULL;
+	//(*data->tree)->down->down->type = NULL;
 	(*data->tree)->down->down->next = NULL;
-	(*data->tree)->down->down->down = malloc(sizeof(t_exec));
-	(*data->tree)->down->down->down->data = "out2";
+	(*data->tree)->down->down->down = NULL;
+	/* (*data->tree)->down->down->down->data = "out";
 	(*data->tree)->down->down->down->type = RED_OUT;
 	(*data->tree)->down->down->down->next = NULL;
 	(*data->tree)->down->down->down->down = malloc(sizeof(t_exec));
 	(*data->tree)->down->down->down->down->data = NULL;
 	(*data->tree)->down->down->down->down->down = NULL;
-	(*data->tree)->down->down->down->down->next = NULL;
+	(*data->tree)->down->down->down->down->next = NULL; */
 	//end of dummy
 	if ((*data->tree)->next == NULL)
-		only_one_sequence(data, (*data->tree)->down);
+		only_one_sequence(data, (*data->tree));
 	else
 	{
-		first_sequence(data, (*data->tree)->down);
+		first_sequence(data, (*data->tree));
 		(*data->tree) = (*data->tree)->next;
 		while ((*data->tree)->next != NULL)
 		{
-			middle_sequence(data, (*data->tree)->down);
+			middle_sequence(data, (*data->tree));
 			(*data->tree) = (*data->tree)->next;
 		}
 		if ((*data->tree)->next == NULL)
-			last_sequence(data, (*data->tree)->down);
+			last_sequence(data, (*data->tree));
 	}
 }
 
@@ -145,7 +145,6 @@ void	exec_sequence(t_var *data, t_exec *tree, int read, int write)
 	temp = tree;
 	while (temp != NULL)
 	{
-		//fix when there are multiple redirections in the same direction
 		redirect(data, temp);
 		temp = temp->down;
 	}
@@ -234,10 +233,27 @@ void	dup_pipes(t_var *data, int read, int write)
 
 void	exec_command(t_var *data, char **cmd_list)
 {
-	if (execve(cmd_list[0], cmd_list, data->env) == -1)
+	char	*abs_cmd;
+	
+	if (cmd_list[0] == NULL)
+		return ;
+	if (ft_strchr(cmd_list[0], '/') != NULL
+		&& execve(cmd_list[0], cmd_list, data->env) == -1)
 	{
-		print_error(2, COMMAND_NOT_FOUND, cmd_list[0]);
-		exit(EXIT_FAILURE);
+		print_error(3, "minishell: ", cmd_list[0], ": No such file or directory");
+		safe_exit(data, COMMAND_NOT_FOUND);
+	}
+	abs_cmd = get_abs_cmd(data, cmd_list[0]);
+	if (abs_cmd == NULL)
+	{
+		print_error(3, "minishell: ", cmd_list[0], ": command not found");
+		safe_exit(data, COMMAND_NOT_FOUND);
+	}
+	if (execve(abs_cmd, cmd_list, data->env) == -1)
+	{
+		print_error(3, "minishell: ", abs_cmd, ": No such file or directory");
+		//ft_free(&abs_cmd);
+		safe_exit(data, COMMAND_NOT_FOUND);
 	}
 }
 
@@ -279,4 +295,56 @@ bool	is_builtin(char *cmd)
 		&& ft_strncmp(cmd, "exit", 5))
 		return (false);
 	return (true);
+}
+
+char	**get_paths(t_var *data)
+{
+	int		i;
+	char	**path;
+
+	i = 0;
+	while (data->env[i] != NULL)
+	{
+		if (ft_strncmp(data->env[i], "PATH=", 5) == 0)
+		{
+			path = ft_split(data->env[i] + 5, ':');
+			if (!path)
+				safe_exit(data, MALLOC_FAIL);
+			return (path);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
+char	*get_abs_cmd(t_var *data, char *cmd)
+{
+	int		i;
+	char	**path;
+	char	*tmp;
+	char	*path_cmd;
+
+	path = get_paths(data);
+	if (!path)
+		return (cmd);
+	i = 0;
+	while (path[i] != NULL)
+	{
+		tmp = ft_strjoin(path[i], "/");
+		if (!tmp)
+			safe_exit(data, MALLOC_FAIL);
+		path_cmd = ft_strjoin(tmp, cmd);
+		ft_free(&tmp);
+		if (!path_cmd)
+			safe_exit(data, MALLOC_FAIL);
+		if (access(path_cmd, F_OK) == 0)
+		{
+			free_array(path);
+			return (path_cmd);
+		}
+		ft_free(&path_cmd);
+		i++;
+	}
+	free_array(path);
+	return (NULL);
 }
