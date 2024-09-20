@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/18 13:46:59 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/19 15:26:52 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*ft_getenv(t_var *data, char *var_name)
 			i++;
 		}
 	}
-	return ("");
+	return (NULL);
 }
 
 void	init_env(t_var *data)
