@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 13:00:11 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 16:42:09 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 			waitpid(data->pid, &data->exit_status, 0);
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
-			printf("This is for debugging! exit code: %d\n", data->exit_code);
+			//printf("This is for debugging! exit code: %d\n", data->exit_code);
 		}
 	}
 }
@@ -102,11 +102,11 @@ void	last_sequence(t_var *data, t_exec *exec)
 	}
 	else
 	{
-		wait(NULL);
+		wait(&data->exit_status);
 		waitpid(data->pid, &data->exit_status, 0);
 		if (WIFEXITED(data->exit_status))
 			data->exit_code = WEXITSTATUS(data->exit_status);
-		printf("This is for debugging nexit code: %d\n", data->exit_code);
+		//printf("This is for debugging nexit code: %d\n", data->exit_code);
 	}
 }
 
@@ -114,12 +114,16 @@ void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
 {
 	char	**cmd_list;
 	t_exec	*temp;
+	int		out_fd;
 
 	temp = exec;
 	cmd_list = create_cmd_list(data, exec);
 	while (temp != NULL && temp->type == WORD)
 		temp = temp->down;
 	temp = exec;
+	out_fd = dup(STDOUT_FILENO);
+	if (out_fd == -1)
+		safe_exit(data, DUP2_FAIL);
 	while (temp != NULL)
 	{
 		redirect(data, temp);
@@ -131,12 +135,23 @@ void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
 		if (exec_builtin(data, cmd_list) == false)
 			exec_command(data, cmd_list);
 	}
+	if (read != STDIN_FILENO)
+		close (read);
+	if (write != STDOUT_FILENO)
+		close (write);
+	if (dup2(out_fd, STDOUT_FILENO) == -1)
+	{
+		close(out_fd);
+		safe_exit(data, DUP2_FAIL);
+	}
+	close(out_fd);
+
 }
 
 void	redirect(t_var *data, t_exec *exec)
 {
 	int	fd;
-
+	
 	if (exec->type == RED_IN)
 	{
 		fd = open(exec->data, O_RDONLY);

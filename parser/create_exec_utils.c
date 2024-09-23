@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_exec_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 10:23:37 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/23 10:21:24 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/23 13:36:14 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ t_exec	*exec_new(t_stack **res)
 	run = 1;
 	new_type = 0;
 	new_node = malloc(sizeof(t_exec));
-	printf("HAHAHA\n");
-	print_stack(*res);
+	//printf("HAHAHA\n");
+	//print_stack(*res);
 	if (new_node == NULL)
 		return (NULL);
 	new_node->down = NULL;
 	new_node->next = NULL;
-	printf("HAHAHAaaaaaa\n");
+	//printf("HAHAHAaaaaaa\n");
 	if ((*res)->type == 6)
 	{
 		new_node->type = (*res)->type;
@@ -138,15 +138,15 @@ t_exec	*create_exec(t_stack **res)
 	t_stack	*temp2;
 
 	new = NULL;
-	printf("HALO\n");
+	//printf("HALO\n");
 	temp2 = *res;
 	while (temp2 != NULL)
 	{
 		temp = exec_new(&temp2);
 		if (temp == NULL)
 			return (free_exec_all(&new), NULL);
-		print_exec(temp);
-		printf("HALO22222222%p\n", temp);
+		//print_exec(temp);
+		//printf("HALO22222222%p\n", temp);
 		if (temp == NULL)
 			return (NULL);
 		if (temp->type != WORD || exec_last_is_not_cmd(new) == 1)
@@ -160,7 +160,7 @@ t_exec	*create_exec(t_stack **res)
 			//print_exec(new);
 		}
 		//printf("NEWWWWWWWWWWWWWWWW\n");
-		print_exec(new);
+		//print_exec(new);
 		temp2 = temp2->next;
 	}
 	//printf("HALO3\n");
