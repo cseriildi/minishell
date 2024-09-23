@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/23 12:56:34 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 13:21:36 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,6 @@ void	parse(t_var *data)
 	t_stack	*result;
 	int		run;
 
-	data->p_table = create_table();
-	if (data->p_table == NULL)
-		return ;
-	printf("kurva3\n");
 	token_list = data->tokens;
 	run = TRUE;
 	stack = init_stack();
