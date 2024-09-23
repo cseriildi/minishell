@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 10:23:37 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/19 15:02:54 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/23 10:21:24 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,27 +115,6 @@ void	exec_add_back_under(t_exec **where_a, t_exec *what)
 	while (where->down != NULL)
 		where = where->down;
 	where->down = what;
-}
-
-void	print_exec(t_exec *exec)
-{
-	t_exec	*temp;
-	t_exec	*temp2;
-	
-	temp = exec;
-	temp2 = exec;
-	printf("PRINTING EXEC:\n");
-	while (temp != NULL)
-	{
-		temp2 = temp;
-		while (temp2 != NULL)
-		{
-			printf("Exec: TYPE: %d, DATA:%s\n", temp2->type, temp2->data);
-			temp2 = temp2->down;
-		}
-		printf("NEXT\n");
-		temp = temp->next;
-	}
 }
 
 int exec_last_is_not_cmd(t_exec *exec)
