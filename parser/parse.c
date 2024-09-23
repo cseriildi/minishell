@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/23 13:21:36 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 13:53:12 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_table	*get_entry(t_token *token, t_table *p_table, t_stack *stack)
 	input_type = -1;
 	if (token)
 		input_type = token->type;
-	printf ("stack->state: %d, input_type %d\n", stack->state, input_type);
+	//printf ("stack->state: %d, input_type %d\n", stack->state, input_type);
 	while (p_table != NULL)
 	{
 		if (p_table->state == stack->state)
@@ -69,7 +69,7 @@ void put_pipes_right_place(t_stack **result)
 	{
 		if (temp->type == P_PIPE_SEQ && temp->next->type == PIPE)
 			swap_stack(&temp, &(temp->next));
-		printf("ty:%d\n", temp->type);
+		//printf("ty:%d\n", temp->type);
 		temp = temp->next;
 	}
 	temp = *result;
@@ -95,11 +95,9 @@ void	parse(t_var *data)
 {
 	t_stack	*stack;
 	t_table	*entry;
-	t_token	*token_list;
 	t_stack	*result;
 	int		run;
 
-	token_list = data->tokens;
 	run = TRUE;
 	stack = init_stack();
 	result = NULL;
@@ -109,13 +107,13 @@ void	parse(t_var *data)
 	{
 		//printf("aaaaaaaaaaaaaaaa\n");
 		//print_stack(stack);
-		entry = get_entry(token_list, data->p_table, stack);
+		entry = get_entry(data->tokens, data->p_table, stack);
 		//printf("aaaaaaaaaaaaaaaa%p\n", entry);
 		//printf("pentry: %p\n", entry);
 		//if(entry != NULL)
 			//printf("entry:%d\n", entry->action);
 		if (entry && entry->action == A_SHIFT)
-			run = shift(&stack, &token_list, entry->next_s);
+			run = shift(&stack, &data->tokens, entry->next_s);
 		else if (entry && entry->action == A_REDUCE)
 			run = reduce(&stack, data->p_table, entry, &result);
 		else if (entry && entry->action == A_ACCEPT)
@@ -138,15 +136,15 @@ void	parse(t_var *data)
 			//printf("\nSTART REVERSING\n\n");
 			reverse_exec(&data->exec);
 			//printf("\nFINAL after reverse\n\n");
-			print_exec(data->exec);
+			//print_exec(data->exec);
 			
-			printf("ACCEPT\n");
+			//printf("ACCEPT\n");
 		}
 		else
 		{
 			run = 0;
 			//print_stack(stack);
-			printf("REJECT\n");
+			//printf("REJECT\n");
 		}
 	}
 	//print_stack(result);
