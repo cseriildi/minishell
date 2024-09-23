@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 13:04:31 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 13:26:47 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	init(t_var *data)
 {
 	data->tokens = NULL;
 	data->p_table = NULL;
+	data->exec = NULL;
 	data->line = NULL;
 	data->exit_code = 0;
 	data->subshell_level = 1;
@@ -38,8 +39,10 @@ void	init(t_var *data)
 	if (!data->pwd)
 		safe_exit(data, MALLOC_FAIL);
 	data->promt = NULL;
+	data->p_table = create_table();
+	if (data->p_table == NULL)
+		safe_exit(data, MALLOC_FAIL);
 	init_env(data);
-	//data->p_table = create_table();
 }
 
 int	main(int argc, char **argv)
@@ -62,11 +65,10 @@ int	main(int argc, char **argv)
 		if (*data->line)
 			add_history(data->line);
 		lexer(data);
-		printf("kurva\n");
 		parse(data);
-		printf("kurva2\n");
 		execute(data);
 		//free_tokens(data);
+		free_exec_all(&data->exec);
 	}
 	safe_exit(data, data->exit_code);
 }
