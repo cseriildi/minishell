@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_table_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:14:59 by pvass             #+#    #+#             */
-/*   Updated: 2024/07/20 16:06:49 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 10:48:31 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ t_table	*table_new(char **args)
 {
 	t_table	*new;
 
+	if (args == NULL || *args == NULL)
+		return (NULL);
 	new = (t_table *) malloc (sizeof(t_table));
 	if (new == NULL)
 		return (NULL);
@@ -69,6 +71,8 @@ void	free_tab(char **tabb)
 	int	i;
 
 	i = 0;
+	if (tabb == NULL)
+		return ;
 	while (tabb[i] != NULL)
 	{
 		free(tabb[i]);
@@ -76,4 +80,4 @@ void	free_tab(char **tabb)
 	}
 	free(tabb);
 }
-/*NEW*/
+

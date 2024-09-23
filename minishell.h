@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/23 19:33:38 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/23 11:20:55 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,18 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_exec
+{
+	int				type;
+	char			*data;
+	struct s_exec	*down;
+	struct s_exec	*next;
+}	t_exec;
+
 typedef struct s_var
 {
 	t_token	**tokens;
+	t_exec	*exec;
 	t_table	*p_table;
 	t_ast	**tree;
 	char	*line;
@@ -116,7 +125,7 @@ typedef enum s_err
 void	lexer(t_var *data);
 
 //parser
-void	parse(t_table *p_table, t_token **tokens);
+t_exec	*parse(t_table *p_table, t_token **tokens);
 t_table	*create_table(void);
 
 //utils
@@ -137,5 +146,8 @@ void	execute(t_var *data);
 void	init_env(t_var *data);
 char	*ft_getenv(t_var *data, char *var_name);
 void	free_env(t_env **env);
+void	free_table(t_table **p_table);
+void	free_exec_all(t_exec **exec);
+void	print_exec(t_exec *exec);
 
 #endif

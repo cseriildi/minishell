@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug_utils.c                                      :+:      :+:    :+:   */
+/*   p_table_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/20 10:52:19 by pvass             #+#    #+#             */
-/*   Updated: 2024/07/20 17:28:16 by pvass            ###   ########.fr       */
+/*   Created: 2024/09/23 10:33:56 by pvass             #+#    #+#             */
+/*   Updated: 2024/09/23 10:45:12 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "minishell.h"
 
-void	print_stack(t_stack *stack)
+void	free_table(t_table **p_table)
 {
-	int	i;
-
-	i = 0;
-	while (stack != NULL)
+	t_table	*prev;
+	t_table	*curr;
+	
+	if (p_table == NULL)
+		return ;
+	curr = *p_table;
+	while (curr != NULL)
 	{
-		ft_printf("Element%d: type: %d, data:%s, state: %d\n", i, stack->type,
-			stack->data, stack->state);
-		i++;
-		stack = stack->next;
+		prev = curr;
+		curr = curr->next;
+		free(prev);
 	}
-	ft_printf("\n");
 }

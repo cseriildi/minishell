@@ -1,28 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   debug_utils.c                                      :+:      :+:    :+:   */
+/*   basic_functions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/20 10:52:19 by pvass             #+#    #+#             */
-/*   Updated: 2024/07/20 17:28:16 by pvass            ###   ########.fr       */
+/*   Created: 2024/09/17 14:26:11 by pvass             #+#    #+#             */
+/*   Updated: 2024/09/17 14:40:19 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-void	print_stack(t_stack *stack)
+void	swap_int(int *a, int *b)
 {
-	int	i;
+	int	t;
 
-	i = 0;
-	while (stack != NULL)
-	{
-		ft_printf("Element%d: type: %d, data:%s, state: %d\n", i, stack->type,
-			stack->data, stack->state);
-		i++;
-		stack = stack->next;
-	}
-	ft_printf("\n");
+	t = *a;
+	*a = *b;
+	*b = t;
+}
+
+void	swap_str(char **a, char**b)
+{
+	char *t;
+
+	t = *a;
+	*a = *b;
+	*b = t;
+}
+void	swap_stack(t_stack **a, t_stack **b)
+{
+	swap_int(&((*a)->state), &((*b)->state));
+	swap_int(&((*a)->type), &((*b)->type));
+	swap_str(&((*a)->data), &((*b)->data));
 }
