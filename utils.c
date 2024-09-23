@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 11:20:40 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 11:26:25 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,32 +68,23 @@ void	safe_exit(t_var *data, int exit_code)
 	exit(exit_code);
 }
 
-void	check_brackets(t_var *data)
-{
-	t_token	*head;
-	t_token	*current;
-	int		count;
-
-	count = 0;
-	head = *data->tokens;
-	current = head;
-	while (current != NULL)
-	{
-		if (current->type == L_BRACKET)
-			count++;
-		if (current->type == R_BRACKET)
-			count--;
-		if (count < 0)
-			safe_exit(data, ERROR_MISUSE);
-		current = current->next;
-	}
-	if (count != 0)
-		safe_exit(data, ERROR_MISUSE);
-}
-
 void	get_promt(t_var *data)
 {
-	data->promt = ft_strjoin(data->pwd, " > ");
+	char	*home;
+	char	*tmp;
+
+	home = ft_getenv(data, "HOME");
+	if (home != NULL
+		&& ft_strncmp(data->pwd, home, ft_strlen(home)) == 0)
+	{
+		tmp = ft_strjoin("~", data->pwd + ft_strlen(home));
+		if (!tmp)
+			safe_exit(data, MALLOC_FAIL);
+		data->promt = ft_strjoin(tmp, "$ ");
+		free(tmp);
+	}
+	else
+		data->promt = ft_strjoin(data->pwd, "$ ");
 	if (!data->promt)
 		safe_exit(data, MALLOC_FAIL);
 }
@@ -113,4 +104,3 @@ void	print_error(int count, ...)
 	va_end(args);
 	ft_putstr_fd("\n", STDERR_FILENO);
 }
-

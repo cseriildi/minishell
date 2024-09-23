@@ -6,27 +6,28 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:53:04 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/24 10:09:55 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/17 17:26:51 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-void	ft_unset(t_var *data, t_ast *token)
+void	ft_unset(t_var *data, char **cmd_list)
 {
 	int	i;
 	int	len;
 
 	data->exit_code = EXIT_SUCCESS;
-	if (!token->data)
+	if (cmd_list[1] == NULL)
 		return ;
 	len = 0;
-	if (token->data)
-		len = ft_strlen(token->data);
+	//I have to loop through the cmd_list and remove all not just the first
+	if (cmd_list[1])
+		len = ft_strlen(cmd_list[1]);
 	i = 0;
 	while (data->env && data->env[i])
 	{
-		if (ft_strncmp(data->env[i], token->data, len) == 0
+		if (ft_strncmp(data->env[i], cmd_list[1], len) == 0
 			&& data->env[i][len] == '=')
 		{
 			free(data->env[i]);

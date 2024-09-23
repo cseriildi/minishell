@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 11:20:55 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 11:26:20 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ typedef struct s_table
 	struct s_table	*next;
 }	t_table;
 
-typedef struct s_ast
+typedef struct s_exec
 {
 	int				type;
 	char			*data;
-	struct s_ast	*child;
-	struct s_ast	*next;
-}	t_ast;
+	struct s_exec	*down;
+	struct s_exec	*next;
+}	t_exec;
 
 typedef struct s_env
 {
@@ -95,10 +95,12 @@ typedef struct s_var
 	t_token	**tokens;
 	t_exec	*exec;
 	t_table	*p_table;
-	t_ast	**tree;
+	t_exec	**tree;
 	char	*line;
 	int		index;
 	pid_t	pid;
+	int		pipe1_fd[2];
+	int		pipe2_fd[2];
 	int		exit_status;
 	int		exit_code;
 	char	*pwd;
@@ -130,14 +132,13 @@ t_table	*create_table(void);
 
 //utils
 void	safe_exit(t_var *data, int exit_code);
-void	check_brackets(t_var *data);
 void	get_promt(t_var *data);
 void	free_tokens(t_var *data);
 void	free_array(char **arr);
 void	print_error(int count, ...);
 
 //builtins
-bool	builtin(t_var *data, t_ast *token);
+bool	exec_builtin(t_var *data, char **cmd_list);
 
 //executor
 void	execute(t_var *data);
