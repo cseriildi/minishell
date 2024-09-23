@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/23 10:49:46 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/23 12:56:34 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,27 +91,29 @@ void put_pipes_right_place(t_stack **result)
 	}	
 }
 
-t_exec	*parse(t_table *p_table, t_token **tokens)
+void	parse(t_var *data)
 {
 	t_stack	*stack;
 	t_table	*entry;
 	t_token	*token_list;
 	t_stack	*result;
-	t_exec *exec;
 	int		run;
 
-	exec = NULL;
-	token_list = *tokens;
+	data->p_table = create_table();
+	if (data->p_table == NULL)
+		return ;
+	printf("kurva3\n");
+	token_list = data->tokens;
 	run = TRUE;
 	stack = init_stack();
 	result = NULL;
 	if (stack == NULL)
-		return (NULL) ;
+		return ;
 	while (run)
 	{
 		//printf("aaaaaaaaaaaaaaaa\n");
 		//print_stack(stack);
-		entry = get_entry(token_list, p_table, stack);
+		entry = get_entry(token_list, data->p_table, stack);
 		//printf("aaaaaaaaaaaaaaaa%p\n", entry);
 		//printf("pentry: %p\n", entry);
 		//if(entry != NULL)
@@ -119,7 +121,7 @@ t_exec	*parse(t_table *p_table, t_token **tokens)
 		if (entry && entry->action == A_SHIFT)
 			run = shift(&stack, &token_list, entry->next_s);
 		else if (entry && entry->action == A_REDUCE)
-			run = reduce(&stack, p_table, entry, &result);
+			run = reduce(&stack, data->p_table, entry, &result);
 		else if (entry && entry->action == A_ACCEPT)
 		{
 			run = 0;
@@ -131,16 +133,16 @@ t_exec	*parse(t_table *p_table, t_token **tokens)
 			printf("result\n");
 			print_stack(result); */
 			
-			exec = create_exec(&result);
-			if (exec == NULL)
+			data->exec = create_exec(&result);
+			if (data->exec == NULL)
 				break ;
 			//print_stack(result);
 			//printf("\nFINAL\n\n");
 			//print_exec(exec);
 			//printf("\nSTART REVERSING\n\n");
-			reverse_exec(&exec);
+			reverse_exec(&data->exec);
 			//printf("\nFINAL after reverse\n\n");
-			print_exec(exec);
+			print_exec(data->exec);
 			
 			printf("ACCEPT\n");
 		}
@@ -156,7 +158,6 @@ t_exec	*parse(t_table *p_table, t_token **tokens)
 	//print_stack(stack);
 	free_stack(&stack);
 	//printf("ENDING\n");
-	return (exec);
 	/* free_exec_all(&exec); */
 }
 

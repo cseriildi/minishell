@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   other_types.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:02:02 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/18 13:59:33 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/23 12:49:21 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	redirection(t_var *data)
 	}
 	if (!new_token)
 		safe_exit(data, MALLOC_FAIL);
-	add_token_to_back(data->tokens, new_token);
+	add_token_to_back(&data->tokens, new_token);
 }
 
 void	input(t_var *data)
@@ -47,7 +47,7 @@ void	input(t_var *data)
 	}
 	if (!new_token)
 		safe_exit(data, MALLOC_FAIL);
-	add_token_to_back(data->tokens, new_token);
+	add_token_to_back(&data->tokens, new_token);
 }
 
 void	pipes(t_var *data)
@@ -67,5 +67,5 @@ void	pipes(t_var *data)
 	}
 	if (!new_token)
 		safe_exit(data, MALLOC_FAIL);
-	add_token_to_back(data->tokens, new_token);
+	add_token_to_back(&data->tokens, new_token);
 }
