@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 12:22:01 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/19 15:13:19 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/23 10:11:09 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,8 @@ typedef struct s_stack
 	struct s_stack	*next;
 }	t_stack;
 
-typedef struct s_exec
-{
-	int				type;
-	char			*data;
-	struct s_exec	*down;
-	struct s_exec	*next;
-}	t_exec;
-
 //PARSE
-void	parse(t_table *p_table, t_token **token_list);
+t_exec	*parse(t_table *p_table, t_token **token_list);
 
 //TABLE UTILS
 t_table	*create_table(void);

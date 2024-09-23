@@ -1,48 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_utils.c                                       :+:      :+:    :+:   */
+/*   p_table_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/19 11:50:42 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/19 14:53:46 by pvass            ###   ########.fr       */
+/*   Created: 2024/09/23 10:33:56 by pvass             #+#    #+#             */
+/*   Updated: 2024/09/23 10:45:12 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "minishell.h"
 
-void	free_down_exec(t_exec **exec)
+void	free_table(t_table **p_table)
 {
-	t_exec	*prev;
-	t_exec	*curr;
-
-	curr = *exec;
-	if (exec == NULL)
+	t_table	*prev;
+	t_table	*curr;
+	
+	if (p_table == NULL)
 		return ;
+	curr = *p_table;
 	while (curr != NULL)
 	{
 		prev = curr;
 		curr = curr->next;
-		if (prev->data != NULL)
-			free(prev->data);
 		free(prev);
-	}
-}
-void	free_exec_all(t_exec **exec)
-{
-	t_exec	*prev;
-	t_exec	*curr;
-
-	curr = *exec;
-	if (exec == NULL)
-		return ;
-	if (*exec == NULL)
-		return /* (free(exec)) */;
-	while (curr != NULL)
-	{
-		prev = curr;
-		curr = curr->next;
-		free_down_exec(&prev);
 	}
 }

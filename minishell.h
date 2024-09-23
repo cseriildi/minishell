@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/19 12:37:25 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/23 10:39:59 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,18 @@ typedef struct s_table
 	struct s_table	*next;
 }		t_table;
 
+typedef struct s_exec
+{
+	int				type;
+	char			*data;
+	struct s_exec	*down;
+	struct s_exec	*next;
+}	t_exec;
+
 typedef struct s_var
 {
 	t_token	**tokens;
+	t_exec	*exec;
 	t_table	*p_table;
 	char	*line;
 	int		index;
@@ -95,11 +104,14 @@ typedef enum s_err
 void	lexer(t_var *data);
 
 //parser
-void	parse(t_table *p_table, t_token **tokens);
+t_exec	*parse(t_table *p_table, t_token **tokens);
 t_table	*create_table(void);
 
 //utils
 void	safe_exit(t_var *data, int exit_code);
 void	check_brackets(t_var *data);
+void	free_table(t_table **p_table);
+void	free_exec_all(t_exec **exec);
+void	print_exec(t_exec *exec);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:14:59 by pvass             #+#    #+#             */
-/*   Updated: 2024/07/20 17:34:00 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/23 10:48:31 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,16 +81,3 @@ void	free_tab(char **tabb)
 	free(tabb);
 }
 
-void	free_table(t_table **p_table)
-{
-	t_table	*temp;
-	
-	if (p_table == NULL)
-		return ;
-	while (*p_table != NULL)
-	{
-		temp = *p_table;
-		*p_table = (*p_table)->next;
-		free(temp);
-	}
-}

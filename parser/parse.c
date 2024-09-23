@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/19 15:07:06 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/23 10:49:46 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void put_pipes_right_place(t_stack **result)
 	}	
 }
 
-void	parse(t_table *p_table, t_token **tokens)
+t_exec	*parse(t_table *p_table, t_token **tokens)
 {
 	t_stack	*stack;
 	t_table	*entry;
@@ -106,7 +106,7 @@ void	parse(t_table *p_table, t_token **tokens)
 	stack = init_stack();
 	result = NULL;
 	if (stack == NULL)
-		return ;
+		return (NULL) ;
 	while (run)
 	{
 		//printf("aaaaaaaaaaaaaaaa\n");
@@ -123,23 +123,23 @@ void	parse(t_table *p_table, t_token **tokens)
 		else if (entry && entry->action == A_ACCEPT)
 		{
 			run = 0;
-			printf("result\n");
-			print_stack(result);
+			/* printf("result\n");
+			print_stack(result); */
 			put_pipes_right_place(&result);
-			printf("stack\n");
+			/* printf("stack\n");
 			print_stack(stack);
 			printf("result\n");
-			print_stack(result);
+			print_stack(result); */
 			
 			exec = create_exec(&result);
 			if (exec == NULL)
 				break ;
-			print_stack(result);
-			printf("\nFINAL\n\n");
-			print_exec(exec);
-			printf("\nSTART REVERSING\n\n");
+			//print_stack(result);
+			//printf("\nFINAL\n\n");
+			//print_exec(exec);
+			//printf("\nSTART REVERSING\n\n");
 			reverse_exec(&exec);
-			printf("\nFINAL after reverse\n\n");
+			//printf("\nFINAL after reverse\n\n");
 			print_exec(exec);
 			
 			printf("ACCEPT\n");
@@ -147,19 +147,17 @@ void	parse(t_table *p_table, t_token **tokens)
 		else
 		{
 			run = 0;
-			print_stack(stack);
+			//print_stack(stack);
 			printf("REJECT\n");
 		}
 	}
-	print_stack(result);
+	//print_stack(result);
 	free_stack(&result);
-	
-	print_stack(stack);
+	//print_stack(stack);
 	free_stack(&stack);
-	
-	free_table(&p_table);
-	printf("ENDING\n");
-	free_exec_all(&exec);
+	//printf("ENDING\n");
+	return (exec);
+	/* free_exec_all(&exec); */
 }
 
 /* int main ()

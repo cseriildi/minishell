@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/19 12:37:32 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/23 10:58:47 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,11 @@ void	safe_exit(t_var *data, int exit_code)
 			ft_free(&data->line);
 		if (data->tokens)
 			free_tokens(data->tokens);
-		free(data);
+		if (data->exec)
+			free_exec_all(&(data->exec));
+		if (data->p_table)
+			free_table(&(data->p_table));
+		free(data);	
 	}
 	exit(exit_code);
 }
