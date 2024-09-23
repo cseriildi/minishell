@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 11:26:25 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 13:04:13 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,9 @@ void	free_tokens(t_var *data)
 	t_token	*current;
 	t_token	*next;
 
-	if (!data->tokens)
-		return ;
-	if (*data->tokens)
+	if (data->tokens)
 	{
-		current = *data->tokens;
+		current = data->tokens;
 		while (current != NULL)
 		{
 			next = current->next;
@@ -29,9 +27,9 @@ void	free_tokens(t_var *data)
 			free(current);
 			current = next;
 		}
+		free(data->tokens);
+		data->tokens = NULL;
 	}
-	free(data->tokens);
-	data->tokens = NULL;
 }
 
 void	free_array(char **arr)

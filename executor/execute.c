@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/19 15:24:24 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/23 13:00:11 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,58 +14,35 @@
 
 void	execute(t_var *data)
 {
-	//dummy
-	data->tree = malloc(sizeof(t_exec *));
-	if (!data->tree)
-		safe_exit(data, MALLOC_FAIL);
-	*data->tree = malloc(sizeof(t_exec));
-	(*data->tree)->data = "cd";
-	(*data->tree)->type = WORD;
-	(*data->tree)->next = NULL;
-	(*data->tree)->down = malloc(sizeof(t_exec));
-	(*data->tree)->down->data = "..";
-	(*data->tree)->down->type = WORD;
-	(*data->tree)->down->next = NULL;
-	(*data->tree)->down->down = malloc(sizeof(t_exec));
-	(*data->tree)->down->down->data = NULL;
-	//(*data->tree)->down->down->type = NULL;
-	(*data->tree)->down->down->next = NULL;
-	(*data->tree)->down->down->down = NULL;
-	/* (*data->tree)->down->down->down->data = "out";
-	(*data->tree)->down->down->down->type = RED_OUT;
-	(*data->tree)->down->down->down->next = NULL;
-	(*data->tree)->down->down->down->down = malloc(sizeof(t_exec));
-	(*data->tree)->down->down->down->down->data = NULL;
-	(*data->tree)->down->down->down->down->down = NULL;
-	(*data->tree)->down->down->down->down->next = NULL; */
-	//end of dummy
-	if ((*data->tree)->next == NULL)
-		only_one_sequence(data, (*data->tree));
+	if (data->exec == NULL)
+		return ;
+	if (data->exec->next == NULL)
+		only_one_sequence(data, data->exec);
 	else
 	{
-		first_sequence(data, (*data->tree));
-		(*data->tree) = (*data->tree)->next;
-		while ((*data->tree)->next != NULL)
+		first_sequence(data, data->exec);
+		data->exec = data->exec->next;
+		while (data->exec->next != NULL)
 		{
-			middle_sequence(data, (*data->tree));
-			(*data->tree) = (*data->tree)->next;
+			middle_sequence(data, data->exec);
+			data->exec = data->exec->next;
 		}
-		if ((*data->tree)->next == NULL)
-			last_sequence(data, (*data->tree));
+		if (data->exec->next == NULL)
+			last_sequence(data, data->exec);
 	}
 }
 
-void	only_one_sequence(t_var *data, t_exec *tree)
+void	only_one_sequence(t_var *data, t_exec *exec)
 {
-	if (is_builtin(tree->data) == true)
-		exec_sequence(data, tree, STDIN_FILENO, STDOUT_FILENO);
+	if (is_builtin(exec->data) == true)
+		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 	else
 	{
 		data->pid = fork();
 		if (data->pid == -1)
 			safe_exit(data, FORK_FAIL);
 		if (data->pid == 0)
-			exec_sequence(data, tree, STDIN_FILENO, STDOUT_FILENO);
+			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 		else
 		{
 			waitpid(data->pid, &data->exit_status, 0);
@@ -76,7 +53,7 @@ void	only_one_sequence(t_var *data, t_exec *tree)
 	}
 }
 
-void	first_sequence(t_var *data, t_exec *tree)
+void	first_sequence(t_var *data, t_exec *exec)
 {
 	pipe(data->pipe1_fd);
 	data->pid = fork();
@@ -85,12 +62,12 @@ void	first_sequence(t_var *data, t_exec *tree)
 	if (data->pid == 0)
 	{
 		close(data->pipe1_fd[0]);
-		exec_sequence(data, tree, STDIN_FILENO, data->pipe1_fd[1]);
+		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		exit(EXIT_SUCCESS);
 	}
 }
 
-void	middle_sequence(t_var *data, t_exec *tree)
+void	middle_sequence(t_var *data, t_exec *exec)
 {
 	pipe(data->pipe2_fd);
 	data->pid = fork();
@@ -100,7 +77,7 @@ void	middle_sequence(t_var *data, t_exec *tree)
 	{
 		close(data->pipe1_fd[1]);
 		close(data->pipe2_fd[0]);
-		exec_sequence(data, tree, data->pipe1_fd[0], data->pipe2_fd[1]);
+		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
 		exit(EXIT_SUCCESS);
 	}
 	else
@@ -112,7 +89,7 @@ void	middle_sequence(t_var *data, t_exec *tree)
 	}
 }
 
-void	last_sequence(t_var *data, t_exec *tree)
+void	last_sequence(t_var *data, t_exec *exec)
 {
 	data->pid = fork();
 	if (data->pid == -1)
@@ -120,7 +97,7 @@ void	last_sequence(t_var *data, t_exec *tree)
 	if (data->pid == 0)
 	{
 		close(data->pipe1_fd[1]);
-		exec_sequence(data, tree, data->pipe1_fd[0], STDOUT_FILENO);
+		exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
 	else
@@ -133,16 +110,16 @@ void	last_sequence(t_var *data, t_exec *tree)
 	}
 }
 
-void	exec_sequence(t_var *data, t_exec *tree, int read, int write)
+void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
 {
 	char	**cmd_list;
 	t_exec	*temp;
 
-	temp = tree;
-	cmd_list = create_cmd_list(data, tree);
+	temp = exec;
+	cmd_list = create_cmd_list(data, exec);
 	while (temp != NULL && temp->type == WORD)
 		temp = temp->down;
-	temp = tree;
+	temp = exec;
 	while (temp != NULL)
 	{
 		redirect(data, temp);
@@ -156,16 +133,16 @@ void	exec_sequence(t_var *data, t_exec *tree, int read, int write)
 	}
 }
 
-void	redirect(t_var *data, t_exec *tree)
+void	redirect(t_var *data, t_exec *exec)
 {
 	int	fd;
 
-	if (tree->type == RED_IN)
+	if (exec->type == RED_IN)
 	{
-		fd = open(tree->data, O_RDONLY);
+		fd = open(exec->data, O_RDONLY);
 		if (fd == -1)
 		{
-			print_error(4, "minishell: ", tree->data, ": ", strerror(errno));
+			print_error(4, "minishell: ", exec->data, ": ", strerror(errno));
 			data->exit_code = CANNOT_OPEN_FILE;
 			return ;
 		}
@@ -176,12 +153,12 @@ void	redirect(t_var *data, t_exec *tree)
 		}
 		close(fd);
 	}
-	else if (tree->type == RED_OUT)
+	else if (exec->type == RED_OUT)
 	{
-		fd = open(tree->data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(exec->data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
 		{
-			print_error(4, "minishell: ", tree->data, ": ", strerror(errno));
+			print_error(4, "minishell: ", exec->data, ": ", strerror(errno));
 			data->exit_code = CANNOT_OPEN_FILE;
 			return ;
 		}
@@ -192,12 +169,12 @@ void	redirect(t_var *data, t_exec *tree)
 		}
 		close(fd);
 	}
-	else if (tree->type == APPEND)
+	else if (exec->type == APPEND)
 	{
-		fd = open(tree->data, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(exec->data, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
 		{
-			print_error(4, "minishell: ", tree->data, ": ", strerror(errno));
+			print_error(4, "minishell: ", exec->data, ": ", strerror(errno));
 			data->exit_code = CANNOT_OPEN_FILE;
 			return ;
 		}
@@ -208,7 +185,7 @@ void	redirect(t_var *data, t_exec *tree)
 		}
 		close(fd);
 	}
-	else if (tree->type == HERE_DOC)
+	else if (exec->type == HERE_DOC)
 	{
 		//I have to implement here_doc
 		//Do NOT forget about quotes in the LIMITER
@@ -257,7 +234,7 @@ void	exec_command(t_var *data, char **cmd_list)
 	}
 }
 
-char	**create_cmd_list(t_var *data, t_exec *tree)
+char	**create_cmd_list(t_var *data, t_exec *exec)
 {
 	int		i;
 	char	**cmd_list;
@@ -265,7 +242,7 @@ char	**create_cmd_list(t_var *data, t_exec *tree)
 
 	//I have to extend the variables and remove the quotes here
 	//Fix to work with relative path
-	temp = tree;
+	temp = exec;
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
 	{
@@ -275,7 +252,7 @@ char	**create_cmd_list(t_var *data, t_exec *tree)
 	cmd_list = malloc(sizeof(char *) * (i + 1));
 	if (!cmd_list)
 		safe_exit(data, MALLOC_FAIL);
-	temp = tree;
+	temp = exec;
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
 	{

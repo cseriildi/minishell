@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 11:25:59 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 13:04:31 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ int	main(int argc, char **argv)
 		data->line = readline(data->promt);
 		if (!data->line)
 			safe_exit(data, READLINE_FAIL);
-		if (ft_strncmp(data->line, "exit", 5) == 0)
-			safe_exit(data, EXIT_SUCCESS);
 		if (*data->line)
 			add_history(data->line);
 		lexer(data);
-		//parse(data->p_table, data->tokens);
+		printf("kurva\n");
+		parse(data);
+		printf("kurva2\n");
 		execute(data);
-		free_tokens(data);
+		//free_tokens(data);
 	}
 	safe_exit(data, data->exit_code);
 }

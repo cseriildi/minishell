@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 11:26:20 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 11:45:23 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,11 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-typedef struct s_exec
-{
-	int				type;
-	char			*data;
-	struct s_exec	*down;
-	struct s_exec	*next;
-}	t_exec;
-
 typedef struct s_var
 {
-	t_token	**tokens;
+	t_token	*tokens;
 	t_exec	*exec;
 	t_table	*p_table;
-	t_exec	**tree;
 	char	*line;
 	int		index;
 	pid_t	pid;
@@ -127,7 +118,7 @@ typedef enum s_err
 void	lexer(t_var *data);
 
 //parser
-t_exec	*parse(t_table *p_table, t_token **tokens);
+void	parse(t_var *data);
 t_table	*create_table(void);
 
 //utils

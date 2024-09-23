@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/18 13:58:16 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/23 12:48:34 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	lexer(t_var *data)
 	data->tokens = malloc(sizeof(t_token *));
 	if (!data->tokens)
 		safe_exit(data, MALLOC_FAIL);
-	*data->tokens = NULL;
+	data->tokens = NULL;
 	data->index = 0;
 	while (data->line[data->index])
 	{
@@ -38,5 +38,6 @@ void	lexer(t_var *data)
 		if (data->line[data->index])
 			get_next_token(data);
 	}
-	add_token_to_back(data->tokens, create_new_token("END", END));
+	add_token_to_back(
+		&data->tokens, create_new_token("END", END));
 }
