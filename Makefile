@@ -6,7 +6,7 @@
 #    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/07/22 15:37:12 by icseri           ###   ########.fr        #
+#    Updated: 2024/09/23 11:21:18 by icseri           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,8 @@ NAME = minishell
 
 SRCS = main.c \
 		utils.c \
+		exec_utils.c \
+		p_table_utils.c \
 		lexer/lexer.c \
 		lexer/list.c \
 		lexer/other_types.c \
@@ -29,6 +31,12 @@ SRCS = main.c \
 		builtins/env_utils.c \
 		builtins/builtins.c \
 		builtins/cd.c \
+		parser/stack_utils.c \
+		parser/stack_free.c \
+		parser/basic_functions.c \
+		parser/create_exec_utils.c \
+		parser/arrange_exec.c
+#		builtins/cd.c \
 		builtins/echo.c \
 		builtins/env.c \
 		builtins/exit.c \

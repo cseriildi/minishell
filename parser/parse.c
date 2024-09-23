@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/07/20 16:01:54 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 10:49:46 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
+#include "parser.h" //cat < in | cat ???
 
 t_table	*get_entry(t_token *token, t_table *p_table, t_stack *stack)
 {
@@ -23,12 +23,11 @@ t_table	*get_entry(t_token *token, t_table *p_table, t_stack *stack)
 	input_type = -1;
 	if (token)
 		input_type = token->type;
+	printf ("stack->state: %d, input_type %d\n", stack->state, input_type);
 	while (p_table != NULL)
 	{
-		//printf("p_table->state: %d\nstack->state: %d\n", p_table->state, stack->state);
 		if (p_table->state == stack->state)
 		{
-			//printf("p_table->event: %d\nstack->event: %d\n", p_table->event, input_type);
 			if (p_table->event == input_type)
 				return (p_table);
 			else if (p_table->event == P_NONE)
@@ -43,6 +42,7 @@ int	get_next_state(t_table *p_table, t_stack *stack)
 {
 	int	next_state;
 
+	next_state = 0;
 	while (p_table != NULL)
 	{
 		if (p_table->state == stack->next->state)
@@ -57,49 +57,107 @@ int	get_next_state(t_table *p_table, t_stack *stack)
 	return (next_state);
 }
 
-void	parse(t_table *p_table, t_token **tokens)
+void put_pipes_right_place(t_stack **result)
+{
+	t_stack *temp;
+	t_stack	*temp2;
+	
+	temp = *result;
+	if (*result == NULL)
+		return ;
+	while (temp != NULL)
+	{
+		if (temp->type == P_PIPE_SEQ && temp->next->type == PIPE)
+			swap_stack(&temp, &(temp->next));
+		printf("ty:%d\n", temp->type);
+		temp = temp->next;
+	}
+	temp = *result;
+	if(temp->type == P_PIPE_SEQ && temp->next->type == PIPE)
+	{
+		*result = temp->next->next;
+		temp2 = *result;
+		swap_stack(&temp, &(temp->next));
+		while (temp2->next != NULL)
+		{
+			if (temp2->next->type == 102 && temp2->type != 101)
+			{
+				temp->next->next = temp2->next;
+				temp2->next = temp;
+				break;
+			}
+			temp2 = temp2->next;
+		}
+	}	
+}
+
+t_exec	*parse(t_table *p_table, t_token **tokens)
 {
 	t_stack	*stack;
 	t_table	*entry;
 	t_token	*token_list;
+	t_stack	*result;
+	t_exec *exec;
 	int		run;
 
+	exec = NULL;
 	token_list = *tokens;
 	run = TRUE;
 	stack = init_stack();
+	result = NULL;
 	if (stack == NULL)
-		return ;
-	while (/* token_list != NULL  &&*/ run)
+		return (NULL) ;
+	while (run)
 	{
+		//printf("aaaaaaaaaaaaaaaa\n");
 		//print_stack(stack);
 		entry = get_entry(token_list, p_table, stack);
-		//print_p_table(entry);
-		//print_stack(stack);
+		//printf("aaaaaaaaaaaaaaaa%p\n", entry);
+		//printf("pentry: %p\n", entry);
+		//if(entry != NULL)
+			//printf("entry:%d\n", entry->action);
 		if (entry && entry->action == A_SHIFT)
 			run = shift(&stack, &token_list, entry->next_s);
 		else if (entry && entry->action == A_REDUCE)
-			run = reduce(&stack, p_table, entry);
+			run = reduce(&stack, p_table, entry, &result);
 		else if (entry && entry->action == A_ACCEPT)
 		{
-			run = 0;//accept();
+			run = 0;
+			/* printf("result\n");
+			print_stack(result); */
+			put_pipes_right_place(&result);
+			/* printf("stack\n");
+			print_stack(stack);
+			printf("result\n");
+			print_stack(result); */
+			
+			exec = create_exec(&result);
+			if (exec == NULL)
+				break ;
+			//print_stack(result);
+			//printf("\nFINAL\n\n");
+			//print_exec(exec);
+			//printf("\nSTART REVERSING\n\n");
+			reverse_exec(&exec);
+			//printf("\nFINAL after reverse\n\n");
+			print_exec(exec);
+			
 			printf("ACCEPT\n");
-			//print_stack(stack);
-			//printf("token: %s\n", token_list->content);
 		}
 		else
 		{
-			run = 0;//reject();
-			printf("REJECT\n");
+			run = 0;
 			//print_stack(stack);
+			printf("REJECT\n");
 		}
-		//printf ("run:%d\n", run);
-		//print_stack(stack);
-		//printf("---------------\n");
-		//if (entry)
-		//	printf("%d	%d	%d	%d	%d\n", entry->state, entry->event, entry->action, entry->next_s, entry->nb_reduce);
-		//token_list = token_list->next;
 	}
-	//print_p_table(entry);
+	//print_stack(result);
+	free_stack(&result);
+	//print_stack(stack);
+	free_stack(&stack);
+	//printf("ENDING\n");
+	return (exec);
+	/* free_exec_all(&exec); */
 }
 
 /* int main ()

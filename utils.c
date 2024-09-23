@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/23 20:21:36 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/23 11:20:40 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,11 @@ void	safe_exit(t_var *data, int exit_code)
 		ft_free(&data->promt);
 		ft_free(&data->line);
 		free_array(data->env);
-		free(data);
+		if (data->exec)
+			free_exec_all(&(data->exec));
+		if (data->p_table)
+			free_table(&(data->p_table));
+		free(data);	
 	}
 	exit(exit_code);
 }

@@ -33,7 +33,9 @@ t_stack	*new_stack_node(t_token *token)
 	state_0 = (t_stack *)malloc(sizeof(*state_0));
 	if (!state_0)
 		return (NULL);
-	state_0->data = token->content;
+	state_0->data = ft_strdup(token->content);
+	if (state_0->data == NULL)
+		return (free(state_0), NULL);
 	state_0->state = 1;
 	state_0->type = token->type;
 	state_0->next = NULL;
