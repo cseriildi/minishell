@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 11:21:29 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/23 11:25:59 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	init(t_var *data)
 		safe_exit(data, MALLOC_FAIL);
 	data->promt = NULL;
 	init_env(data);
+	//data->p_table = create_table();
 }
 
 int	main(int argc, char **argv)
@@ -47,7 +48,7 @@ int	main(int argc, char **argv)
 
 	(void)argv;
 	if (argc != 1)
-		return (1);
+		return (print_error(2, "too many arguments, rerun like ./minishell"), ERROR_MISUSE);
 	data = malloc(sizeof(t_var));
 	if (!data)
 		return (MALLOC_FAIL);
@@ -63,9 +64,6 @@ int	main(int argc, char **argv)
 		if (*data->line)
 			add_history(data->line);
 		lexer(data);
-		check_brackets(data);
-		//print_tokens(data->tokens);
-		//data->p_table = create_table();
 		//parse(data->p_table, data->tokens);
 		execute(data);
 		free_tokens(data);
