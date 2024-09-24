@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 12:46:48 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/24 15:18:10 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	init(t_var *data)
 	data->tokens = NULL;
 	data->p_table = NULL;
 	data->exec = NULL;
+	data->cmd_list = NULL;
 	data->line = NULL;
 	data->exit_code = 0;
 	data->subshell_level = 1;

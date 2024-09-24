@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 12:39:21 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/24 15:44:29 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,18 +114,17 @@ void	last_sequence(t_var *data, t_exec *exec)
 
 void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
 {
-	char	**cmd_list;
 	t_exec	*temp;
 	int		out_fd;
 
 	temp = exec;
-	cmd_list = create_cmd_list(data, exec);
+	create_cmd_list(data, exec);
 	while (temp != NULL && temp->type == WORD)
 		temp = temp->down;
 	temp = exec;
 	out_fd = -1;
-	if (is_builtin(cmd_list[0])	
-		&& ft_strncmp("exit", cmd_list[0], 5) != 0 && write == STDOUT_FILENO)
+	if (is_builtin(data->cmd_list[0])	
+		&& ft_strncmp("exit", data->cmd_list[0], 5) != 0 && write == STDOUT_FILENO)
 	{
 		out_fd = dup(STDOUT_FILENO);
 		if (out_fd == -1)
@@ -137,10 +136,10 @@ void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
 		temp = temp->down;
 	}
 	dup_pipes(data, read, write);
-	if (cmd_list != NULL)
+	if (data->cmd_list != NULL)
 	{
-		if (exec_builtin(data, cmd_list) == false)
-			exec_command(data, cmd_list);
+		if (exec_builtin(data) == false)
+			exec_command(data);
 	}
 	if (read != STDIN_FILENO)
 		close (read);
@@ -232,40 +231,38 @@ void	dup_pipes(t_var *data, int read, int write)
 	}
 }
 
-void	exec_command(t_var *data, char **cmd_list)
+void	exec_command(t_var *data)
 {
 	char	*abs_cmd;
 	
-	if (cmd_list[0] == NULL)
+	if (data->cmd_list[0] == NULL)
 		return ;
-	if (ft_strchr(cmd_list[0], '/') != NULL
-		&& execve(cmd_list[0], cmd_list, data->env) == -1)
+	if (ft_strchr(data->cmd_list[0], '/') != NULL
+		&& execve(data->cmd_list[0], data->cmd_list, data->env) == -1)
 	{
-		print_error(3, "minishell: ", cmd_list[0], ": No such file or directory");
+		print_error(3, "minishell: ", data->cmd_list[0], ": No such file or directory");
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
-	abs_cmd = get_abs_cmd(data, cmd_list[0]);
+	abs_cmd = get_abs_cmd(data, data->cmd_list[0]);
 	if (abs_cmd == NULL)
 	{
-		print_error(3, "minishell: ", cmd_list[0], ": command not found");
+		print_error(3, "minishell: ", data->cmd_list[0], ": command not found");
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
-	if (execve(abs_cmd, cmd_list, data->env) == -1)
+	if (execve(abs_cmd, data->cmd_list, data->env) == -1)
 	{
 		print_error(3, "minishell: ", abs_cmd, ": No such file or directory");
-		//ft_free(&abs_cmd);
+		ft_free(&abs_cmd);
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
 }
 
-char	**create_cmd_list(t_var *data, t_exec *exec)
+void	create_cmd_list(t_var *data, t_exec *exec)
 {
 	int		i;
-	char	**cmd_list;
 	t_exec	*temp;
 
 	//I have to extend the variables and remove the quotes here
-	//Fix to work with relative path
 	temp = exec;
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
@@ -273,29 +270,18 @@ char	**create_cmd_list(t_var *data, t_exec *exec)
 		i++;
 		temp = temp->down;
 	}
-	cmd_list = malloc(sizeof(char *) * (i + 1));
-	if (!cmd_list)
+	data->cmd_list = malloc(sizeof(char *) * (i + 1));
+	if (!data->cmd_list)
 		safe_exit(data, MALLOC_FAIL);
 	temp = exec;
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
 	{
-		cmd_list[i] = temp->data;
+		data->cmd_list[i] = temp->data;
 		i++;
 		temp = temp->down;
 	}
-	cmd_list[i] = NULL;
-	return (cmd_list);
-}
-
-bool	is_builtin(char *cmd)
-{
-	if (ft_strncmp(cmd, "echo", 5) && ft_strncmp(cmd, "cd", 3)
-		&& ft_strncmp(cmd, "pwd", 4) && ft_strncmp(cmd, "export", 7)
-		&& ft_strncmp(cmd, "unset", 5) && ft_strncmp(cmd, "env", 4)
-		&& ft_strncmp(cmd, "exit", 5))
-		return (false);
-	return (true);
+	data->cmd_list[i] = NULL;
 }
 
 char	**get_paths(t_var *data)

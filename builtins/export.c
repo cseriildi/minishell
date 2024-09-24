@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/18 13:53:22 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/24 15:16:14 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,33 +108,36 @@ bool	is_valid_var(t_var *data, char *line)
 	return (true);
 }
 
-void	ft_export(t_var *data, char **cmd_list)
+void	ft_export(t_var *data)
 {
 	char	**line;
+	int		i;
 
 	data->exit_code = EXIT_SUCCESS;
-	if (cmd_list[1] == NULL)
-	{
+	if (data->cmd_list[1] == NULL)
 		no_arg_export(data);
-		return ;
-	}
-	//I have to loop through the cmd_list and add all not just the first
-	if (is_valid_var(data, cmd_list[1]) == false)
-		return ;
-	line = ft_split(cmd_list[1], '=');
-	if (!line)
+	i = 0;
+	while (data->cmd_list[++i] != NULL)
 	{
-		print_error(2, "export: ", strerror(errno));
-		data->exit_code = MALLOC_FAIL;
-		return ;
-	}
-	if (replace_var(data, line[0], line[1]) == false)
-	{
-		if (add_var_to_env(data, cmd_list[1]) == MALLOC_FAIL)
+		if (is_valid_var(data, data->cmd_list[i]) == true)
 		{
-			print_error(2, "export: ", strerror(errno));
-			data->exit_code = MALLOC_FAIL;
+			line = ft_split(data->cmd_list[1], '=');
+			if (!line)
+			{
+				print_error(2, "export: ", strerror(errno));
+				data->exit_code = MALLOC_FAIL;
+				free_array(line);
+				continue ;
+			}
+			if (replace_var(data, line[0], line[1]) == false)
+			{
+				if (add_var_to_env(data, data->cmd_list[i]) == MALLOC_FAIL)
+				{
+					print_error(2, "export: ", strerror(errno));
+					data->exit_code = MALLOC_FAIL;
+				}
+			}
 		}
+		free_array(line);
 	}
-	free_array(line);
 }
