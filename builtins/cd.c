@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/18 13:47:29 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/24 15:03:42 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ int	cd_in_env(t_var *data, char *pwd)
 	return (EXIT_SUCCESS);
 }
 
-void	ft_cd(t_var *data, char **cmd_list)
+void	ft_cd(t_var *data)
 {
 	char	*pwd;
 	char	*dest;
 
 	data->exit_code = EXIT_SUCCESS;
-	dest = cmd_list[1];
+	dest = data->cmd_list[1];
 	//handle when text is "" or " " or even "     "
 	if (dest == NULL)
 	{
@@ -55,7 +55,7 @@ void	ft_cd(t_var *data, char **cmd_list)
 			return ;
 		}
 	}
-	else if (cmd_list[2] != NULL)
+	else if (data->cmd_list[2] != NULL)
 	{
 		print_error(2, "minishell: cd: too many arguments");
 		data->exit_code = EXIT_FAILURE;

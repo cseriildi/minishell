@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:52 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/18 13:50:25 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/24 15:35:46 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,16 @@ int	get_exit_code(char *str)
 	return (ft_atoi(str));
 }
 
-void	ft_exit(t_var *data, char **cmd_list)
+void	ft_exit(t_var *data)
 {
 	printf("exit\n");
-	if (cmd_list[1] && cmd_list[2])
+	if (data->cmd_list[1] && data->cmd_list[2])
 	{
 		print_error(3, "minishell: exit: too many arguments");
 		data->exit_code = ERROR_MISUSE;
 		return ;
 	}
-	else if (cmd_list[1])
-		data->exit_code = get_exit_code(cmd_list[1]);
+	else if (data->cmd_list[1])
+		data->exit_code = get_exit_code(data->cmd_list[1]);
 	safe_exit(data, data->exit_code);
 }

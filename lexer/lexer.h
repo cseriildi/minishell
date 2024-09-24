@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:33:55 by icseri            #+#    #+#             */
-/*   Updated: 2024/07/23 20:21:57 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/24 15:55:02 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,12 @@ void	add_token_to_back(t_token **lst, t_token *new);
 char	*get_word(char *text, char *separator);
 
 //word
-void	single_quote(t_var *data);
 char	*fix_content(char *content, t_var *data);
-void	double_quote(t_var *data);
 void	word(t_var *data);
 
 //other types
 void	redirection(t_var *data);
 void	input(t_var *data);
 void	pipes(t_var *data);
-void	braces(t_var *data);
-void	and_sign(t_var *data);
 
 #endif

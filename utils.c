@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 12:45:19 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/24 15:51:29 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,19 @@ void	free_array(char **arr)
 			ft_free(&arr[i++]);
 		free(arr);
 	}
+	arr = NULL;
 }
 
 void	safe_exit(t_var *data, int exit_code)
 {
 	if (data)
 	{
-		if (data->line)
-			ft_free(&data->line);
-		if (data->tokens)
-			free_tokens(data);
+		free_tokens(data);
 		ft_free(&data->pwd);
 		ft_free(&data->promt);
 		ft_free(&data->line);
 		free_array(data->env);
+		free_array(data->cmd_list);
 		if (data->exec)
 			free_exec_all(&(data->exec));
 		if (data->p_table)

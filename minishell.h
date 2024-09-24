@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 11:45:23 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/24 15:40:39 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_var
 	t_token	*tokens;
 	t_exec	*exec;
 	t_table	*p_table;
+	char	**cmd_list;
 	char	*line;
 	int		index;
 	pid_t	pid;
@@ -129,7 +130,8 @@ void	free_array(char **arr);
 void	print_error(int count, ...);
 
 //builtins
-bool	exec_builtin(t_var *data, char **cmd_list);
+bool	exec_builtin(t_var *data);
+bool	is_builtin(char *cmd);
 
 //executor
 void	execute(t_var *data);
@@ -137,7 +139,8 @@ void	execute(t_var *data);
 //env
 void	init_env(t_var *data);
 char	*ft_getenv(t_var *data, char *var_name);
-void	free_env(t_env **env);
+
+//exec_utils
 void	free_table(t_table **p_table);
 void	free_exec_all(t_exec **exec);
 void	print_exec(t_exec *exec);
