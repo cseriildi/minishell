@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 16:42:09 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/24 12:04:03 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,9 @@ void	last_sequence(t_var *data, t_exec *exec)
 	}
 	else
 	{
-		wait(&data->exit_status);
+		close(data->pipe1_fd[0]);
+		close(data->pipe1_fd[1]);
+		wait(NULL);
 		waitpid(data->pid, &data->exit_status, 0);
 		if (WIFEXITED(data->exit_status))
 			data->exit_code = WEXITSTATUS(data->exit_status);
@@ -121,9 +123,14 @@ void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
 	while (temp != NULL && temp->type == WORD)
 		temp = temp->down;
 	temp = exec;
-	out_fd = dup(STDOUT_FILENO);
-	if (out_fd == -1)
-		safe_exit(data, DUP2_FAIL);
+	out_fd = -1;
+	if (is_builtin(cmd_list[0])	
+		&& ft_strncmp("exit", cmd_list[0], 5) != 0 && write == STDOUT_FILENO)
+	{
+		out_fd = dup(STDOUT_FILENO);
+		if (out_fd == -1)
+			safe_exit(data, DUP2_FAIL);
+	}
 	while (temp != NULL)
 	{
 		redirect(data, temp);
@@ -139,6 +146,8 @@ void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
 		close (read);
 	if (write != STDOUT_FILENO)
 		close (write);
+	if (out_fd == -1)
+		return ;
 	if (dup2(out_fd, STDOUT_FILENO) == -1)
 	{
 		close(out_fd);
@@ -241,6 +250,7 @@ void	exec_command(t_var *data, char **cmd_list)
 		print_error(3, "minishell: ", cmd_list[0], ": command not found");
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
+	printf("%s\n", abs_cmd);
 	if (execve(abs_cmd, cmd_list, data->env) == -1)
 	{
 		print_error(3, "minishell: ", abs_cmd, ": No such file or directory");
