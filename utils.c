@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 13:44:39 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/24 12:45:19 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	safe_exit(t_var *data, int exit_code)
 	{
 		if (data->line)
 			ft_free(&data->line);
-		//if (data->tokens)
-		//	free_tokens(data);
+		if (data->tokens)
+			free_tokens(data);
 		ft_free(&data->pwd);
 		ft_free(&data->promt);
 		ft_free(&data->line);
