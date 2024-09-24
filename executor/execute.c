@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 12:04:03 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/24 12:39:21 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,7 +250,6 @@ void	exec_command(t_var *data, char **cmd_list)
 		print_error(3, "minishell: ", cmd_list[0], ": command not found");
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
-	printf("%s\n", abs_cmd);
 	if (execve(abs_cmd, cmd_list, data->env) == -1)
 	{
 		print_error(3, "minishell: ", abs_cmd, ": No such file or directory");

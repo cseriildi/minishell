@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 13:26:47 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/24 12:46:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	main(int argc, char **argv)
 		lexer(data);
 		parse(data);
 		execute(data);
-		//free_tokens(data);
+		free_tokens(data);
 		free_exec_all(&data->exec);
 	}
 	safe_exit(data, data->exit_code);
