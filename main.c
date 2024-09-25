@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 15:18:10 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/25 13:18:14 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_signals signals;
 
 void	print_tokens(t_token **tokens)
 {
@@ -46,10 +48,30 @@ void	init(t_var *data)
 	init_env(data);
 }
 
+/* // Signal handler for Ctrl-C (SIGINT)
+void handle_sigint(int sig) {
+    (void)sig;
+    printf("\nCtrl-C pressed\n");
+}
+
+// Signal handler for Ctrl-\ (SIGQUIT)
+void handle_sigquit(int sig) {
+    (void)sig;
+    printf("Ctrl-\\ pressed\n");
+}
+
+// Function to handle Ctrl-D (EOF)
+void handle_ctrl_d() {
+    printf("Ctrl-D pressed\n");
+    exit(0);  // Exit the shell as Ctrl-D should exit normally
+} */
+
 int	main(int argc, char **argv)
 {
 	t_var	*data;
 
+	signals.child_pid = -1;
+	signals.interactive = 1;
 	(void)argv;
 	if (argc != 1)
 		return (print_error(2, "too many arguments, rerun like ./minishell"), ERROR_MISUSE);
@@ -57,18 +79,28 @@ int	main(int argc, char **argv)
 	if (!data)
 		return (MALLOC_FAIL);
 	init(data);
+	init_signals();
 	while (true)
 	{
 		get_promt(data);
+		signals.interactive = 1;
 		data->line = readline(data->promt);
+		signals.interactive = 0;
 		if (!data->line)
+		{
+			ft_printf("exit\n");
 			safe_exit(data, READLINE_FAIL);
+		}
 		if (*data->line)
 			add_history(data->line);
 		lexer(data);
 		parse(data);
 		execute(data);
+		/* if (!data->line) {
+		    handle_ctrl_d();
+		} */
 		free_tokens(data);
+		ft_free(&data->line);
 		free_exec_all(&data->exec);
 	}
 	safe_exit(data, data->exit_code);

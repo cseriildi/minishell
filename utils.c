@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 15:51:29 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/25 13:18:54 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	free_tokens(t_var *data)
 			free(current);
 			current = next;
 		}
-		free(data->tokens);
+		//free(data->tokens);
 		data->tokens = NULL;
 	}
 }
@@ -53,14 +53,14 @@ void	safe_exit(t_var *data, int exit_code)
 		free_tokens(data);
 		ft_free(&data->pwd);
 		ft_free(&data->promt);
-		ft_free(&data->line);
+		//ft_free(&data->line);
 		free_array(data->env);
 		free_array(data->cmd_list);
 		if (data->exec)
 			free_exec_all(&(data->exec));
 		if (data->p_table)
 			free_table(&(data->p_table));
-		free(data);	
+		free(data);
 	}
 	exit(exit_code);
 }

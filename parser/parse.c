@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/23 13:53:12 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/25 13:21:28 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ t_table	*get_entry(t_token *token, t_table *p_table, t_stack *stack)
 	input_type = -1;
 	if (token)
 		input_type = token->type;
-	//printf ("stack->state: %d, input_type %d\n", stack->state, input_type);
 	while (p_table != NULL)
 	{
 		if (p_table->state == stack->state)
@@ -69,7 +68,6 @@ void put_pipes_right_place(t_stack **result)
 	{
 		if (temp->type == P_PIPE_SEQ && temp->next->type == PIPE)
 			swap_stack(&temp, &(temp->next));
-		//printf("ty:%d\n", temp->type);
 		temp = temp->next;
 	}
 	temp = *result;
@@ -96,22 +94,20 @@ void	parse(t_var *data)
 	t_stack	*stack;
 	t_table	*entry;
 	t_stack	*result;
+	t_token	*token_list;
 	int		run;
 
 	run = TRUE;
 	stack = init_stack();
+	if (stack == NULL)
+		safe_exit(data, MALLOC_FAIL);
 	result = NULL;
 	if (stack == NULL)
 		return ;
-	while (run)
+	token_list = data->tokens;
+	while (run == 1)
 	{
-		//printf("aaaaaaaaaaaaaaaa\n");
-		//print_stack(stack);
-		entry = get_entry(data->tokens, data->p_table, stack);
-		//printf("aaaaaaaaaaaaaaaa%p\n", entry);
-		//printf("pentry: %p\n", entry);
-		//if(entry != NULL)
-			//printf("entry:%d\n", entry->action);
+		entry = get_entry(token_list, data->p_table, stack);
 		if (entry && entry->action == A_SHIFT)
 			run = shift(&stack, &data->tokens, entry->next_s);
 		else if (entry && entry->action == A_REDUCE)
@@ -119,62 +115,23 @@ void	parse(t_var *data)
 		else if (entry && entry->action == A_ACCEPT)
 		{
 			run = 0;
-			/* printf("result\n");
-			print_stack(result); */
+			free_stack(&stack);
 			put_pipes_right_place(&result);
-			/* printf("stack\n");
-			print_stack(stack);
-			printf("result\n");
-			print_stack(result); */
-			
 			data->exec = create_exec(&result);
+			free_stack(&result);
 			if (data->exec == NULL)
-				break ;
-			//print_stack(result);
-			//printf("\nFINAL\n\n");
-			//print_exec(exec);
-			//printf("\nSTART REVERSING\n\n");
+				return ;
 			reverse_exec(&data->exec);
-			//printf("\nFINAL after reverse\n\n");
-			//print_exec(data->exec);
-			
-			//printf("ACCEPT\n");
+			free_tokens(data);
 		}
 		else
 		{
 			run = 0;
-			//print_stack(stack);
-			//printf("REJECT\n");
+			print_error(3, "minishell: syntax error near unexpected token '", token_list->content, "'");
+			data->exit_code = CANNOT_OPEN_FILE;
+			return (free_stack(&result), free_stack(&stack), free_tokens(data));
 		}
+		if (run == -1)
+			return (free_stack(&result), free_stack(&stack), safe_exit(data, MALLOC_FAIL));
 	}
-	//print_stack(result);
-	free_stack(&result);
-	//print_stack(stack);
-	free_stack(&stack);
-	//printf("ENDING\n");
-	/* free_exec_all(&exec); */
 }
-
-/* int main ()
-{
-	t_token *token;
-	t_table	*p_table;
-
-	token = create_new_token("1st word", HERE_DOC);
-	add_token_to_back(&token, create_new_token("EOF", WORD));
-	add_token_to_back(&token, create_new_token("EOF", WORD));
-	add_token_to_back(&token, create_new_token("EOF", PIPE));
-	add_token_to_back(&token, create_new_token("cat", L_BRACKET));
-	add_token_to_back(&token, create_new_token("ls", WORD));
-	add_token_to_back(&token, create_new_token("|", OR));
-	add_token_to_back(&token, create_new_token("ls", WORD));
-	add_token_to_back(&token, create_new_token("cat", R_BRACKET));
-	add_token_to_back(&token, create_new_token(">>", PIPE));
-	add_token_to_back(&token, create_new_token("ls", WORD));
-	add_token_to_back(&token, create_new_token("|", APPEND));
-	add_token_to_back(&token, create_new_token("aaaa", WORD));
-	add_token_to_back(&token, create_new_token("END", END));
-	p_table = create_table();
-	parse(p_table, token);
-	return (0);
-} */

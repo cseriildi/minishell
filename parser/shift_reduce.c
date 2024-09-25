@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shift_reduce.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:06:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/23 13:40:13 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/25 13:16:54 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,17 @@ t_stack	*new_stack_node_state(int next_state)
 int	shift(t_stack **stack, t_token **token_list, int next_state)
 {
 	t_stack	*new;
+	t_token *prev;
 
-	//printf("SHIFT\n");
-	//printf("SHIFT1\n");
-	//print_stack(*stack);
 	new = new_stack_node(*token_list);
 	if (new == NULL)
-		return (printf("REJECT2\n"), 0);
+		return (-1);
 	stack_add_front(stack, new);
 	new = new_stack_node_state(next_state);
 	if (new == NULL)
-		return (printf("REJECT3\n"), 0);
+		return (-1);
 	stack_add_front(stack, new);
-	//printf("SHIFT2\n");
-	//print_stack(*stack);
+	prev = *token_list;
 	*token_list = (*token_list)->next;
 	return (1);
 }
@@ -131,47 +128,31 @@ int	reduce(t_stack **stack, t_table *p_table, t_table *entry, t_stack **result)
 	int		i;
 	int		next_state;
 
-	/* printf("REDUCE\n"); */
 	i = 0;
 	popped = NULL;
-	/* printf("I AM HERE\n");
-	print_stack(*stack);
-	printf("I AM HERE\n");
-	print_stack(*result); */
 	while (i / 2 < entry->nb_reduce && (*stack)->next != NULL)
 	{
 		temp = pop_stack(stack);
-	//	printf("POP\n");
-	//	print_stack(temp);
 		stack_add_front(&popped, temp);
 		if (temp->type > P_NONE)
 			stack_add_front(result, temp);
 		else 
-		{
-		//	printf("FREE\n");
 			free(temp);
-		}
 		i++;
 	}
-	/* printf("I AM HERE2\n");
-	print_stack(*result);
-	printf("I AM HERE2\n");
-	print_stack(*stack); */
 	if (popped != NULL)
 	{
-	//	printf("I AM HERE\n");
-		//print_stack(*stack);
 		if (push_reduction(stack, entry->next_s))
 		{
 			next_state = get_next_state(p_table, *stack);
 			temp = new_stack_node_state(next_state);
 			if (temp == NULL)
-				return (0);
+				return (-1);
 			stack_add_front(stack, temp);
 		}
-		//print_stack(*stack);
+		else
+			return (-1);
 	}
-	//printf ("%d %d\n", i, entry->nb_reduce);
 	if (i / 2 == entry->nb_reduce)
 		return (TRUE);
 	else
