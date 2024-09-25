@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/09/24 15:44:29 by icseri           ###   ########.fr       */
-=======
-/*   Updated: 2024/09/24 14:59:44 by pvass            ###   ########.fr       */
->>>>>>> parser
+/*   Updated: 2024/09/25 13:41:37 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +279,9 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
 	{
-		data->cmd_list[i] = temp->data;
+		data->cmd_list[i] = ft_strdup(exec->data);
+		if (!data->cmd_list[i])
+			safe_exit(data, MALLOC_FAIL);
 		i++;
 		temp = temp->down;
 	}

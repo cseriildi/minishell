@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shift_reduce.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:06:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 13:16:54 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/25 14:32:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,12 @@ int	shift(t_stack **stack, t_token **token_list, int next_state)
 	new = new_stack_node(*token_list);
 	if (new == NULL)
 		return (-1);
+	//handle
 	stack_add_front(stack, new);
 	new = new_stack_node_state(next_state);
 	if (new == NULL)
 		return (-1);
+	//handle
 	stack_add_front(stack, new);
 	prev = *token_list;
 	*token_list = (*token_list)->next;
@@ -51,6 +53,7 @@ int	push_reduction(t_stack **stack, int reduction)
 	new = (t_stack *)malloc(sizeof(*new));
 	if (!new)
 		return (0);
+	//handle
 	new->type = reduction;
 	new->state = 0;
 	new->data = NULL;
@@ -71,7 +74,7 @@ void	put_pipes_in_place(t_stack *stack, t_stack **result)
 	{
 		temp = copy_node(stack);
 		if (temp == NULL)
-			return ;
+			return ; //handle
 		if (temp->type != P_NONE)
 			stack_add_front(&new, temp);
 		i++;
@@ -97,7 +100,7 @@ void	put_red_in_place(t_stack *stack, t_stack **result)
 	{
 		temp = copy_node(stack);
 		if (temp == NULL)
-			return ;
+			return ; //handle
 		if (temp->type != P_NONE)
 			stack_add_front(&new, temp);
 		i++;
@@ -147,7 +150,7 @@ int	reduce(t_stack **stack, t_table *p_table, t_table *entry, t_stack **result)
 			next_state = get_next_state(p_table, *stack);
 			temp = new_stack_node_state(next_state);
 			if (temp == NULL)
-				return (-1);
+				return (-1); //handle
 			stack_add_front(stack, temp);
 		}
 		else

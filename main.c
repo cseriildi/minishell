@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/25 13:18:14 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/25 14:17:28 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,16 @@ void	init(t_var *data)
 	data->tokens = NULL;
 	data->p_table = NULL;
 	data->exec = NULL;
+	data->env = NULL;
+	data->promt = NULL;
 	data->cmd_list = NULL;
 	data->line = NULL;
 	data->exit_code = 0;
 	data->subshell_level = 1;
+	data->pwd = NULL;
 	data->pwd = getcwd(NULL, 0);
 	if (!data->pwd)
 		safe_exit(data, MALLOC_FAIL);
-	data->promt = NULL;
 	data->p_table = create_table();
 	if (data->p_table == NULL)
 		safe_exit(data, MALLOC_FAIL);
@@ -101,6 +103,8 @@ int	main(int argc, char **argv)
 		} */
 		free_tokens(data);
 		ft_free(&data->line);
+		ft_free(&data->promt);
+		free_array(data->cmd_list);
 		free_exec_all(&data->exec);
 	}
 	safe_exit(data, data->exit_code);

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 12:50:38 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/25 14:06:54 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,6 @@ void	lexer(t_var *data)
 {
 	t_token	*new_token;
 	
-	data->tokens = malloc(sizeof(t_token));
-	if (!data->tokens)
-		safe_exit(data, MALLOC_FAIL);
 	data->tokens = NULL;
 	data->index = 0;
 	while (data->line[data->index])

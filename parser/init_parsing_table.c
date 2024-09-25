@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:08:11 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/23 13:36:33 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/25 14:26:37 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ t_table	*init_table(int fd)
 	while (line != NULL)
 	{
 		args = ft_split(line, 9);
+		if (args == NULL)
+			// handle
 		free(line);
 		temp = table_new(args);
 		free_tab(args);

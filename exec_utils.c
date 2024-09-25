@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 11:50:42 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 13:17:37 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/25 13:36:44 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,14 @@ void	free_down_exec(t_exec **exec)
 		prev = curr;
 		curr = curr->down;
 		if (prev->data != NULL)
-			free(prev->data);
+		{
+			ft_free(&prev->data);
+			prev->data = NULL;
+		}
 		free(prev);
 		prev = NULL;
 	}
+	*exec = NULL;
 }
 void	free_exec_all(t_exec **exec)
 {
