@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 13:21:28 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/25 14:30:13 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	parse(t_var *data)
 	t_stack	*stack;
 	t_table	*entry;
 	t_stack	*result;
-	t_token	*token_list;
+
 	int		run;
 
 	run = TRUE;
@@ -102,12 +102,9 @@ void	parse(t_var *data)
 	if (stack == NULL)
 		safe_exit(data, MALLOC_FAIL);
 	result = NULL;
-	if (stack == NULL)
-		return ;
-	token_list = data->tokens;
 	while (run == 1)
 	{
-		entry = get_entry(token_list, data->p_table, stack);
+		entry = get_entry(data->tokens, data->p_table, stack);
 		if (entry && entry->action == A_SHIFT)
 			run = shift(&stack, &data->tokens, entry->next_s);
 		else if (entry && entry->action == A_REDUCE)
@@ -120,16 +117,16 @@ void	parse(t_var *data)
 			data->exec = create_exec(&result);
 			free_stack(&result);
 			if (data->exec == NULL)
-				return ;
+				//handle
 			reverse_exec(&data->exec);
 			free_tokens(data);
 		}
 		else
 		{
 			run = 0;
-			print_error(3, "minishell: syntax error near unexpected token '", token_list->content, "'");
+			print_error(3, "minishell: syntax error near unexpected token '", data->tokens->content, "'");
 			data->exit_code = CANNOT_OPEN_FILE;
-			return (free_stack(&result), free_stack(&stack), free_tokens(data));
+			return (free_stack(&result), free_stack(&stack), free_tokens(data), safe_exit(data, CANNOT_OPEN_FILE));
 		}
 		if (run == -1)
 			return (free_stack(&result), free_stack(&stack), safe_exit(data, MALLOC_FAIL));

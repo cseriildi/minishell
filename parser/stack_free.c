@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:19:34 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/19 14:36:20 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/25 14:31:22 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_stack(t_stack **stack)
 	while (s != NULL)
 	{
 		if (s->data != NULL)
-			free(s->data);
+			ft_free(&s->data);
 		temp = s;
 		s = s->next;
 		free(temp);
@@ -56,10 +56,7 @@ void	stack_reverse(t_stack **stack)
 	{
 		temp2 = temp;
 		temp = temp->next;
-		//ft_printf("%p\n", temp2);
-		//print_stack(new);
 		stack_add_front(&new, temp2);
-		//print_stack(new);
 	}
 	*stack = new;
 }

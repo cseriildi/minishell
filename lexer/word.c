@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:54:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 12:49:38 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/25 14:08:34 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ void	word(t_var *data)
 		safe_exit(data, MALLOC_FAIL);
 	data->index += ft_strlen(content);
 	new_token = create_new_token(content, WORD);
-	ft_free(&content);
+	free(content);
 	if (!new_token)
 		safe_exit(data, MALLOC_FAIL);
 	add_token_to_back(&data->tokens, new_token);
