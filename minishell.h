@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 15:40:39 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/25 13:18:26 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/stat.h>
+# include <sys/ioctl.h>
 # include <dirent.h>
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
 # include <fcntl.h>
+# include <termios.h>
 
 # define PARSING_TABLE "./parser/parse_table_numbs"
 
@@ -101,6 +103,14 @@ typedef struct s_var
 	int		subshell_level;
 }	t_var;
 
+typedef struct s_signals
+{
+	pid_t	child_pid;
+	int		interactive;
+}	t_signals;
+
+extern t_signals signals;
+
 typedef enum s_err
 {
 	ERROR_MISUSE = 2,
@@ -112,7 +122,7 @@ typedef enum s_err
 	FORK_FAIL,
 	UNLINK_FAIL,
 	NON_NUMERIC_EXIT,
-	COMMAND_NOT_FOUND = 127
+	COMMAND_NOT_FOUND = 127,
 }	t_err;
 
 //lexer
@@ -144,5 +154,7 @@ char	*ft_getenv(t_var *data, char *var_name);
 void	free_table(t_table **p_table);
 void	free_exec_all(t_exec **exec);
 void	print_exec(t_exec *exec);
+
+void	init_signals();
 
 #endif
