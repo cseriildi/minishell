@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 13:00:11 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/24 14:59:44 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,16 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		data->pid = fork();
 		if (data->pid == -1)
 			safe_exit(data, FORK_FAIL);
+		signals.child_pid = data->pid;
 		if (data->pid == 0)
 			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 		else
 		{
 			waitpid(data->pid, &data->exit_status, 0);
+			signals.child_pid = -1;
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
-			printf("This is for debugging! exit code: %d\n", data->exit_code);
+			//printf("This is for debugging! exit code: %d\n", data->exit_code);
 		}
 	}
 }
@@ -106,7 +108,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 		waitpid(data->pid, &data->exit_status, 0);
 		if (WIFEXITED(data->exit_status))
 			data->exit_code = WEXITSTATUS(data->exit_status);
-		printf("This is for debugging nexit code: %d\n", data->exit_code);
+		//printf("This is for debugging nexit code: %d\n", data->exit_code);
 	}
 }
 

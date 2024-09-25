@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 12:06:22 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/19 11:47:38 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/24 14:55:54 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ void	reverse_exec(t_exec **exec)
 		}
 		*exec = (*exec)->next;
 		next_temp = next_temp->next;
-		print_exec(temp);
+		//print_exec(temp);
 	}
 	*exec = temp;
 	reverse_front_back(exec);

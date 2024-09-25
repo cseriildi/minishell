@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 11:50:42 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/23 10:23:49 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/25 12:32:00 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ void	free_down_exec(t_exec **exec)
 	while (curr != NULL)
 	{
 		prev = curr;
-		curr = curr->next;
+		curr = curr->down;
 		if (prev->data != NULL)
 			free(prev->data);
 		free(prev);
+		prev = NULL;
 	}
 }
 void	free_exec_all(t_exec **exec)
@@ -44,7 +45,9 @@ void	free_exec_all(t_exec **exec)
 		prev = curr;
 		curr = curr->next;
 		free_down_exec(&prev);
+		prev = NULL;
 	}
+	*exec = NULL;
 }
 
 void	print_exec(t_exec *exec)
