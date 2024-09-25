@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
+#    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/09/23 11:35:05 by icseri           ###   ########.fr        #
+#    Updated: 2024/09/24 13:54:36 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,8 @@ SRCS = main.c \
 		builtins/exit.c \
 		builtins/export.c \
 		builtins/pwd.c \
-		builtins/unset.c
+		builtins/unset.c \
+		signal/signals.c
 
 OBJS = ${SRCS:.c=.o}
 
