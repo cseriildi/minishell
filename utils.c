@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/25 14:16:42 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 13:52:12 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	free_array(char **arr)
 	arr = NULL;
 }
 
-void	safe_exit(t_var *data, int exit_code)
+void	free_all(t_var *data)
 {
 	if (data)
 	{
@@ -57,8 +57,18 @@ void	safe_exit(t_var *data, int exit_code)
 		free_array(data->cmd_list);
 		free_exec_all(&(data->exec));
 		free_table(&(data->p_table));
+		safe_close(data->pipe1_fd[0], data);
+		safe_close(data->pipe1_fd[1], data);
+		safe_close(data->pipe2_fd[0], data);
+		safe_close(data->pipe2_fd[1], data);
+		safe_close(data->stdout_copy, data);
 		free(data);
 	}
+}
+
+void	safe_exit(t_var *data, int exit_code)
+{
+	free_all(data);
 	exit(exit_code);
 }
 
