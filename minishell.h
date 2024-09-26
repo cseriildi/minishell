@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 12:48:00 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/26 14:03:41 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@
 # include <termios.h>
 
 # define PARSING_TABLE "./parser/parse_table_numbs"
+
+# define READ 0
+# define CREATE 1
+# define CREATE_OR_APPEND 2
 
 typedef enum s_token_type
 {
@@ -101,6 +105,7 @@ typedef struct s_var
 	char	*promt;
 	char	**env;
 	int		subshell_level;
+	int		stdout_copy;
 }	t_var;
 
 typedef struct s_signals
@@ -133,6 +138,7 @@ void	parse(t_var *data);
 t_table	*create_table(void);
 
 //utils
+void	free_all(t_var *data);
 void	safe_exit(t_var *data, int exit_code);
 void	safe_clear(t_var *data);
 void	get_promt(t_var *data);
@@ -157,5 +163,12 @@ void	free_exec_all(t_exec **exec);
 void	print_exec(t_exec *exec);
 
 void	init_signals();
+
+//fd_handling
+
+int		safe_open(char *filename, int mode, t_var *data);
+void	safe_close(int fd, t_var *data);
+void	delete_file(t_var *data, char *filename);
+void	safe_dup2(int old_fd, int new_fd, t_var *data);
 
 #endif

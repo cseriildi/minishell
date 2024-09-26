@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 12:26:37 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/26 14:01:46 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,24 @@
 
 void	execute(t_var *data)
 {
-	if (data->exec == NULL)
+	t_exec	*temp;
+	
+	temp = data->exec;
+	if (temp == NULL)
 		return ;
-	if (data->exec->next == NULL)
-		only_one_sequence(data, data->exec);
+	if (temp->next == NULL)
+		only_one_sequence(data, temp);
 	else
 	{
-		first_sequence(data, data->exec);
-		data->exec = data->exec->next;
-		while (data->exec->next != NULL)
+		first_sequence(data, temp);
+		temp = temp->next;
+		while (temp->next != NULL)
 		{
-			middle_sequence(data, data->exec);
-			data->exec = data->exec->next;
+			middle_sequence(data, temp);
+			temp = temp->next;
 		}
-		if (data->exec->next == NULL)
-			last_sequence(data, data->exec);
+		if (temp->next == NULL)
+			last_sequence(data, temp);
 	}
 }
 
@@ -65,7 +68,7 @@ void	first_sequence(t_var *data, t_exec *exec)
 	{
 		close(data->pipe1_fd[0]);
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
-		exit(EXIT_SUCCESS);
+		safe_exit(data, EXIT_SUCCESS);
 	}
 }
 
@@ -80,7 +83,7 @@ void	middle_sequence(t_var *data, t_exec *exec)
 		close(data->pipe1_fd[1]);
 		close(data->pipe2_fd[0]);
 		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
-		exit(EXIT_SUCCESS);
+		safe_exit(data, EXIT_SUCCESS);
 	}
 	else
 	{
@@ -100,7 +103,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 	{
 		close(data->pipe1_fd[1]);
 		exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
-		exit(EXIT_SUCCESS);
+		safe_exit(data, EXIT_SUCCESS);
 	}
 	else
 	{
@@ -116,121 +119,29 @@ void	last_sequence(t_var *data, t_exec *exec)
 
 void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
 {
-	t_exec	*temp;
-	int		out_fd;
-
-	temp = exec;
 	create_cmd_list(data, exec);
-	while (temp != NULL && temp->type == WORD)
-		temp = temp->down;
-	temp = exec;
-	out_fd = -1;
 	if (is_builtin(data->cmd_list[0])	
 		&& ft_strncmp("exit", data->cmd_list[0], 5) != 0 && write == STDOUT_FILENO)
 	{
-		out_fd = dup(STDOUT_FILENO);
-		if (out_fd == -1)
+		data->stdout_copy = dup(STDOUT_FILENO);
+		if (data->stdout_copy == -1)
 			safe_exit(data, DUP2_FAIL);
 	}
-	while (temp != NULL)
-	{
-		redirect(data, temp);
-		temp = temp->down;
-	}
-	dup_pipes(data, read, write);
+	if (redirect_in(data, exec) == false)
+		return;
+	safe_dup2(read, STDIN_FILENO, data);
+	safe_dup2(write, STDOUT_FILENO, data);
+	if (redirect_out(data, exec) == false)
+		return;
 	if (data->cmd_list != NULL)
 	{
 		if (exec_builtin(data) == false)
 			exec_command(data);
 	}
-	if (read != STDIN_FILENO)
-		close (read);
-	if (write != STDOUT_FILENO)
-		close (write);
-	if (out_fd == -1)
-		return ;
-	if (dup2(out_fd, STDOUT_FILENO) == -1)
-	{
-		close(out_fd);
-		safe_exit(data, DUP2_FAIL);
-	}
-	close(out_fd);
+	safe_close(read, data);
+	safe_close(write, data);
+	safe_dup2(data->stdout_copy, STDOUT_FILENO, data);
 
-}
-
-void	redirect(t_var *data, t_exec *exec)
-{
-	int	fd;
-	
-	if (exec->type == RED_IN)
-	{
-		fd = open(exec->data, O_RDONLY);
-		if (fd == -1)
-		{
-			print_error(4, "minishell: ", exec->data, ": ", strerror(errno));
-			data->exit_code = CANNOT_OPEN_FILE;
-			return ;
-		}
-		if (dup2(fd, STDIN_FILENO) == -1)
-		{
-			close(fd);
-			safe_exit(data, DUP2_FAIL);
-		}
-		close(fd);
-	}
-	else if (exec->type == RED_OUT)
-	{
-		fd = open(exec->data, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd == -1)
-		{
-			print_error(4, "minishell: ", exec->data, ": ", strerror(errno));
-			data->exit_code = CANNOT_OPEN_FILE;
-			return ;
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			close(fd);
-			safe_exit(data, DUP2_FAIL);
-		}
-		close(fd);
-	}
-	else if (exec->type == APPEND)
-	{
-		fd = open(exec->data, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd == -1)
-		{
-			print_error(4, "minishell: ", exec->data, ": ", strerror(errno));
-			data->exit_code = CANNOT_OPEN_FILE;
-			return ;
-		}
-		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			close(fd);
-			safe_exit(data, DUP2_FAIL);
-		}
-		close(fd);
-	}
-	else if (exec->type == HERE_DOC)
-	{
-		//I have to implement here_doc
-		//Do NOT forget about quotes in the LIMITER
-	}
-}
-
-void	dup_pipes(t_var *data, int read, int write)
-{
-	if (read != STDIN_FILENO)
-	{
-		if (dup2(read, STDIN_FILENO) == -1)
-			safe_exit(data, DUP2_FAIL);
-		close(read);
-	}
-	if (write != STDOUT_FILENO)
-	{
-		if (dup2(write, STDOUT_FILENO) == -1)
-			safe_exit(data, DUP2_FAIL);
-		close(write);
-	}
 }
 
 void	exec_command(t_var *data)
