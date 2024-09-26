@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 13:17:05 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/26 14:02:44 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ void	init(t_var *data)
 	data->exit_code = 0;
 	data->subshell_level = 1;
 	data->pwd = NULL;
+	data->pipe1_fd[0] = -1;
+	data->pipe1_fd[1] = -1;
+	data->pipe2_fd[0] = -1;
+	data->pipe2_fd[1] = -1;
+	data->stdout_copy = -1;
 	data->pwd = getcwd(NULL, 0);
 	if (!data->pwd)
 		safe_exit(data, MALLOC_FAIL);
@@ -102,6 +107,7 @@ int	main(int argc, char **argv)
 		/* if (!data->line) {
 		    handle_ctrl_d();
 		} */
+		free_all(data);
 		/* free_tokens(data);
 		ft_free(&data->line);
 		ft_free(&data->promt);

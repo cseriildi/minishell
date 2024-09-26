@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 12:35:27 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/26 14:06:44 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,18 +46,31 @@ void	free_array(char **arr)
 	}
 }
 
-void	safe_exit(t_var *data, int exit_code)
+void	free_all(t_var *data)
 {
 	if (data)
 	{
 		free_tokens(data);
-		ft_free(&data->pwd);
 		ft_free(&data->promt);
 		ft_free(&data->line);
-		free_array(data->env);
 		free_array(data->cmd_list);
 		free_exec_all(&(data->exec));
+		safe_close(data->pipe1_fd[0], data);
+		safe_close(data->pipe1_fd[1], data);
+		safe_close(data->pipe2_fd[0], data);
+		safe_close(data->pipe2_fd[1], data);
+		safe_close(data->stdout_copy, data);
+	}
+}
+
+void	safe_exit(t_var *data, int exit_code)
+{
+	if (data)
+	{
+		ft_free(&data->pwd);
+		free_array(data->env);
 		free_table(&(data->p_table));
+		free_all(data);
 		free(data);
 	}
 	exit(exit_code);
