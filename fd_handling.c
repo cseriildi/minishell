@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_handling.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 13:06:15 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 14:41:09 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,14 @@ void	safe_close(int fd, t_var *data)
 {
 	if (fd < 3)
 		return ;
-	if (close(fd) == -1)
+	(void)data;
+	close(fd);
+	fd = -1;
+	/* if (close(fd) == -1)
 	{
 		print_error(2, strerror(errno), " :Cannot close file descriptor");
 		data->exit_code = EXIT_FAILURE;
-	}
+	} */
 }
 
 void	delete_file(t_var *data, char *filename)

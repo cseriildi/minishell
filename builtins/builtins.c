@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:44:24 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 15:28:42 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 14:12:48 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	exec_builtin(t_var *data)
 		ft_unset(data);
 	if (is_builtin(data->cmd_list[0]) == true)
 	{
-		free_array(data->cmd_list);
+		//free_array(data->cmd_list);
 		return (true);
 	}
 	return (false);

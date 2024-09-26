@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:00:39 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/26 11:50:40 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/26 14:27:25 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 void handle_sigint(int sig) 
 {
 	(void)sig;
-    if (signals.child_pid > 0) {
-
-        //ioctl(STDIN_FILENO, TIOCSTI, "\n");
+    if (signals.child_pid > 0) 
+	{
 		ft_printf("\n");
 		rl_on_new_line();
+		//data->exit_code = 130
 		kill(signals.child_pid, SIGINT);
     } 
 	else 
