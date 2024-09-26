@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 13:47:33 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 14:38:45 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*generate_random_filename(t_var *data)
 	int		rand_fd;
 	char	*filename;
 
-	filename = "temp_heredoc_file";
+	filename = "0123456789";
 	rand_fd = safe_open("/dev/urandom", 'R', data);
 	if (rand_fd == -1)
 		return (filename);
@@ -48,11 +48,13 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 		safe_close(fd_to_write, data);
 		return false;
 	}
+	printf("LIMITER {%s}\n", limiter);
 	while (true)
 	{
 		ft_putstr_fd("pipe heredoc> ", STDOUT_FILENO);
 		line = get_next_line(STDIN_FILENO);
-		if (ft_strncmp(line, limiter, ft_strlen(limiter) + 1) == 0)
+		printf("LINE {%s}\n", line);
+		if (ft_strncmp(line, limiter, ft_strlen(limiter) /* + 1 */) == 0)
 		{
 			ft_free(&line);
 			break ;

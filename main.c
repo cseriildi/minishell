@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 14:02:44 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/26 14:08:11 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	main(int argc, char **argv)
 		ft_free(&data->promt);
 		free_array(data->cmd_list);
 		free_exec_all(&data->exec); */
-		safe_clear(data);
+		//safe_clear(data);
 	}
 	safe_exit(data, data->exit_code);
 }
