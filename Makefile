@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
+#    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/09/24 13:54:36 by pvass            ###   ########.fr        #
+#    Updated: 2024/09/26 13:42:43 by icseri           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRCS = main.c \
 		utils.c \
 		exec_utils.c \
 		p_table_utils.c \
+		fd_handling.c \
 		lexer/lexer.c \
 		lexer/list.c \
 		lexer/other_types.c \
@@ -32,6 +33,9 @@ SRCS = main.c \
 		parser/create_exec_utils.c \
 		parser/arrange_exec.c \
 		executor/execute.c \
+		executor/expander.c \
+		executor/heredoc.c \
+		executor/redirection.c \
 		builtins/env_utils.c \
 		builtins/builtins.c \
 		builtins/cd.c \
