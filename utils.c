@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/25 14:16:42 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 12:35:27 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ void	free_array(char **arr)
 	{
 		while (arr && arr[i])
 			ft_free(&arr[i++]);
-		free(arr);
+		if (arr != NULL)
+			free(arr);
+		arr = NULL;
 	}
-	arr = NULL;
 }
 
 void	safe_exit(t_var *data, int exit_code)

@@ -6,17 +6,11 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:00:39 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 13:06:03 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/26 11:50:40 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <string.h>
 
 void handle_sigint(int sig) 
 {

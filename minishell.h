@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/25 14:03:12 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 12:48:00 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ t_table	*create_table(void);
 
 //utils
 void	safe_exit(t_var *data, int exit_code);
+void	safe_clear(t_var *data);
 void	get_promt(t_var *data);
 void	free_tokens(t_var *data);
 void	free_array(char **arr);

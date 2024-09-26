@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_parsing_table.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:08:11 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 14:26:37 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 11:39:45 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_table	*init_table(int fd)
 	{
 		args = ft_split(line, 9);
 		if (args == NULL)
-			// handle
+			return (free(line), free_table(&table), NULL);
 		free(line);
 		temp = table_new(args);
 		free_tab(args);
