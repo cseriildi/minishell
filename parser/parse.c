@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 14:30:13 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 13:17:14 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	parse(t_var *data)
 			data->exec = create_exec(&result);
 			free_stack(&result);
 			if (data->exec == NULL)
-				//handle
+				break ;
 			reverse_exec(&data->exec);
 			free_tokens(data);
 		}
@@ -125,8 +125,8 @@ void	parse(t_var *data)
 		{
 			run = 0;
 			print_error(3, "minishell: syntax error near unexpected token '", data->tokens->content, "'");
-			data->exit_code = CANNOT_OPEN_FILE;
-			return (free_stack(&result), free_stack(&stack), free_tokens(data), safe_exit(data, CANNOT_OPEN_FILE));
+			//data->exit_code = CANNOT_OPEN_FILE;
+			return (free_stack(&result), free_stack(&stack), free_tokens(data)/* , safe_exit(data, CANNOT_OPEN_FILE) */);
 		}
 		if (run == -1)
 			return (free_stack(&result), free_stack(&stack), safe_exit(data, MALLOC_FAIL));

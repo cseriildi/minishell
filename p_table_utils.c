@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 10:33:56 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/23 10:45:12 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/26 11:32:47 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,7 @@ void	free_table(t_table **p_table)
 		prev = curr;
 		curr = curr->next;
 		free(prev);
+		prev = NULL;
 	}
+	*p_table = NULL;
 }

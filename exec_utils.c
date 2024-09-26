@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 11:50:42 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 13:36:44 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 12:31:21 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,16 @@ void	print_exec(t_exec *exec)
 		}
 		ft_printf("NEXT\n");
 		temp = temp->next;
+	}
+}
+
+void safe_clear(t_var *data)
+{
+	if (data)
+	{
+		free_tokens(data);
+		ft_free(&data->promt);
+		ft_free(&data->line);
+		free_exec_all(&(data->exec));
 	}
 }

@@ -3,41 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   create_exec_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 10:23:37 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 14:24:06 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 13:54:43 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_exec	*exec_new(t_stack **res)
+t_exec	*exec_return_pipe(t_exec *new_node, t_stack **res)
 {
-	t_exec	*new_node;
+	new_node->type = (*res)->type;
+	if ((*res)->data != NULL)
+	{
+		new_node->data = ft_strdup((*res)->data);
+		if (new_node->data == NULL)
+			return (free(new_node), new_node = NULL, NULL);
+	}
+	else 
+		new_node->data = NULL;
+	return (new_node);
+}
+
+t_exec *exec_return_others(t_stack **res, t_exec *new_node)
+{
 	int		new_type;
 	int		run;
 
 	run = 1;
 	new_type = 0;
-	new_node = malloc(sizeof(t_exec));
-	if (new_node == NULL)
-		return (NULL);
-	new_node->down = NULL;
-	new_node->next = NULL;
-	if ((*res)->type == 6)
-	{
-		new_node->type = (*res)->type;
-		if ((*res)->data != NULL)
-		{
-			new_node->data = ft_strdup((*res)->data);
-			if (new_node->data == NULL)
-				return (free(new_node), NULL);
-		}
-		else 
-			new_node->data = NULL;
-		return (new_node);
-	}
 	while (*res != NULL && run == 1)
 	{
 		if ((*res)->type < 100 && (*res)->type > new_type)
@@ -54,6 +49,21 @@ t_exec	*exec_new(t_stack **res)
 	}
 	new_node->type = new_type;
 	return (new_node);
+}
+
+t_exec	*exec_new(t_stack **res)
+{
+	t_exec	*new_node;
+	
+	new_node = malloc(sizeof(t_exec));
+	if (new_node == NULL)
+		return (NULL);
+	new_node->down = NULL;
+	new_node->next = NULL;
+	if ((*res)->type == 6)
+		return (exec_return_pipe(new_node, res));
+	else
+		return (exec_return_others(res, new_node));
 }
 
 void	exec_add_back(t_exec **where_a, t_exec *what)

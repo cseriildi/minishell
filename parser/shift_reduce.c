@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shift_reduce.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:06:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 14:32:48 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/26 11:45:24 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ int	shift(t_stack **stack, t_token **token_list, int next_state)
 	//handle
 	stack_add_front(stack, new);
 	prev = *token_list;
-	*token_list = (*token_list)->next;
+	*token_list = (*token_list)->next;\
+	ft_free(&prev->content);
+	free(prev);
 	return (1);
 }
 
