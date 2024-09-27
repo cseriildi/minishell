@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 14:08:11 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 11:38:34 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,18 +102,11 @@ int	main(int argc, char **argv)
 			add_history(data->line);
 		lexer(data);
 		parse(data);
-		//print_exec(data->exec);
 		execute(data);
 		/* if (!data->line) {
 		    handle_ctrl_d();
 		} */
 		free_all(data);
-		/* free_tokens(data);
-		ft_free(&data->line);
-		ft_free(&data->promt);
-		free_array(data->cmd_list);
-		free_exec_all(&data->exec); */
-		//safe_clear(data);
 	}
 	safe_exit(data, data->exit_code);
 }

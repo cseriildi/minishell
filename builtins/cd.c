@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 15:03:42 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/27 10:58:28 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	ft_cd(t_var *data)
 	if (dest == NULL)
 	{
 		dest = ft_getenv(data, "HOME");
-		if (ft_strncmp(dest, "", 2) == 0)
+		if (dest == NULL)
 		{
 			print_error(2, "minishell: cd: HOME not set");
 			data->exit_code = EXIT_FAILURE;
@@ -67,7 +67,6 @@ void	ft_cd(t_var *data)
 		data->exit_code = EXIT_FAILURE;
 		return ;
 	}
-	ft_free(&data->pwd);
 	pwd = getcwd(NULL, 0);
 	if (cd_in_env(data, pwd) == MALLOC_FAIL)
 	{

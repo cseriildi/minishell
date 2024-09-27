@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 14:01:46 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:52:25 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,12 @@ void	execute(t_var *data)
 void	only_one_sequence(t_var *data, t_exec *exec)
 {
 	if (is_builtin(exec->data) == true)
+	{
+		data->stdout_copy = dup(STDOUT_FILENO);
 		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
+		safe_dup2(&data->stdout_copy, STDOUT_FILENO, data);
+
+	}
 	else
 	{
 		data->pid = fork();
@@ -66,7 +71,7 @@ void	first_sequence(t_var *data, t_exec *exec)
 		safe_exit(data, FORK_FAIL);
 	if (data->pid == 0)
 	{
-		close(data->pipe1_fd[0]);
+		safe_close(&data->pipe1_fd[0]);
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, EXIT_SUCCESS);
 	}
@@ -80,15 +85,15 @@ void	middle_sequence(t_var *data, t_exec *exec)
 		safe_exit(data, FORK_FAIL);
 	if (data->pid == 0)
 	{
-		close(data->pipe1_fd[1]);
-		close(data->pipe2_fd[0]);
+		safe_close(&data->pipe1_fd[1]);
+		safe_close(&data->pipe2_fd[0]);
 		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
 		safe_exit(data, EXIT_SUCCESS);
 	}
 	else
 	{
-		close(data->pipe1_fd[0]);
-		close(data->pipe1_fd[1]);
+		safe_close(&data->pipe1_fd[0]);
+		safe_close(&data->pipe1_fd[1]);
 		data->pipe1_fd[0] = data->pipe2_fd[0];
 		data->pipe1_fd[1] = data->pipe2_fd[1];
 	}
@@ -101,14 +106,16 @@ void	last_sequence(t_var *data, t_exec *exec)
 		safe_exit(data, FORK_FAIL);
 	if (data->pid == 0)
 	{
-		close(data->pipe1_fd[1]);
+		safe_close(&data->pipe1_fd[1]);
+		data->stdout_copy = dup(STDOUT_FILENO);
 		exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
+		safe_dup2(&data->stdout_copy, STDOUT_FILENO, data);
 		safe_exit(data, EXIT_SUCCESS);
 	}
 	else
 	{
-		close(data->pipe1_fd[0]);
-		close(data->pipe1_fd[1]);
+		safe_close(&data->pipe1_fd[0]);
+		safe_close(&data->pipe1_fd[1]);
 		wait(NULL);
 		waitpid(data->pid, &data->exit_status, 0);
 		if (WIFEXITED(data->exit_status))
@@ -117,20 +124,13 @@ void	last_sequence(t_var *data, t_exec *exec)
 	}
 }
 
-void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
+void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 {
 	create_cmd_list(data, exec);
-	if (is_builtin(data->cmd_list[0])	
-		&& ft_strncmp("exit", data->cmd_list[0], 5) != 0 && write == STDOUT_FILENO)
-	{
-		data->stdout_copy = dup(STDOUT_FILENO);
-		if (data->stdout_copy == -1)
-			safe_exit(data, DUP2_FAIL);
-	}
 	if (redirect_in(data, exec) == false)
 		return;
-	safe_dup2(read, STDIN_FILENO, data);
-	safe_dup2(write, STDOUT_FILENO, data);
+	safe_dup2(&read_fd, STDIN_FILENO, data);
+	safe_dup2(&write_fd, STDOUT_FILENO, data);
 	if (redirect_out(data, exec) == false)
 		return;
 	if (data->cmd_list != NULL)
@@ -138,10 +138,6 @@ void	exec_sequence(t_var *data, t_exec *exec, int read, int write)
 		if (exec_builtin(data) == false)
 			exec_command(data);
 	}
-	safe_close(read, data);
-	safe_close(write, data);
-	safe_dup2(data->stdout_copy, STDOUT_FILENO, data);
-
 }
 
 void	exec_command(t_var *data)
@@ -241,12 +237,12 @@ char	*get_abs_cmd(t_var *data, char *cmd)
 			safe_exit(data, MALLOC_FAIL);
 		if (access(path_cmd, F_OK) == 0)
 		{
-			free_array(path);
+			free_array(&path);
 			return (path_cmd);
 		}
 		ft_free(&path_cmd);
 		i++;
 	}
-	free_array(path);
+	free_array(&path);
 	return (NULL);
 }

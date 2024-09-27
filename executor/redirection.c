@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 13:48:01 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/27 12:00:57 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool	redirect_in(t_var *data, t_exec *exec)
 			fd = safe_open(temp->data, READ, data);
 			if (fd == -1)
 				return false;
-			safe_dup2(fd, STDIN_FILENO, data);
+			safe_dup2(&fd, STDIN_FILENO, data);
 		}
 		else if (temp->type == HERE_DOC)
 		{
@@ -45,19 +45,19 @@ bool	redirect_out(t_var *data, t_exec *exec)
 	temp = exec;
 	while (temp != NULL)
 	{
-		if (exec->type == RED_OUT)
+		if (temp->type == RED_OUT)
 		{
-			fd = safe_open(exec->data, CREATE, data);
+			fd = safe_open(temp->data, CREATE, data);
 			if (fd == -1)
 				return false;
-			safe_dup2(fd, STDOUT_FILENO, data);
+			safe_dup2(&fd, STDOUT_FILENO, data);
 		}
-		else if (exec->type == APPEND)
+		else if (temp->type == APPEND)
 		{
-			fd = safe_open(exec->data, CREATE_OR_APPEND, data);
+			fd = safe_open(temp->data, CREATE_OR_APPEND, data);
 			if (fd == -1)
 				return false;
-			safe_dup2(fd, STDOUT_FILENO, data);
+			safe_dup2(&fd, STDOUT_FILENO, data);
 		}
 		temp = temp->down;
 	}
