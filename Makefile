@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
+#    By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/09/26 13:42:43 by icseri           ###   ########.fr        #
+#    Updated: 2024/09/27 13:16:20 by cseriildii       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = minishell
 
 SRCS = main.c \
 		utils.c \
+		init.c \
 		exec_utils.c \
 		p_table_utils.c \
 		fd_handling.c \
@@ -31,7 +32,10 @@ SRCS = main.c \
 		parser/stack_free.c \
 		parser/basic_functions.c \
 		parser/create_exec_utils.c \
+		parser/create_exec_utils_2.c \
 		parser/arrange_exec.c \
+		parser/arrange_exec_2.c \
+		parser/put_pipes.c \
 		executor/execute.c \
 		executor/expander.c \
 		executor/heredoc.c \

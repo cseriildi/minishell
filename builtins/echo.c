@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:42 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 12:11:07 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 13:43:11 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	ft_echo(t_var *data)
 	int		i;
 	bool	n_flag;
 
-	
 	i = 0;
 	n_flag = false;
 	if (data->cmd_list[1] && ft_strncmp(data->cmd_list[1], "-n", 3) == 0)
@@ -28,7 +27,7 @@ void	ft_echo(t_var *data)
 	while (data->cmd_list[++i])
 	{
 		printf("%s", data->cmd_list[i]);
-		if(data->cmd_list[i+1] != NULL)
+		if (data->cmd_list[i + 1] != NULL)
 			printf(" ");
 	}
 	if (n_flag == false)

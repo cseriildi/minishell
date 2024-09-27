@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 12:45:55 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/27 13:15:04 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,26 +73,6 @@ void	safe_exit(t_var *data, int exit_code)
 		free(data);
 	}
 	exit(exit_code);
-}
-
-void	get_promt(t_var *data)
-{
-	char	*home;
-	char	*tmp;
-
-	home = ft_getenv(data, "HOME");
-	if (home != NULL && ft_strncmp(data->pwd, home, ft_strlen(home)) == 0)
-	{
-		tmp = ft_strjoin("~", data->pwd + ft_strlen(home));
-		if (!tmp)
-			safe_exit(data, MALLOC_FAIL);
-		data->promt = ft_strjoin(tmp, "$ ");
-		free(tmp);
-	}
-	else
-		data->promt = ft_strjoin(data->pwd, "$ ");
-	if (!data->promt)
-		safe_exit(data, MALLOC_FAIL);
 }
 
 void	print_error(int count, ...)

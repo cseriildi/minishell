@@ -3,11 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   signals.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 14:04:09 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/24 14:04:41 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 13:35:23 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef SIGNALS_H
+# define SIGNALS_H
 
+# include "../minishell.h"
+
+#endif

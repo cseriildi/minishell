@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 12:22:01 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/23 12:51:10 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/27 12:33:44 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	free_table(t_table **p_table);
 
 //SHIFT REDUCE
 int		shift(t_stack **stack, t_token **token_list, int next_state);
-int		reduce(t_stack **stack, t_table *p_table, t_table *entry, t_stack **rl_key_sequence_length);
+int		reduce(t_stack **stack, t_table *p_table, t_table *entry, t_stack **r);
 
 //STACK OP
 t_stack	*init_stack(void);
@@ -91,17 +91,23 @@ void	swap_stack(t_stack **a, t_stack **b);
 void	print_stack(t_stack *stack);
 void	print_p_table(t_table *parsing_table);
 
-int	check_red(int type);
-
 //EXEC
 t_exec	*create_exec(t_stack **res);
 void	print_exec(t_exec *exec);
+void	reverse_down_up(t_exec **exec);
+void	reverse_front_back(t_exec **exec);
+void	arrange_in_pip_seq(t_exec **exec);
+void	sort_in_pip_seq_util(t_exec **prev_d, t_exec **curr_d);
+void	sort_in_pip_seq(t_exec **exec);
 void	reverse_exec(t_exec **exec);
 int		exec_last_is_not_cmd(t_exec *exec);
 void	exec_add_back_under(t_exec **where_a, t_exec *what);
 void	exec_add_under(t_exec **where_a, t_exec *what);
 void	exec_add_back(t_exec **where_a, t_exec *what);
+t_exec	*exec_new(t_stack **res);
+t_exec	*exec_return_others(t_stack **res, t_exec *new_node);
+t_exec	*exec_return_pipe(t_exec *new_node, t_stack **res);
+void	put_pipes_right_place(t_stack **result);
 void	free_exec_all(t_exec **exec);
-
 
 #endif

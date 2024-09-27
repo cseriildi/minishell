@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/25 14:06:54 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/27 13:36:30 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	get_next_token(t_var *data)
 void	lexer(t_var *data)
 {
 	t_token	*new_token;
-	
+
 	data->tokens = NULL;
 	data->index = 0;
 	while (data->line[data->index])
