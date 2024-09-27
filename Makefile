@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
+#    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/09/26 13:42:43 by icseri           ###   ########.fr        #
+#    Updated: 2024/09/27 11:59:04 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,10 @@ SRCS = main.c \
 		parser/stack_free.c \
 		parser/basic_functions.c \
 		parser/create_exec_utils.c \
+		parser/create_exec_utils_2.c \
 		parser/arrange_exec.c \
+		parser/arrange_exec_2.c \
+		parser/put_pipes.c \
 		executor/execute.c \
 		executor/expander.c \
 		executor/heredoc.c \

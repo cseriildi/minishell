@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:08:11 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/26 11:39:45 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 11:30:40 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,7 @@ t_table	*init_table(int fd)
 		table_add_back(&table, temp);
 		line = get_next_line(fd);
 	}
-	free(line);
-	return (table);
+	return (free(line), table);
 }
 
 t_table	*create_table(void)
@@ -66,11 +65,3 @@ void	print_p_table(t_table *parsing_table)
 		parsing_table = parsing_table->next;
 	}
 }
-
-/* int main ()
-{
-	t_table *t;
-
-	t = create_table();
-	return (0);
-} */

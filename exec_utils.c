@@ -6,11 +6,26 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 11:50:42 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/26 12:31:21 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:28:49 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	print_tokens(t_token **tokens)
+{
+	t_token	*head;
+	t_token	*current;
+
+	head = *tokens;
+	current = head;
+	while (current != NULL)
+	{
+		printf("%s\n", current->content);
+		printf("%d\n", current->type);
+		current = current->next;
+	}
+}
 
 void	free_down_exec(t_exec **exec)
 {
@@ -75,7 +90,7 @@ void	print_exec(t_exec *exec)
 	}
 }
 
-void safe_clear(t_var *data)
+/* void safe_clear(t_var *data)
 {
 	if (data)
 	{
@@ -84,4 +99,4 @@ void safe_clear(t_var *data)
 		ft_free(&data->line);
 		free_exec_all(&(data->exec));
 	}
-}
+} */

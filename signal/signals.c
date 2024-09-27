@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:00:39 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/26 14:27:25 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 11:17:20 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ void handle_sigquit(int sig)
 void	init_signals()
 {
 	struct sigaction sa_int, sa_quit;
-	
+	(void) sa_int;
 	sa_int.sa_handler = &handle_sigint;
     sigemptyset(&sa_int.sa_mask);
-    sa_int.sa_flags = SA_RESTART; 
+   sa_int.sa_flags = SA_RESTART; 
     if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{
         perror("sigaction(SIGINT) failed");

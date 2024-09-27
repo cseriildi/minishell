@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 12:06:22 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/26 13:20:22 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:35:24 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,14 @@ void	reverse_down_up(t_exec **exec)
 		return ;
 	while (curr != NULL)
 	{
-		next = curr->down;  
-        curr->down = prev;  
-        prev = curr;        
-        curr = next;
+		next = curr->down;
+		curr->down = prev;
+		prev = curr;
+		curr = next;
 	}
 	prev->next = first->next;
 	first->next = NULL;
 	*exec = prev;
-	
 }
 
 void	reverse_front_back(t_exec **exec)
@@ -53,13 +52,12 @@ void	reverse_front_back(t_exec **exec)
 		return ;
 	while (curr != NULL)
 	{
-		next = curr->next;  
-        curr->next = prev;  
-        prev = curr;        
-        curr = next;
+		next = curr->next;
+		curr->next = prev;
+		prev = curr;
+		curr = next;
 	}
 	*exec = prev;
-	
 }
 
 void	arrange_in_pip_seq(t_exec **exec)
@@ -89,6 +87,7 @@ void	arrange_in_pip_seq(t_exec **exec)
 		}
 	}
 }
+
 void	sort_in_pip_seq_util(t_exec **prev_d, t_exec **curr_d)
 {
 	t_exec	*prev;
@@ -127,48 +126,5 @@ void	sort_in_pip_seq(t_exec **exec)
 				sort_in_pip_seq_util(&prev, &curr);
 		}
 		exec_temp = exec_temp->down;
-	}
-}
-
-void	reverse_exec(t_exec **exec)
-{
-	t_exec *next_temp;
-	t_exec *temp;
-	t_exec *prev;
-	int	first;
-	
-	if (exec == NULL || *exec == NULL)
-		return ;
-	next_temp = *exec;
-	first = TRUE;
-	prev = NULL;
-	while (next_temp != NULL)
-	{
-		reverse_down_up(&next_temp);
-		*exec = next_temp;
-		if (first == TRUE)
-		{
-			prev = next_temp;
-			temp = *exec;
-			first = FALSE;
-		}
-		else
-		{
-			prev->next = next_temp;
-			prev = prev->next;
-		}
-		*exec = (*exec)->next;
-		next_temp = next_temp->next;
-	}
-	*exec = temp;
-	reverse_front_back(exec);
-	arrange_in_pip_seq(exec);;
-	temp = *exec;
-	sort_in_pip_seq(exec);
-	sort_in_pip_seq(exec);
-	while (temp != NULL)
-	{
-		sort_in_pip_seq(&temp);
-		temp = temp->next;
 	}
 }
