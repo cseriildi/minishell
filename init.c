@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/09/27 13:28:34 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/27 14:24:26 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	init(t_var *data)
 	data->env = NULL;
 	data->promt = NULL;
 	data->cmd_list = NULL;
+	data->here_doc_filename[0] = '\0';
 	data->line = NULL;
 	data->exit_code = 0;
 	data->subshell_level = 1;

@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 12:00:23 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/27 13:55:39 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@ int	safe_open(char *filename, int mode, t_var *data)
 {
 	int	fd;
 
-	fd = -1;
 	if (mode == READ)
 		fd = open(filename, O_RDONLY, 0644);
 	else if (mode == CREATE)
 		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (mode == CREATE_OR_APPEND)
 		fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	else
+		return (-1);
 	if (fd == -1)
 	{
 		print_error(4, "minishell: ", filename, ": ", strerror(errno));
