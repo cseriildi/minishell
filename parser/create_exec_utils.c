@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   create_exec_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 10:23:37 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/26 13:54:43 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 10:23:28 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,6 @@ void	exec_add_back_under(t_exec **where_a, t_exec *what)
 
 int exec_last_is_not_cmd(t_exec *exec)
 {
-	int	res;
-
-	res = 0;
 	if (exec == NULL)
 		return (1);
 	while (exec->next != NULL)

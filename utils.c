@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 14:10:24 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:45:55 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,17 @@ void	free_tokens(t_var *data)
 	}
 }
 
-void	free_array(char **arr)
+void	free_array(char ***arr)
 {
 	int	i;
 
 	i = 0;
-	if (arr)
+	if (arr && *arr)
 	{
-		while (arr && arr[i])
-			ft_free(&arr[i++]);
-		if (arr != NULL)
-			free(arr);
-		arr = NULL;
+		while ((*arr)[i])
+			ft_free(&(*arr)[i++]);
+		free(*arr);
+		*arr = NULL;
 	}
 }
 
@@ -53,13 +52,13 @@ void	free_all(t_var *data)
 		free_tokens(data);
 		ft_free(&data->promt);
 		ft_free(&data->line);
-		free_array(data->cmd_list);
+		free_array(&data->cmd_list);
 		free_exec_all(&(data->exec));
-		safe_close(data->pipe1_fd[0], data);
-		safe_close(data->pipe1_fd[1], data);
-		safe_close(data->pipe2_fd[0], data);
-		safe_close(data->pipe2_fd[1], data);
-		safe_close(data->stdout_copy, data);
+		safe_close(&data->pipe1_fd[0]);
+		safe_close(&data->pipe1_fd[1]);
+		safe_close(&data->pipe2_fd[0]);
+		safe_close(&data->pipe2_fd[1]);
+		safe_close(&data->stdout_copy);
 	}
 }
 
@@ -68,7 +67,7 @@ void	safe_exit(t_var *data, int exit_code)
 	if (data)
 	{
 		ft_free(&data->pwd);
-		free_array(data->env);
+		free_array(&data->env);
 		free_table(&(data->p_table));
 		free_all(data);
 		free(data);
@@ -82,8 +81,7 @@ void	get_promt(t_var *data)
 	char	*tmp;
 
 	home = ft_getenv(data, "HOME");
-	if (home != NULL
-		&& ft_strncmp(data->pwd, home, ft_strlen(home)) == 0)
+	if (home != NULL && ft_strncmp(data->pwd, home, ft_strlen(home)) == 0)
 	{
 		tmp = ft_strjoin("~", data->pwd + ft_strlen(home));
 		if (!tmp)

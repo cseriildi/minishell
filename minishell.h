@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 14:03:41 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:41:21 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	safe_exit(t_var *data, int exit_code);
 void	safe_clear(t_var *data);
 void	get_promt(t_var *data);
 void	free_tokens(t_var *data);
-void	free_array(char **arr);
+void	free_array(char ***arr);
 void	print_error(int count, ...);
 
 //builtins
@@ -167,8 +167,8 @@ void	init_signals();
 //fd_handling
 
 int		safe_open(char *filename, int mode, t_var *data);
-void	safe_close(int fd, t_var *data);
+void	safe_close(int *fd);
 void	delete_file(t_var *data, char *filename);
-void	safe_dup2(int old_fd, int new_fd, t_var *data);
+void	safe_dup2(int *old_fd, int new_fd, t_var *data);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_handling.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 14:41:09 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:00:23 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,12 @@ int	safe_open(char *filename, int mode, t_var *data)
 	return (fd);
 }
 
-void	safe_close(int fd, t_var *data)
+void	safe_close(int *fd)
 {
-	if (fd < 3)
+	if (*fd < 3)
 		return ;
-	(void)data;
-	close(fd);
-	fd = -1;
-	/* if (close(fd) == -1)
-	{
-		print_error(2, strerror(errno), " :Cannot close file descriptor");
-		data->exit_code = EXIT_FAILURE;
-	} */
+	close(*fd);
+	*fd = -1;
 }
 
 void	delete_file(t_var *data, char *filename)
@@ -60,16 +54,16 @@ void	delete_file(t_var *data, char *filename)
 	}
 }
 
-void	safe_dup2(int old_fd, int new_fd, t_var *data)
+void	safe_dup2(int *old_fd, int new_fd, t_var *data)
 {
-	if (old_fd == new_fd || old_fd == -1 || new_fd == -1)
+	if (*old_fd == new_fd || *old_fd < 0 || new_fd < 0)
 		return ;
-	if (dup2(old_fd, new_fd) == -1)
+	if (dup2(*old_fd, new_fd) == -1)
 	{
 		print_error(2, strerror(errno), " :Cannot duplicate file descriptor");
 		data->exit_code = DUP2_FAIL;
-		safe_close(old_fd, data);
+		safe_close(old_fd);
 		safe_exit(data, DUP2_FAIL);
 	}
-	safe_close(old_fd, data);
+	safe_close(old_fd);
 }

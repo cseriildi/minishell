@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arrange_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 12:06:22 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/26 13:20:22 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 10:23:44 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,7 @@ void	reverse_front_back(t_exec **exec)
 	t_exec	*curr;
 	t_exec	*prev;
 	t_exec	*next;
-	t_exec	*first;
 
-	first = *exec;
 	prev = NULL;
 	curr = *exec;
 	next = NULL;
