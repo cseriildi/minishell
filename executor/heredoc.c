@@ -6,28 +6,29 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 13:17:36 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/27 14:26:44 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-char	*generate_random_filename(t_var *data)
+void	generate_random_filename(t_var *data)
 {
 	int		rand_fd;
-	char	*filename;
 
-	filename = "temp_heredoc_file";
-	rand_fd = safe_open("/dev/urandom", 'R', data);
+	rand_fd = safe_open("/dev/urandom", READ, data);
 	if (rand_fd == -1)
-		return (filename);
-	if (read(rand_fd, filename, 10) != 10)
 	{
+		ft_memcpy(data->here_doc_filename, "temp_heredoc_file", 18);
+		return ;
+	}
+	if (read(rand_fd, data->here_doc_filename, 18) != 18)
+	{
+		ft_memcpy(data->here_doc_filename, "temp_heredoc_file", 18);
 		safe_close(&rand_fd);
-		return (filename);
+		return ;
 	}
 	safe_close(&rand_fd);
-	return (filename);
 }
 
 bool	here_doc(t_var *data, char *limiter, bool expanding)
@@ -35,14 +36,13 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 	char	*line;
 	int		fd_to_write;
 	int		fd_to_read;
-	char	*filename;
 	char	*expanded_line;
 
-	filename = generate_random_filename(data);
-	fd_to_write = safe_open(filename, CREATE, data);
+	generate_random_filename(data);
+	fd_to_write = safe_open(data->here_doc_filename, CREATE, data);
 	if (fd_to_write == -1)
 		return (false);
-	fd_to_read = safe_open(filename, READ, data);
+	fd_to_read = safe_open(data->here_doc_filename, READ, data);
 	if (fd_to_read == -1)
 	{
 		safe_close(&fd_to_write);
@@ -75,6 +75,6 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 	}
 	safe_close(&fd_to_write);
 	safe_dup2(&fd_to_read, STDIN_FILENO, data);
-	delete_file(data, filename);
+	delete_file(data, data->here_doc_filename);
 	return (true);
 }
