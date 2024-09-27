@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 12:42:11 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/27 13:44:07 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,15 +72,13 @@ char	*ft_strjoin2(char *str1, char *str2, char *delimiter)
 bool	replace_var(t_var *data, char *key, char *content)
 {
 	int	i;
-	int len;
+	int	len;
 
 	i = 0;
 	if (!key || !content)
 		return (false);
 	len = ft_strlen(key);
-	if (len == 0)
-		return (false);
-	while (data->env && data->env[i])
+	while (len != 0 && data->env && data->env[i])
 	{
 		printf("env[%d] = %s\n", i, data->env[i]);
 		if (ft_strncmp(data->env[i], key, len) == 0

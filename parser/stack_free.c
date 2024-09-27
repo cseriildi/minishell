@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack_free.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 17:19:34 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/25 14:31:22 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/27 12:31:21 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void	free_stack(t_stack **stack)
 {
-	t_stack *temp;
-	t_stack *s;
-	
+	t_stack	*temp;
+	t_stack	*s;
+
 	if (stack == NULL || *stack == NULL)
-		return;
+		return ;
 	s = *stack;
 	while (s != NULL)
 	{
@@ -30,13 +30,13 @@ void	free_stack(t_stack **stack)
 	}
 }
 
-t_stack *copy_node(t_stack *node)
+t_stack	*copy_node(t_stack *node)
 {
-	t_stack *new;
+	t_stack	*new;
 
 	new = init_stack();
 	if (new == NULL)
-		return NULL;
+		return (NULL);
 	new->data = node->data;
 	new->next = NULL;
 	new->state = node->state;
@@ -48,7 +48,7 @@ void	stack_reverse(t_stack **stack)
 {
 	t_stack	*temp;
 	t_stack	*temp2;
-	t_stack *new;
+	t_stack	*new;
 
 	temp = *stack;
 	new = NULL;

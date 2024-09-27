@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 12:41:21 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/27 13:28:15 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ typedef struct s_signals
 	int		interactive;
 }	t_signals;
 
-extern t_signals signals;
+extern t_signals	signals;
 
 typedef enum s_err
 {
@@ -140,8 +140,6 @@ t_table	*create_table(void);
 //utils
 void	free_all(t_var *data);
 void	safe_exit(t_var *data, int exit_code);
-void	safe_clear(t_var *data);
-void	get_promt(t_var *data);
 void	free_tokens(t_var *data);
 void	free_array(char ***arr);
 void	print_error(int count, ...);
@@ -156,13 +154,14 @@ void	execute(t_var *data);
 //env
 void	init_env(t_var *data);
 char	*ft_getenv(t_var *data, char *var_name);
+char	*ft_strjoin2(char *str1, char *str2, char *delimiter);
 
 //exec_utils
 void	free_table(t_table **p_table);
 void	free_exec_all(t_exec **exec);
 void	print_exec(t_exec *exec);
 
-void	init_signals();
+void	init_signals(void);
 
 //fd_handling
 
@@ -170,5 +169,9 @@ int		safe_open(char *filename, int mode, t_var *data);
 void	safe_close(int *fd);
 void	delete_file(t_var *data, char *filename);
 void	safe_dup2(int *old_fd, int new_fd, t_var *data);
+
+//init
+void	init(t_var *data);
+void	get_promt(t_var *data);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 12:52:25 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/27 13:25:27 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	execute(t_var *data)
 {
 	t_exec	*temp;
-	
+
 	temp = data->exec;
 	if (temp == NULL)
 		return ;
@@ -42,7 +42,6 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		data->stdout_copy = dup(STDOUT_FILENO);
 		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 		safe_dup2(&data->stdout_copy, STDOUT_FILENO, data);
-
 	}
 	else
 	{
@@ -128,11 +127,11 @@ void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 {
 	create_cmd_list(data, exec);
 	if (redirect_in(data, exec) == false)
-		return;
+		return ;
 	safe_dup2(&read_fd, STDIN_FILENO, data);
 	safe_dup2(&write_fd, STDOUT_FILENO, data);
 	if (redirect_out(data, exec) == false)
-		return;
+		return ;
 	if (data->cmd_list != NULL)
 	{
 		if (exec_builtin(data) == false)
@@ -142,20 +141,22 @@ void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 
 void	exec_command(t_var *data)
 {
+	char	*cmd;
 	char	*abs_cmd;
-	
-	if (data->cmd_list[0] == NULL)
+
+	cmd = data->cmd_list[0];
+	if (cmd == NULL)
 		return ;
-	if (ft_strchr(data->cmd_list[0], '/') != NULL
-		&& execve(data->cmd_list[0], data->cmd_list, data->env) == -1)
+	if (ft_strchr(cmd, '/') != NULL
+		&& execve(cmd, data->cmd_list, data->env) == -1)
 	{
-		print_error(3, "minishell: ", data->cmd_list[0], ": No such file or directory");
+		print_error(3, "minishell: ", cmd, ": No such file or directory");
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
-	abs_cmd = get_abs_cmd(data, data->cmd_list[0]);
+	abs_cmd = get_abs_cmd(data, cmd);
 	if (abs_cmd == NULL)
 	{
-		print_error(3, "minishell: ", data->cmd_list[0], ": command not found");
+		print_error(3, "minishell: ", cmd, ": command not found");
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
 	if (execve(abs_cmd, data->cmd_list, data->env) == -1)
@@ -219,29 +220,26 @@ char	*get_abs_cmd(t_var *data, char *cmd)
 {
 	int		i;
 	char	**path;
-	char	*tmp;
 	char	*path_cmd;
 
 	path = get_paths(data);
 	if (!path)
 		return (cmd);
-	i = 0;
-	while (path[i] != NULL)
+	i = -1;
+	while (path[++i] != NULL)
 	{
-		tmp = ft_strjoin(path[i], "/");
-		if (!tmp)
-			safe_exit(data, MALLOC_FAIL);
-		path_cmd = ft_strjoin(tmp, cmd);
-		ft_free(&tmp);
+		path_cmd = ft_strjoin2(path[i], cmd, "/");
 		if (!path_cmd)
+		{
+			free_array(&path);
 			safe_exit(data, MALLOC_FAIL);
+		}
 		if (access(path_cmd, F_OK) == 0)
 		{
 			free_array(&path);
 			return (path_cmd);
 		}
 		ft_free(&path_cmd);
-		i++;
 	}
 	free_array(&path);
 	return (NULL);

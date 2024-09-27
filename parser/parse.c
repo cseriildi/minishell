@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/26 13:17:14 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:42:39 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,37 +56,27 @@ int	get_next_state(t_table *p_table, t_stack *stack)
 	return (next_state);
 }
 
-void put_pipes_right_place(t_stack **result)
+int	parse_accept(t_var *data, t_stack *stack, t_stack *result)
 {
-	t_stack *temp;
-	t_stack	*temp2;
-	
-	temp = *result;
-	if (*result == NULL)
-		return ;
-	while (temp != NULL)
-	{
-		if (temp->type == P_PIPE_SEQ && temp->next->type == PIPE)
-			swap_stack(&temp, &(temp->next));
-		temp = temp->next;
-	}
-	temp = *result;
-	if(temp->type == P_PIPE_SEQ && temp->next->type == PIPE)
-	{
-		*result = temp->next->next;
-		temp2 = *result;
-		swap_stack(&temp, &(temp->next));
-		while (temp2->next != NULL)
-		{
-			if (temp2->next->type == 102 && temp2->type != 101)
-			{
-				temp->next->next = temp2->next;
-				temp2->next = temp;
-				break;
-			}
-			temp2 = temp2->next;
-		}
-	}	
+	free_stack(&stack);
+	put_pipes_right_place(&result);
+	data->exec = create_exec(&result);
+	if (data->exec == NULL && result != NULL)
+		return (free_stack(&result), -1);
+	free_stack(&result);
+	reverse_exec(&data->exec);
+	free_tokens(data);
+	return (0);
+}
+
+int	parse_reject(t_var *data, t_stack *stack, t_stack *result)
+{
+	print_error(3, "minishell: syntax error near unexpected token '",
+		data->tokens->content, "'");
+	free_stack(&result);
+	free_stack(&stack);
+	free_tokens(data);
+	return (0);
 }
 
 void	parse(t_var *data)
@@ -94,7 +84,6 @@ void	parse(t_var *data)
 	t_stack	*stack;
 	t_table	*entry;
 	t_stack	*result;
-
 	int		run;
 
 	run = TRUE;
@@ -110,25 +99,11 @@ void	parse(t_var *data)
 		else if (entry && entry->action == A_REDUCE)
 			run = reduce(&stack, data->p_table, entry, &result);
 		else if (entry && entry->action == A_ACCEPT)
-		{
-			run = 0;
-			free_stack(&stack);
-			put_pipes_right_place(&result);
-			data->exec = create_exec(&result);
-			free_stack(&result);
-			if (data->exec == NULL)
-				break ;
-			reverse_exec(&data->exec);
-			free_tokens(data);
-		}
+			run = parse_accept(data, stack, result);
 		else
-		{
-			run = 0;
-			print_error(3, "minishell: syntax error near unexpected token '", data->tokens->content, "'");
-			//data->exit_code = CANNOT_OPEN_FILE;
-			return (free_stack(&result), free_stack(&stack), free_tokens(data)/* , safe_exit(data, CANNOT_OPEN_FILE) */);
-		}
-		if (run == -1)
-			return (free_stack(&result), free_stack(&stack), safe_exit(data, MALLOC_FAIL));
+			run = parse_reject(data, stack, result);
 	}
+	if (run == -1)
+		return (free_stack(&result), free_stack(&stack),
+			safe_exit(data, MALLOC_FAIL));
 }

@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:53:04 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 10:44:32 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/27 13:45:27 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	ft_unset(t_var *data)
 				&& data->env[j][len] == '=')
 			{
 				shift_env(data, j);
-				break;
+				break ;
 			}
 		}
 	}

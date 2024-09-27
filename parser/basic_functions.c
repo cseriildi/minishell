@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 14:26:11 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/17 14:40:19 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/27 12:31:51 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,13 @@ void	swap_int(int *a, int *b)
 
 void	swap_str(char **a, char**b)
 {
-	char *t;
+	char	*t;
 
 	t = *a;
 	*a = *b;
 	*b = t;
 }
+
 void	swap_stack(t_stack **a, t_stack **b)
 {
 	swap_int(&((*a)->state), &((*b)->state));
