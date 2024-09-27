@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stack_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 17:11:51 by pvass             #+#    #+#             */
-/*   Updated: 2024/07/20 16:05:39 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/27 12:27:27 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,4 @@ t_stack	*pop_stack(t_stack **stack)
 	*stack = (*stack)->next;
 	new->next = NULL;
 	return (new);
-	//del_stack_node(&temp);
 }
