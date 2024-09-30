@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:33:55 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/24 15:55:02 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/30 10:53:01 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ char	*get_word(char *text, char *separator);
 //word
 char	*fix_content(char *content, t_var *data);
 void	word(t_var *data);
+int		find_end_of_quote(t_var *data, char *line);
+int		find_end_of_word(t_var *data, char *line);
 
 //other types
 void	redirection(t_var *data);

@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 14:25:56 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 11:04:07 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ typedef struct s_var
 	int		subshell_level;
 	int		stdout_copy;
 	char	here_doc_filename[19];
+	bool	missing_quote;
 }	t_var;
 
 typedef struct s_signals

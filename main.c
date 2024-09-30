@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 13:15:51 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 11:04:47 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int	main(void)
 	init(data);
 	while (true)
 	{
+		data->missing_quote = false;
 		get_promt(data);
 		signals.interactive = 1;
 		data->line = readline(data->promt);
@@ -36,6 +37,11 @@ int	main(void)
 		if (*data->line)
 			add_history(data->line);
 		lexer(data);
+		if (data->missing_quote == true)
+		{
+			free_all(data);
+			continue ;
+		}
 		parse(data);
 		execute(data);
 		free_all(data);
