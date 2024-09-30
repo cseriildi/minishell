@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arrange_exec.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/18 12:06:22 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/27 13:03:18 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 11:56:04 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	arrange_in_pip_seq(t_exec **exec)
 		if (curr->type == PIPE)
 		{
 			prev->next = curr->next;
+			free (curr->data);
 			free (curr);
 			curr = prev->next;
 		}
