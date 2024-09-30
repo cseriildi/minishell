@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 14:45:51 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/30 15:01:38 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ typedef struct s_var
 	char	**env;
 	int		subshell_level;
 	int		stdout_copy;
-	char	here_doc_filename[19];
+	char	*here_doc_filename;
 	bool	missing_quote;
 }	t_var;
 

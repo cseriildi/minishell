@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 14:24:46 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 15:13:11 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,10 @@ void	free_all(t_var *data)
 		free_tokens(data);
 		ft_free(&data->promt);
 		ft_free(&data->line);
+		delete_file(data, data->here_doc_filename);
+		ft_free(&data->here_doc_filename);
 		free_array(&data->cmd_list);
 		free_exec_all(&(data->exec));
-		data->here_doc_filename[0] = '\0';
 		safe_close(&data->pipe1_fd[0]);
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);

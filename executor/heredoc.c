@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 14:26:44 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 15:07:45 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	generate_random_filename(t_var *data)
 	int		rand_fd;
 
 	rand_fd = safe_open("/dev/urandom", READ, data);
+	rand_fd = -1;
 	if (rand_fd == -1)
 	{
 		ft_memcpy(data->here_doc_filename, "temp_heredoc_file", 18);
@@ -38,6 +39,9 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 	int		fd_to_read;
 	char	*expanded_line;
 
+	data->here_doc_filename = ft_calloc(1, 19);
+	if (data->here_doc_filename == NULL)
+		safe_exit(data, MALLOC_FAIL);
 	generate_random_filename(data);
 	fd_to_write = safe_open(data->here_doc_filename, CREATE, data);
 	if (fd_to_write == -1)
