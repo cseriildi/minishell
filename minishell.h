@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 15:47:34 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 15:59:08 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ void	execute(t_var *data);
 //env
 void	init_env(t_var *data);
 char	*ft_getenv(t_var *data, char *var_name);
+char	*safe_getenv(t_var *data, char *var_name);
 char	*ft_strjoin2(char *str1, char *str2, char *delimiter);
 
 //exec_utils

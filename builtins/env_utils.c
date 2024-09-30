@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 13:44:07 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 15:58:03 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,16 @@ char	*ft_getenv(t_var *data, char *var_name)
 	return (NULL);
 }
 
+char *safe_getenv(t_var *data, char *var_name)
+{
+	char *res;
+
+	res = ft_getenv(data, var_name);
+	if (!res)
+		return ("");
+	return (res);
+}
+
 void	init_env(t_var *data)
 {
 	extern char	**environ;
@@ -52,21 +62,6 @@ void	init_env(t_var *data)
 			safe_exit(data, MALLOC_FAIL);
 	}
 	data->env[i] = NULL;
-}
-
-char	*ft_strjoin2(char *str1, char *str2, char *delimiter)
-{
-	char	*tmp;
-	char	*new_str;
-
-	tmp = ft_strjoin(str1, delimiter);
-	if (!tmp)
-		return (NULL);
-	new_str = ft_strjoin(tmp, str2);
-	free(tmp);
-	if (!new_str)
-		return (NULL);
-	return (new_str);
 }
 
 bool	replace_var(t_var *data, char *key, char *content)
