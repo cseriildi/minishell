@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 14:45:42 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/30 17:00:50 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int	main(void)
 		signals.interactive = 0;
 		if (!data->line)
 		{
-			ft_printf("exit\n");
-			safe_exit(data, READLINE_FAIL);
+			ft_putendl_fd("exit", STDERR_FILENO);
+			safe_exit(data, data->exit_code);
 		}
 		if (*data->line)
 			add_history(data->line);
