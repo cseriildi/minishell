@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:33:55 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 10:53:01 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 15:34:29 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,6 @@
 //list
 t_token	*create_new_token(char *content, int type);
 void	add_token_to_back(t_token **lst, t_token *new);
-
-//utils
-char	*get_word(char *text, char *separator);
 
 //word
 char	*fix_content(char *content, t_var *data);

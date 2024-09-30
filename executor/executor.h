@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/26 13:39:46 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/30 15:34:45 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,4 +31,5 @@ bool	redirect_out(t_var *data, t_exec *tree);
 
 bool	here_doc(t_var *data, char *limiter, bool expanding);
 
+int		get_chunk_size(char *str);
 #endif

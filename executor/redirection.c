@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 13:30:34 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 15:32:13 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ bool	redirect_in(t_var *data, t_exec *exec)
 {
 	int		fd;
 	t_exec	*temp;
+	bool	expandable;
+	char	*fixed_limiter;
 
 	temp = exec;
 	while (temp != NULL)
@@ -29,7 +31,9 @@ bool	redirect_in(t_var *data, t_exec *exec)
 		}
 		else if (temp->type == HERE_DOC)
 		{
-			if (here_doc(data, temp->data, false) == false)
+			expandable = !ft_strchr(temp->data, '\'') && !ft_strchr(temp->data, '\"');
+			fixed_limiter = expander(data, temp->data);
+			if (here_doc(data, fixed_limiter, expandable) == false)
 				return (false);
 			//Do NOT forget about quotes in the LIMITER
 		}

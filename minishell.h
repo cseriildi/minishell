@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 11:04:07 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 15:34:14 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,5 +175,8 @@ void	safe_dup2(int *old_fd, int new_fd, t_var *data);
 //init
 void	init(t_var *data);
 void	get_promt(t_var *data);
+
+char	*fix_content(char *content, t_var *data);
+char	*get_word(char *text, char *separator);
 
 #endif

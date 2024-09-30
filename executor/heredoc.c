@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 14:26:44 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 15:37:26 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 		}
 		if (expanding == true)
 		{
-			expanded_line = expander(data, line);
-			ft_free(&line);
+			expanded_line = fix_content(line, data);
 			if (expanded_line == NULL)
 			{
 				safe_close(&fd_to_write);
 				safe_close(&fd_to_read);
+				print_error(1, "minishell: malloc failed");	
 				safe_exit(data, MALLOC_FAIL);
 			}
 			line = expanded_line;
