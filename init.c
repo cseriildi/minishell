@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/09/27 14:24:26 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 13:48:09 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	init(t_var *data)
 	if (data->p_table == NULL)
 		safe_exit(data, MALLOC_FAIL);
 	init_env(data);
-	init_signals();
+	init_signals(data);
 }
 
 void	get_promt(t_var *data)
