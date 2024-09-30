@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
+#    By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/09/30 15:45:29 by pvass            ###   ########.fr        #
+#    Updated: 2024/09/30 15:56:23 by cseriildii       ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,7 @@ NAME = minishell
 
 SRCS = main.c \
 		utils.c \
+		utils2.c \
 		init.c \
 		exec_utils.c \
 		p_table_utils.c \
