@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 15:50:45 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/30 15:52:31 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	print_export(char *line)
 	printf("=\"%s\"\n", line + i + 1);
 }
 
-void	ex_util(t_var *data, char *line)
+void	ex_util(t_var *data, char **line)
 {
 	print_error(2, "export: ", strerror(errno));
 	data->exit_code = MALLOC_FAIL;
