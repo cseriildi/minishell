@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+         #
+#    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/09/27 13:16:20 by cseriildii       ###   ########.fr        #
+#    Updated: 2024/09/30 15:45:29 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ SRCS = main.c \
 		builtins/env.c \
 		builtins/exit.c \
 		builtins/export.c \
+		builtins/export_util.c \
 		builtins/pwd.c \
 		builtins/unset.c \
 		signal/signals.c
