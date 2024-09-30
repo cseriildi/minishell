@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 14:25:56 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 13:43:04 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef struct s_signals
 {
 	pid_t	child_pid;
 	int		interactive;
+	int		exit_c;
 }	t_signals;
 
 extern t_signals	signals;
@@ -162,7 +163,7 @@ void	free_table(t_table **p_table);
 void	free_exec_all(t_exec **exec);
 void	print_exec(t_exec *exec);
 
-void	init_signals(void);
+void	init_signals(t_var *data);
 
 //fd_handling
 
