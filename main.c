@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 11:04:47 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 14:45:42 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ int	main(void)
 		data->missing_quote = false;
 		get_promt(data);
 		signals.interactive = 1;
+		signals.exit_c = 0;
 		data->line = readline(data->promt);
+		data->exit_code = signals.exit_c;
 		signals.interactive = 0;
 		if (!data->line)
 		{
