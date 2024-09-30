@@ -6,14 +6,11 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 14:39:57 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 15:36:23 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-char	*fix_content(char *content, t_var *data);
-char	*get_word(char *text, char *separator);
-int	get_chunk_size(char *str);
 
 char	*expander(t_var *data, char *str)
 {
@@ -33,14 +30,14 @@ char	*expander(t_var *data, char *str)
 			chunk = ft_substr(str, index + 1, len - 1);
 		else
 			chunk = ft_substr(str, index, len);
+		if (*str != '\'' && chunk)
+			chunk = fix_content(chunk, data);
 		if (chunk == NULL)
 		{
 			free(expanded);
 			print_error(1, "minishell: malloc failed");	
 			safe_exit(data, MALLOC_FAIL);
 		}
-		if (*str != '\'')
-			chunk = fix_content(chunk, data);
 		tmp = ft_strjoin(expanded, chunk);
 		free(expanded);
 		free(chunk);
@@ -92,41 +89,21 @@ char	*fix_content(char *content, t_var *data)
 	{
 		first = get_word(content, "$");
 		if (!first)
-		{
-			ft_free(&content);
-			print_error(1, "minishell: malloc failed");	
-			safe_exit(data, MALLOC_FAIL);
-		}
+			return (ft_free(&content), NULL);
 		var_name = get_word(ft_strchr(content, '$') + 1, " $|><\'\"");
 		if (!var_name)
-		{
-			ft_free(&content);
-			ft_free(&first);
-			print_error(1, "minishell: malloc failed");	
-			safe_exit(data, MALLOC_FAIL);
-		}
+			return (ft_free(&content), ft_free(&first), NULL);
 		if (*var_name == '?')
 			expanded_var = ft_itoa(data->exit_code);
 		else
 			expanded_var = ft_strdup(ft_getenv(data, var_name));
+		// if getenv returns NULL, we should return an empty string
 		if (!expanded_var)
-		{
-			ft_free(&content);
-			ft_free(&first);
-			ft_free(&var_name);
-			print_error(1, "minishell: malloc failed");	
-			safe_exit(data, MALLOC_FAIL);
-		}
+			return (ft_free(&content),ft_free(&first), ft_free(&var_name),NULL);
 		tmp = ft_strjoin(first, expanded_var);
 		ft_free(&expanded_var);
 		if (!tmp)
-		{
-			ft_free(&content);
-			ft_free(&first);
-			ft_free(&var_name);
-			print_error(1, "minishell: malloc failed");	
-			safe_exit(data, MALLOC_FAIL);
-		}
+			return (ft_free(&content),ft_free(&first), ft_free(&var_name),NULL);
 		if (*var_name == '?')
 			last = ft_strdup(content + ft_strlen(first) + 2);
 		else
@@ -136,19 +113,12 @@ char	*fix_content(char *content, t_var *data)
 		ft_free(&first);
 		ft_free(&var_name);
 		if (!last)
-		{
-			ft_free(&tmp);
-			print_error(1, "minishell: malloc failed");	
-			safe_exit(data, MALLOC_FAIL);
-		}
+			return (ft_free(&tmp),NULL);
 		content = ft_strjoin(tmp, last);
 		ft_free(&tmp);
 		ft_free(&last);
 		if (!content)
-		{
-			print_error(1, "minishell: malloc failed");	
-			safe_exit(data, MALLOC_FAIL);
-		}
+			return (NULL);
 	}
 	return (content);
 }
