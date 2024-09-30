@@ -3,125 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   word.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:54:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/25 14:08:34 by icseri           ###   ########.fr       */
+/*   Updated: 2024/09/30 11:20:29 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-/* 
-void	single_quote(t_var *data)
-{
-	char	*content;
-	t_token	*new_token;
-
-	data->index++;
-	if (ft_strchr(data->line + data->index, '\'') == NULL)
-		safe_exit(data, MALLOC_FAIL);
-	content = get_word(data->line + data->index, "\'");
-	if (!content)
-		safe_exit(data, MALLOC_FAIL);
-	data->index += ft_strlen(content) + 1;
-	new_token = create_new_token(content, WORD);
-	ft_free(&content);
-	if (!new_token)
-		safe_exit(data, MALLOC_FAIL);
-	add_token_to_back(data->tokens, new_token);
-}
-
-char	*fix_content(char *content, t_var *data)
-{
-	char	*first;
-	char	*var_name;
-	char	*last;
-	char	*tmp;
-	char	*expanded_var;
-
-	while (ft_strchr(content, '$') != NULL)
-	{
-		first = get_word(content, "$");
-		if (!first)
-		{
-			ft_free(&content);
-			safe_exit(data, MALLOC_FAIL);
-		}
-		var_name = get_word(ft_strchr(content, '$') + 1, " ()$|><\'\"&");
-		if (!var_name)
-		{
-			ft_free(&content);
-			ft_free(&first);
-			safe_exit(data, MALLOC_FAIL);
-		}
-		if (*var_name == '?')
-			expanded_var = ft_itoa(data->exit_code);
-		else
-			expanded_var = ft_strdup(ft_getenv(data, var_name));
-		if (!expanded_var)
-		{
-			ft_free(&content);
-			ft_free(&first);
-			ft_free(&var_name);
-			safe_exit(data, MALLOC_FAIL);
-		}
-		tmp = ft_strjoin(first, expanded_var);
-		ft_free(&expanded_var);
-		if (!tmp)
-		{
-			ft_free(&content);
-			ft_free(&first);
-			ft_free(&var_name);
-			safe_exit(data, MALLOC_FAIL);
-		}
-		if (*var_name == '?')
-			last = ft_strdup(content + ft_strlen(first) + 2);
-		else
-			last = ft_strdup(content 
-				+ ft_strlen(first) + ft_strlen(var_name) + 1);
-		ft_free(&content);
-		ft_free(&first);
-		ft_free(&var_name);
-		if (!last)
-		{
-			ft_free(&tmp);
-			safe_exit(data, MALLOC_FAIL);
-		}
-		content = ft_strjoin(tmp, last);
-		ft_free(&tmp);
-		ft_free(&last);
-		if (!content)
-			safe_exit(data, MALLOC_FAIL);
-	}
-	return (content);
-}
- */
-/* void	double_quote(t_var *data)
-{
-	char	*content;
-	t_token	*new_token;
-
-	data->index++;
-	if (ft_strchr(data->line + data->index, '\"') == NULL)
-		safe_exit(data, ERROR_MISUSE);
-	content = get_word(data->line + data->index, "\"");
-	if (!content)
-		safe_exit(data, MALLOC_FAIL);
-	data->index += ft_strlen(content) + 1;
-	content = fix_content(content, data);
-	new_token = create_new_token(content, WORD);
-	ft_free(&content);
-	if (!new_token)
-		safe_exit(data, MALLOC_FAIL);
-	add_token_to_back(data->tokens, new_token);
-} */
 
 void	word(t_var *data)
 {
 	t_token	*new_token;
 	char	*content;
+	int		end_index;
 
-	content = get_word(data->line + data->index, " |><");
+	end_index = find_end_of_word(data, data->line + data->index);
+	if (data->missing_quote == true)
+		return ;
+	content = ft_substr(data->line, data->index, end_index);
 	if (!content)
 		safe_exit(data, MALLOC_FAIL);
 	data->index += ft_strlen(content);
@@ -130,4 +30,48 @@ void	word(t_var *data)
 	if (!new_token)
 		safe_exit(data, MALLOC_FAIL);
 	add_token_to_back(&data->tokens, new_token);
+}
+
+int	find_end_of_quote(t_var *data, char *line)
+{
+	int		index;
+	char	quote;
+
+	quote = *line;
+	index = 1;
+	while (line[index] && line[index] != quote)
+		index++;
+	if (line[index] == '\0')
+	{
+		if (quote == '\'')
+			print_error(1, "minishell: syntax error: missing \'\'\'");
+		else
+			print_error(1, "minishell: syntax error: missing \'\"\'");
+		data->missing_quote = true;
+		data->exit_code = ERROR_MISUSE;
+	}
+	return (index);
+}
+
+int	find_end_of_word(t_var *data, char *line)
+{
+	char	*letter;
+	int		index;
+	
+	index = 0;
+	while (line[index])
+	{
+		if (line[index] ==  '\'' || line[index] == '\"')
+			index += find_end_of_quote(data, line + index);
+		else
+		{
+			letter = ft_strchr(" |><", line[index]);
+			if (letter && *letter)
+				break ;
+		}
+		if (data->missing_quote == true)
+			break ;
+		index++;
+	}
+	return (index);
 }

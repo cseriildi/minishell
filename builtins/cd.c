@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 10:58:28 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 14:38:29 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	ft_cd(t_var *data)
 
 	data->exit_code = EXIT_SUCCESS;
 	dest = data->cmd_list[1];
-	//handle when text is "" or " " or even "     "
 	if (dest == NULL)
 	{
 		dest = ft_getenv(data, "HOME");

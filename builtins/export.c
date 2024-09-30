@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 12:42:24 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 10:51:04 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,11 @@ bool	is_valid_var(t_var *data, char *line)
 	char	*var_name;
 
 	var_name = get_word(line, "=");
+	if (!var_name)
+	{
+		print_error(2, "minishell: malloc failed: ", strerror(errno));
+		safe_exit(data, MALLOC_FAIL);
+	}
 	i = 0;
 	if (ft_isdigit(line[i]))
 	{

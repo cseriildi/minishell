@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 13:25:27 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 12:02:32 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
 	{
-		data->cmd_list[i] = ft_strdup(temp->data);
+		data->cmd_list[i] = expander(data, temp->data);
 		if (!data->cmd_list[i])
 			safe_exit(data, MALLOC_FAIL);
 		i++;

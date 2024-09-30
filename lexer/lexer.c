@@ -6,7 +6,7 @@
 /*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 13:36:30 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/09/30 11:14:13 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ void	lexer(t_var *data)
 			data->index++;
 		if (data->line[data->index])
 			get_next_token(data);
+		if (data->missing_quote == true)
+			return ;
 	}
 	new_token = create_new_token("END", END);
 	if (new_token == NULL)
