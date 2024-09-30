@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/09/30 13:48:09 by pvass            ###   ########.fr       */
+/*   Updated: 2024/09/30 15:13:23 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	init(t_var *data)
 	data->env = NULL;
 	data->promt = NULL;
 	data->cmd_list = NULL;
-	data->here_doc_filename[0] = '\0';
 	data->line = NULL;
 	data->exit_code = 0;
 	data->subshell_level = 1;
@@ -32,6 +31,7 @@ void	init(t_var *data)
 	data->pipe2_fd[0] = -1;
 	data->pipe2_fd[1] = -1;
 	data->stdout_copy = -1;
+	data->here_doc_filename = NULL;
 	data->pwd = getcwd(NULL, 0);
 	if (!data->pwd)
 		safe_exit(data, MALLOC_FAIL);
