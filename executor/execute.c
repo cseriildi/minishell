@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 13:24:46 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/01 15:22:10 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,19 @@ void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 	}
 }
 
+int is_directory(const char *path) {
+    struct stat path_stat;
+
+    // Get information about the file at 'path'
+    if (stat(path, &path_stat) != 0) {
+        perror("stat");
+        return 0;  // Error occurred
+    }
+
+    // Check if it is a directory
+    return S_ISDIR(path_stat.st_mode);
+}
+
 void	exec_command(t_var *data)
 {
 	char	*cmd;
@@ -147,23 +160,41 @@ void	exec_command(t_var *data)
 	cmd = data->cmd_list[0];
 	if (cmd == NULL)
 		return ;
-	if (ft_strncmp(".", cmd, 2) == 0)
+	/* if (ft_strncmp(".", cmd, 2) == 0)
 	{
 		print_error(3, "minishell: ", cmd, ": filename argument required");
 		safe_exit(data, ERROR_MISUSE);
+	} */
+/* 	//execve("/home", (char *[]) {"/home", NULL}, data->env);
+	//execve("\home",(char *[]) {"\home", NULL}, data->env);
+	printf("%s\n", strerror(errno));
+	printf("%s%d%d\n",cmd, access(cmd, F_OK), access(cmd, X_OK)); */
+	abs_cmd = ft_strdup(cmd);
+	if (access(cmd, F_OK) == 0 )
+	{
+		if (is_directory(cmd) == 1)
+		{
+			print_error(3, "minishell: ", cmd, ": Is a directory");
+			free(abs_cmd);
+			safe_exit(data, 126);
+		}
 	}
-	if (ft_strncmp("/", cmd, 2) == 0 || ((ft_strncmp(cmd, "./", 2) == 0 || ft_strncmp(cmd, "../", 3) == 0 || ft_strncmp(cmd, "/home/", 6) == 0) && access(cmd, F_OK) == 0))
+	else
+	{
+		free(abs_cmd);
+		abs_cmd = get_abs_cmd(data, cmd);
+	}
+	/* if (ft_strncmp("/", cmd, 2) == 0 || ((ft_strncmp(cmd, "./", 2) == 0 || ft_strncmp(cmd, "../", 3) == 0 || ft_strncmp(cmd, "/home/", 6) == 0) && access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1))
 	{
 		print_error(3, "minishell: ", cmd, ": Is a directory");
 		safe_exit(data, 126);
-	}
-	if (ft_strchr(cmd, '/') != NULL
+	} */
+	/* if (ft_strchr(cmd, '/') != NULL
 		&& execve(cmd, data->cmd_list, data->env) == -1)
 	{
 		print_error(3, "minishell: ", cmd, ": No such file or directory");
 		safe_exit(data, COMMAND_NOT_FOUND);
-	}
-	abs_cmd = get_abs_cmd(data, cmd);
+	} */
 	if (abs_cmd == NULL || ft_strncmp("..", cmd, 3) == 0)
 	{
 		print_error(3, "minishell: ", cmd, ": command not found");
@@ -171,7 +202,8 @@ void	exec_command(t_var *data)
 	}
 	if (execve(abs_cmd, data->cmd_list, data->env) == -1)
 	{
-		print_error(3, "minishell: ", abs_cmd, ": No such file or directory");
+		print_error(4, "minishell: ", abs_cmd, ": ", strerror(errno));
+		//print_error(3, "minishell: ", abs_cmd, ": No such file or directory");
 		ft_free(&abs_cmd);
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
