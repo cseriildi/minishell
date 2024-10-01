@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/27 12:42:39 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/01 11:58:21 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,13 @@ int	parse_accept(t_var *data, t_stack *stack, t_stack *result)
 
 int	parse_reject(t_var *data, t_stack *stack, t_stack *result)
 {
-	print_error(3, "minishell: syntax error near unexpected token '",
+	data->exit_code = 2;
+	if (data->tokens->type != 0)
+		print_error(3, "minishell: syntax error near unexpected token '",
 		data->tokens->content, "'");
+	if (data->tokens->type == 0)
+		print_error(3, "minishell: syntax error near unexpected token '",
+		"newline", "'");
 	free_stack(&result);
 	free_stack(&stack);
 	free_tokens(data);
