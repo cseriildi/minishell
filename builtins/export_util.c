@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:38:19 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/30 15:49:28 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/01 15:30:12 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ void	no_arg_export(t_var *data)
 	bubble_sort_with_context(indices, count, data->env);
 	i = -1;
 	while (++i < count)
-		print_export(data->env[indices[i]]);
+	{
+		if (ft_strncmp(data->env[indices[i]], "_=", 2))
+			print_export(data->env[indices[i]]);
+	}
 	free(indices);
 }
 
