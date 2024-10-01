@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 15:58:36 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/01 11:22:53 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ char	*expander(t_var *data, char *str)
 			chunk = ft_substr(str, index, len);
 		if (*str != '\'' && chunk)
 			chunk = fix_content(chunk, data);
+		printf("chunk: %s\n", chunk);
 		if (chunk == NULL)
 		{
 			free(expanded);
@@ -47,7 +48,7 @@ char	*expander(t_var *data, char *str)
 			print_error(1, "minishell: malloc failed");	
 			safe_exit(data, MALLOC_FAIL);
 		}
-		index += len;
+		index += len + 1;
 	}
 	return (expanded);
 }

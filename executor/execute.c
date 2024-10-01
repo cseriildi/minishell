@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 12:02:32 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/01 11:29:25 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	execute(t_var *data)
 
 void	only_one_sequence(t_var *data, t_exec *exec)
 {
-	if (is_builtin(exec->data) == true)
+	if (is_builtin(exec->data) == true || exec->type != WORD)
 	{
 		data->stdout_copy = dup(STDOUT_FILENO);
 		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
@@ -72,7 +72,7 @@ void	first_sequence(t_var *data, t_exec *exec)
 	{
 		safe_close(&data->pipe1_fd[0]);
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
-		safe_exit(data, EXIT_SUCCESS);
+		safe_exit(data, data->exit_code);
 	}
 }
 
@@ -87,7 +87,7 @@ void	middle_sequence(t_var *data, t_exec *exec)
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);
 		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
-		safe_exit(data, EXIT_SUCCESS);
+		safe_exit(data, data->exit_code);
 	}
 	else
 	{
@@ -109,7 +109,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 		data->stdout_copy = dup(STDOUT_FILENO);
 		exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
 		safe_dup2(&data->stdout_copy, STDOUT_FILENO, data);
-		safe_exit(data, EXIT_SUCCESS);
+		safe_exit(data, data->exit_code);
 	}
 	else
 	{
