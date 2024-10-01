@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 14:11:13 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/01 16:01:42 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,12 @@ char	*fix_content(char *content, t_var *data)
 	char	*var;
 
 	var = ft_strchr(content, '$');
-	while (var && var[1] && var[1] != ' ')
+	while (var && var[1] && ft_strchr(" \t\n\v\f\r|><\'\"", var[1]) == NULL)
 	{
 		first = get_word(content, "$");
 		if (!first)
 			return (ft_free(&content), NULL);
-		var_name = get_word(var + 1, " $|><\'\"");
+		var_name = get_word(var + 1, " \t\n\v\f\r$|><\'\"");
 		if (!var_name)
 			return (ft_free(&content), ft_free(&first), NULL);
 		if (*var_name == '?')
