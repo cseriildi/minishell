@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 15:58:03 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/01 17:23:57 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ bool	replace_var(t_var *data, char *key, char *content)
 	len = ft_strlen(key);
 	while (len != 0 && data->env && data->env[i])
 	{
-		printf("env[%d] = %s\n", i, data->env[i]);
 		if (ft_strncmp(data->env[i], key, len) == 0
 			&& data->env[i][len] == '=')
 		{

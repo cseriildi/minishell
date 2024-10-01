@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/01 15:46:42 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/01 17:37:08 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	parse_reject(t_var *data, t_stack *stack, t_stack *result)
 	if (data->tokens->type == 0)
 		print_error(3, "minishell: syntax error near unexpected token `",
 		"newline", "'");
+	//what is this newline?
 	free_stack(&result);
 	free_stack(&stack);
 	free_tokens(data);
