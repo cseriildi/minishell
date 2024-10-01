@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 11:29:25 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/01 12:37:22 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,11 @@ void	exec_command(t_var *data)
 	cmd = data->cmd_list[0];
 	if (cmd == NULL)
 		return ;
+	if (ft_strncmp("/", cmd, 2) == 0 || (ft_strncmp(cmd, "./", 2) == 0 && access(cmd, F_OK) == 0))
+	{
+		print_error(3, "minishell: ", cmd, ": Is a directory");
+		safe_exit(data, 126);
+	}
 	if (ft_strchr(cmd, '/') != NULL
 		&& execve(cmd, data->cmd_list, data->env) == -1)
 	{
