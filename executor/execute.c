@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 12:37:22 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/01 13:24:46 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,12 @@ void	exec_command(t_var *data)
 	cmd = data->cmd_list[0];
 	if (cmd == NULL)
 		return ;
-	if (ft_strncmp("/", cmd, 2) == 0 || (ft_strncmp(cmd, "./", 2) == 0 && access(cmd, F_OK) == 0))
+	if (ft_strncmp(".", cmd, 2) == 0)
+	{
+		print_error(3, "minishell: ", cmd, ": filename argument required");
+		safe_exit(data, ERROR_MISUSE);
+	}
+	if (ft_strncmp("/", cmd, 2) == 0 || ((ft_strncmp(cmd, "./", 2) == 0 || ft_strncmp(cmd, "../", 3) == 0 || ft_strncmp(cmd, "/home/", 6) == 0) && access(cmd, F_OK) == 0))
 	{
 		print_error(3, "minishell: ", cmd, ": Is a directory");
 		safe_exit(data, 126);
@@ -159,7 +164,7 @@ void	exec_command(t_var *data)
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
 	abs_cmd = get_abs_cmd(data, cmd);
-	if (abs_cmd == NULL)
+	if (abs_cmd == NULL || ft_strncmp("..", cmd, 3) == 0)
 	{
 		print_error(3, "minishell: ", cmd, ": command not found");
 		safe_exit(data, COMMAND_NOT_FOUND);
