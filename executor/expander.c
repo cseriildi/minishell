@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 11:36:14 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/01 13:17:45 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@ char	*expander(t_var *data, char *str)
 	while (str[index])
 	{
 		len = get_chunk_size(str + index);
-		if (*str == '\'' || *str == '\"')
-			chunk = ft_substr(str, index + 1, len - 1);
+		if (str[index] == '\'' || str[index] == '\"')
+			chunk = ft_substr(str, index + 1, len - 2);
 		else
 			chunk = ft_substr(str, index, len);
-		if (*str != '\'' && chunk)
+		if (str[index] != '\'' && chunk)
 			chunk = fix_content(chunk, data);
 		if (chunk == NULL)
 		{
@@ -47,7 +47,7 @@ char	*expander(t_var *data, char *str)
 			print_error(1, "minishell: malloc failed");	
 			safe_exit(data, MALLOC_FAIL);
 		}
-		index += len + 1;
+		index += len;
 	}
 	return (expanded);
 }
@@ -57,6 +57,7 @@ int	get_chunk_size(char *str)
 	int		i;
 	int		j;
 	char	*separator;
+	bool	is_quoted;
 
 	if (*str == '\"')
 		separator  = "\"";
@@ -64,17 +65,18 @@ int	get_chunk_size(char *str)
 		separator  = "\'";
 	else
 		separator  = "|><\'\"";
-	i = 1;
+	is_quoted = (*str == '\'' || *str == '\"');
+	i = is_quoted;
 	while (str[i])
 	{
 		j = 0;
 		while (separator[j] && separator[j] != str[i])
 			j++;
 		if (separator[j] && separator[j] == str[i])
-			return (i++);
+			return (i + is_quoted);
 		i++;
 	}
-	return (i);
+	return (i + is_quoted);
 }
 
 char	*fix_content(char *content, t_var *data)
