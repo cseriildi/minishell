@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 13:17:45 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/01 14:11:13 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*expander(t_var *data, char *str)
 		if (chunk == NULL)
 		{
 			free(expanded);
-			print_error(1, "minishell: malloc failed");	
+			print_error(1, "minishell: malloc failed");
 			safe_exit(data, MALLOC_FAIL);
 		}
 		tmp = ft_strjoin(expanded, chunk);
@@ -44,7 +44,7 @@ char	*expander(t_var *data, char *str)
 		expanded = tmp;
 		if (expanded == NULL)
 		{
-			print_error(1, "minishell: malloc failed");	
+			print_error(1, "minishell: malloc failed");
 			safe_exit(data, MALLOC_FAIL);
 		}
 		index += len;
@@ -60,11 +60,11 @@ int	get_chunk_size(char *str)
 	bool	is_quoted;
 
 	if (*str == '\"')
-		separator  = "\"";
+		separator = "\"";
 	else if (*str == '\'')
-		separator  = "\'";
+		separator = "\'";
 	else
-		separator  = "|><\'\"";
+		separator = "|><\'\"";
 	is_quoted = (*str == '\'' || *str == '\"');
 	i = is_quoted;
 	while (str[i])
@@ -86,13 +86,15 @@ char	*fix_content(char *content, t_var *data)
 	char	*last;
 	char	*tmp;
 	char	*expanded_var;
+	char	*var;
 
-	while (ft_strchr(content, '$') != NULL)
+	var = ft_strchr(content, '$');
+	while (var && var[1] && var[1] != ' ')
 	{
 		first = get_word(content, "$");
 		if (!first)
 			return (ft_free(&content), NULL);
-		var_name = get_word(ft_strchr(content, '$') + 1, " $|><\'\"");
+		var_name = get_word(var + 1, " $|><\'\"");
 		if (!var_name)
 			return (ft_free(&content), ft_free(&first), NULL);
 		if (*var_name == '?')
@@ -100,26 +102,27 @@ char	*fix_content(char *content, t_var *data)
 		else
 			expanded_var = ft_strdup(safe_getenv(data, var_name));
 		if (!expanded_var)
-			return (ft_free(&content),ft_free(&first), ft_free(&var_name),NULL);
+			return (ft_free(&content), free(first), free(var_name), NULL);
 		tmp = ft_strjoin(first, expanded_var);
 		ft_free(&expanded_var);
 		if (!tmp)
-			return (ft_free(&content),ft_free(&first), ft_free(&var_name),NULL);
+			return (ft_free(&content), free(first), free(var_name), NULL);
 		if (*var_name == '?')
 			last = ft_strdup(content + ft_strlen(first) + 2);
 		else
-			last = ft_strdup(content 
-				+ ft_strlen(first) + ft_strlen(var_name) + 1);
+			last = ft_strdup(content
+					+ ft_strlen(first) + ft_strlen(var_name) + 1);
 		ft_free(&content);
 		ft_free(&first);
 		ft_free(&var_name);
 		if (!last)
-			return (ft_free(&tmp),NULL);
+			return (ft_free(&tmp), NULL);
 		content = ft_strjoin(tmp, last);
 		ft_free(&tmp);
 		ft_free(&last);
 		if (!content)
 			return (NULL);
+		var = ft_strchr(content, '$');
 	}
 	return (content);
 }
