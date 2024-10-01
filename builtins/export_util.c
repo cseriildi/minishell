@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:38:19 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/30 15:49:28 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/01 14:10:22 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,15 @@ bool	is_valid_var(t_var *data, char *line)
 	var_name = get_word(line, "=");
 	if (!var_name)
 		p_error_exp(data);
+	if (ft_strlen(var_name) == 0 || ft_isdigit(var_name[0]) || var_name[0] == '=')
+	{
+		data->exit_code = 1;
+		return (print_error(3, "minishell: export: `", line,"': not a valid identifier"), false);
+	}
 	i = 0;
 	if (ft_isdigit(line[i]))
 	{
-		data->exit_code = ERROR_MISUSE;
+		data->exit_code = 1;
 		return (print_error(2, "export: not an identifier: ", var_name), false);
 	}
 	while (line[i] && line[i] != '=')
@@ -62,7 +67,7 @@ bool	is_valid_var(t_var *data, char *line)
 		if (!ft_isalnum(line[i]) && line[i] != '_')
 		{
 			print_error(2, "export: not valid in this context ", var_name);
-			data->exit_code = ERROR_MISUSE;
+			data->exit_code = 1;
 			return (false);
 		}
 		i++;
