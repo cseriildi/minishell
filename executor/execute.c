@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 15:22:10 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/01 17:36:02 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,16 +160,9 @@ void	exec_command(t_var *data)
 	cmd = data->cmd_list[0];
 	if (cmd == NULL)
 		return ;
-	/* if (ft_strncmp(".", cmd, 2) == 0)
-	{
-		print_error(3, "minishell: ", cmd, ": filename argument required");
-		safe_exit(data, ERROR_MISUSE);
-	} */
-/* 	//execve("/home", (char *[]) {"/home", NULL}, data->env);
-	//execve("\home",(char *[]) {"\home", NULL}, data->env);
-	printf("%s\n", strerror(errno));
-	printf("%s%d%d\n",cmd, access(cmd, F_OK), access(cmd, X_OK)); */
 	abs_cmd = ft_strdup(cmd);
+	if (!abs_cmd)
+		safe_exit(data, MALLOC_FAIL);
 	if (access(cmd, F_OK) == 0 )
 	{
 		if (is_directory(cmd) == 1)
@@ -184,17 +177,6 @@ void	exec_command(t_var *data)
 		free(abs_cmd);
 		abs_cmd = get_abs_cmd(data, cmd);
 	}
-	/* if (ft_strncmp("/", cmd, 2) == 0 || ((ft_strncmp(cmd, "./", 2) == 0 || ft_strncmp(cmd, "../", 3) == 0 || ft_strncmp(cmd, "/home/", 6) == 0) && access(cmd, F_OK) == 0 && access(cmd, X_OK) == -1))
-	{
-		print_error(3, "minishell: ", cmd, ": Is a directory");
-		safe_exit(data, 126);
-	} */
-	/* if (ft_strchr(cmd, '/') != NULL
-		&& execve(cmd, data->cmd_list, data->env) == -1)
-	{
-		print_error(3, "minishell: ", cmd, ": No such file or directory");
-		safe_exit(data, COMMAND_NOT_FOUND);
-	} */
 	if (abs_cmd == NULL || ft_strncmp("..", cmd, 3) == 0)
 	{
 		print_error(3, "minishell: ", cmd, ": command not found");
@@ -203,7 +185,6 @@ void	exec_command(t_var *data)
 	if (execve(abs_cmd, data->cmd_list, data->env) == -1)
 	{
 		print_error(4, "minishell: ", abs_cmd, ": ", strerror(errno));
-		//print_error(3, "minishell: ", abs_cmd, ": No such file or directory");
 		ft_free(&abs_cmd);
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
@@ -214,7 +195,6 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 	int		i;
 	t_exec	*temp;
 
-	//I have to extend the variables and remove the quotes here
 	temp = exec;
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
