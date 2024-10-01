@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/23 14:00:39 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/30 14:11:02 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/01 11:53:42 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	init_signals(t_var *data)
 	if (sigaction(SIGINT, &sa_int, NULL) == -1)
 	{
 		perror("sigaction(SIGINT) failed");
-		safe_exit(data, signals.exit_c);
+		safe_exit(data, data->exit_code);
 	}
 	data->exit_code = signals.exit_c;
 	sa_quit.sa_handler = &handle_sigquit;
