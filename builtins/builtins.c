@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:44:24 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 12:29:20 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/02 12:57:32 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,21 @@
 
 bool	exec_builtin(t_var *data)
 {
-	if (ft_strncmp(data->cmd_list[0], "cd", 3) == 0)
+	if (data->cmd_list[0] == NULL)
+		return (true);
+	else if (ft_strncmp(data->cmd_list[0], "cd", 3) == 0)
 		ft_cd(data);
-	if (ft_strncmp(data->cmd_list[0], "echo", 5) == 0)
+	else if (ft_strncmp(data->cmd_list[0], "echo", 5) == 0)
 		ft_echo(data);
-	if (ft_strncmp(data->cmd_list[0], "env", 4) == 0)
+	else if (ft_strncmp(data->cmd_list[0], "env", 4) == 0)
 		ft_env(data);
-	if (ft_strncmp(data->cmd_list[0], "exit", 5) == 0)
+	else if (ft_strncmp(data->cmd_list[0], "exit", 5) == 0)
 		ft_exit(data);
-	if (ft_strncmp(data->cmd_list[0], "export", 7) == 0)
+	else if (ft_strncmp(data->cmd_list[0], "export", 7) == 0)
 		ft_export(data);
-	if (ft_strncmp(data->cmd_list[0], "pwd", 3) == 0)
+	else if (ft_strncmp(data->cmd_list[0], "pwd", 3) == 0)
 		ft_pwd(data);
-	if (ft_strncmp(data->cmd_list[0], "unset", 5) == 0)
+	else if (ft_strncmp(data->cmd_list[0], "unset", 5) == 0)
 		ft_unset(data);
 	if (is_builtin(data->cmd_list[0]) == true)
 		return (true);

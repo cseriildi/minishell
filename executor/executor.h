@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 15:34:45 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/02 14:10:25 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ char	*get_abs_cmd(t_var *data, char *cmd);
 char	*expander(t_var *data, char *str);
 bool	redirect_in(t_var *data, t_exec *tree);
 bool	redirect_out(t_var *data, t_exec *tree);
+int is_directory(const char *path);
 
 bool	here_doc(t_var *data, char *limiter, bool expanding);
 

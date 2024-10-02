@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_handling.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 17:33:28 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/02 14:50:52 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int	safe_open(char *filename, int mode, t_var *data)
 	{
 		print_error(4, "minishell: ", filename, ": ", strerror(errno));
 		data->exit_code = CANNOT_OPEN_FILE;
+		if (access(filename, X_OK) == -1)
+			data->exit_code = 1;
 	}
 	return (fd);
 }
