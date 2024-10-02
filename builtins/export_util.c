@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:38:19 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/02 14:48:08 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/02 19:08:29 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	no_arg_export(t_var *data)
 	if (indices == NULL)
 	{
 		print_error(2, "export: ", strerror(errno));
-		data->exit_code = MALLOC_FAIL;
+		safe_exit(data, MALLOC_FAIL);
 	}
 	i = -1;
 	while (++i < count)
@@ -51,6 +51,11 @@ bool	is_valid_var(t_var *data, char *line)
 	int		i;
 
 	i = 0;
+	if (line[i] && line[i] == '=')
+	{
+		data->exit_code = 1;
+		return (print_error(3, "minishell: export: `", line,"': not a valid identifier"), false);
+	}
 	while (line[i] && line[i] != '=')
 	{
 		if ((i == 0 && (!ft_isalpha(line[i]) && line[i] != '_'))
