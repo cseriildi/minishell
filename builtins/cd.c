@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 16:14:32 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/02 16:18:24 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	ft_cd(t_var *data)
 		data->exit_code = EXIT_FAILURE;
 		return ;
 	}
-	if (ft_strncmp(data->cmd_list[1], "-", 2) == 0)
+	if (data->cmd_list[1] && ft_strncmp(data->cmd_list[1], "-", 2) == 0)
 	{
 		dest = ft_getenv(data, "OLDPWD");
 		if (dest == NULL)
