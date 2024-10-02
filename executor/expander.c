@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 14:54:32 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/02 15:34:30 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	get_chunk_size(char *str)
 	return (i + is_quoted);
 }
 char *get_var_name(char *str);
+
 char	*expand(char *content, t_var *data)
 {
 	char	*first;
@@ -130,8 +131,9 @@ char	*expand(char *content, t_var *data)
 char *get_var_name(char *str)
 {
 	int		i;
-	char	*var_name;
 
+	if (str[0] == '?')
+		return (ft_substr(str, 0, 1));
 	i = 0;
 	while (str[i] && str[i] != '=')
 	{
@@ -140,6 +142,5 @@ char *get_var_name(char *str)
 			break ;
 		i++;
 	}
-	var_name = ft_substr(str, 0, i);
-	return (var_name);
+	return (ft_substr(str, 0, i));
 }
