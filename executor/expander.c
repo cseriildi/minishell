@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 11:20:13 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/02 14:54:32 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	get_chunk_size(char *str)
 	}
 	return (i + is_quoted);
 }
-
+char *get_var_name(char *str);
 char	*expand(char *content, t_var *data)
 {
 	char	*first;
@@ -94,7 +94,7 @@ char	*expand(char *content, t_var *data)
 		first = get_word(content, "$");
 		if (!first)
 			return (ft_free(&content), NULL);
-		var_name = get_word(var + 1, " \t\n\v\f\r$|><\'\"");
+		var_name = get_var_name(var + 1);
 		if (!var_name)
 			return (ft_free(&content), ft_free(&first), NULL);
 		if (*var_name == '?')
@@ -125,4 +125,21 @@ char	*expand(char *content, t_var *data)
 		var = ft_strchr(content, '$');
 	}
 	return (content);
+}
+
+char *get_var_name(char *str)
+{
+	int		i;
+	char	*var_name;
+
+	i = 0;
+	while (str[i] && str[i] != '=')
+	{
+		if ((i == 0 && (!ft_isalpha(str[i]) && str[i] != '_'))
+			|| (!ft_isalnum(str[i]) && str[i] != '_'))
+			break ;
+		i++;
+	}
+	var_name = ft_substr(str, 0, i);
+	return (var_name);
 }
