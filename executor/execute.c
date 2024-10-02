@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 15:23:58 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/02 16:11:28 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ bool good_redir_path(char *redir, t_var *data)
 			count = i;
 		i++;
 	}
-	new = ft_substr(redir, 0, i);
+	if (count == 0)
+		return (1);
+	new = ft_substr(redir, 0, count);
 	if (new == NULL)
 	{
 		print_error(1, "minishell: malloc failed");
@@ -55,6 +57,7 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 	{
 		if (is_in_out_app(temp2) == 1)
 		{
+			temp2->data = fix_content(data, temp2->data, true);
 			if (is_directory(temp2->data) == 1)
 			{
 				data->exit_code = 1;
@@ -64,7 +67,7 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 			if (temp2->type != RED_IN && good_redir_path(temp2->data, data) == 0)
 			{
 				data->exit_code = 1;
-				print_error(3, "minishell: ", temp2->data, ": Not a directory");
+				print_error(3, "minishell: ", temp2->data, ": No such file or directory");
 				return (0);
 			}
 			if (temp2->type == RED_IN && access(temp2->data, F_OK) == -1)
@@ -117,7 +120,10 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 			safe_exit(data, FORK_FAIL);
 		signals.child_pid = data->pid;
 		if (data->pid == 0)
+		{
 			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
+			safe_exit(data, data->exit_code);
+		}
 		else
 		{
 			waitpid(data->pid, &data->exit_status, 0);
