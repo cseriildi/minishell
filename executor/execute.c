@@ -3,14 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 17:36:02 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/02 15:19:40 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
+int	is_in_out_app(t_exec *exec)
+{
+	if (exec->type == RED_IN || exec->type == RED_OUT || exec->type == APPEND)
+		return (1);
+	else 
+		return (0);
+}
+
+bool good_redir_path(char *redir, t_var *data)
+{
+	char	*new;
+	int		i;
+	int		count;
+	bool	res;
+
+	count = 0;
+	i = 0;
+	while (redir[i] != '\0')
+	{
+		if (redir[i] == '/')
+			count = i;
+		i++;
+	}
+	new = ft_substr(redir, 0, i);
+	if (new == NULL)
+	{
+		print_error(1, "minishell: malloc failed");
+		safe_exit(data, MALLOC_FAIL);
+	}
+	res = is_directory(new);
+	free(new);
+	return (res);
+}
+
+bool	redirs_exist(t_var *data, t_exec *exec)
+{
+	t_exec	*temp2;
+
+	temp2 = exec;
+	while (temp2 != NULL)
+	{
+		if (is_in_out_app(temp2) == 1)
+		{
+			if (is_directory(temp2->data) == 1)
+			{
+				data->exit_code = 1;
+				print_error(3, "minishell: ", temp2->data, ": Is a directory");
+				return (0);
+			}
+			if (temp2->type != RED_IN && good_redir_path(temp2->data, data) == 0)
+			{
+				data->exit_code = 1;
+				print_error(3, "minishell: ", temp2->data, ": Not a directory");
+				return (0);
+			}
+			if (temp2->type == RED_IN && access(temp2->data, F_OK) == -1)
+			{
+				data->exit_code = 1;
+				print_error(3, "minishell: ", temp2->data, ": No such file or directory");
+				return (0);
+			}
+		}
+		temp2 = temp2->down;
+	}
+	return (1);
+}
 
 void	execute(t_var *data)
 {
@@ -126,6 +193,12 @@ void	last_sequence(t_var *data, t_exec *exec)
 void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 {
 	create_cmd_list(data, exec);
+	if (redirs_exist(data, exec) == 0)
+	{
+		safe_dup2(&read_fd, STDIN_FILENO, data);
+		safe_dup2(&write_fd, STDOUT_FILENO, data);
+		return ;
+	}
 	if (redirect_in(data, exec) == false)
 		return ;
 	safe_dup2(&read_fd, STDIN_FILENO, data);
@@ -139,12 +212,13 @@ void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 	}
 }
 
-int is_directory(const char *path) {
+int is_directory(const char *path)
+{
     struct stat path_stat;
 
     // Get information about the file at 'path'
     if (stat(path, &path_stat) != 0) {
-        perror("stat");
+		//perror("stat");
         return 0;  // Error occurred
     }
 
@@ -163,7 +237,7 @@ void	exec_command(t_var *data)
 	abs_cmd = ft_strdup(cmd);
 	if (!abs_cmd)
 		safe_exit(data, MALLOC_FAIL);
-	if (access(cmd, F_OK) == 0 )
+	if (access(cmd, F_OK) == 0)
 	{
 		if (is_directory(cmd) == 1)
 		{
