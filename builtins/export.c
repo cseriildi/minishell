@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 13:43:21 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/02 15:38:44 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,16 @@ void	ft_export(t_var *data)
 			line = ft_split(data->cmd_list[1], '=');
 			if (!line)
 			{
-				ex_util(data, line);
-				continue ;
+				print_error(2, "export: ", strerror(errno));
+				safe_exit(data, MALLOC_FAIL);
 			}
 			if (replace_var(data, line[0], line[1]) == false)
 			{
 				if (add_var_to_env(data, data->cmd_list[i]) == MALLOC_FAIL)
-					ex_util2(data);
+				{
+					print_error(2, "export: ", strerror(errno));
+					safe_exit(data, MALLOC_FAIL);
+				}
 			}
 			free_array(&line);
 		}

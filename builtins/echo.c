@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:42 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 13:43:11 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/02 16:04:18 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,8 @@ void	ft_echo(t_var *data)
 	int		i;
 	bool	n_flag;
 
-	i = 0;
-	n_flag = false;
-	if (data->cmd_list[1] && ft_strncmp(data->cmd_list[1], "-n", 3) == 0)
-	{
-		n_flag = true;
-		i++;
-	}
+	n_flag = is_n_flag(data->cmd_list[1]);
+	i = n_flag;
 	while (data->cmd_list[++i])
 	{
 		printf("%s", data->cmd_list[i]);
@@ -33,4 +28,20 @@ void	ft_echo(t_var *data)
 	if (n_flag == false)
 		printf("\n");
 	data->exit_code = EXIT_SUCCESS;
+}
+
+bool is_n_flag(char *str)
+{
+	int	i;
+
+	if (str == NULL || str[0] != '-')
+		return (false);
+	i = 1;
+	while (str[i])
+	{
+		if (str[i] != 'n')
+			return (false);
+		i++;
+	}
+	return (true);
 }
