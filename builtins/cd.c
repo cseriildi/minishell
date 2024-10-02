@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 17:44:41 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/02 16:14:32 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,18 @@ void	ft_cd(t_var *data)
 		print_error(1, "minishell: cd: too many arguments");
 		data->exit_code = EXIT_FAILURE;
 		return ;
+	}
+	if (ft_strncmp(data->cmd_list[1], "-", 2) == 0)
+	{
+		dest = ft_getenv(data, "OLDPWD");
+		if (dest == NULL)
+		{
+			print_error(1, "minishell: cd: OLDPWD not set");
+			data->exit_code = EXIT_FAILURE;
+			return ;
+		}
+		else 
+			printf("%s\n", dest);
 	}
 	if (chdir(dest) == -1)
 	{
