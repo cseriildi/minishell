@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 11:43:50 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/02 11:27:08 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,7 +178,6 @@ void	safe_dup2(int *old_fd, int new_fd, t_var *data);
 void	init(t_var *data);
 void	get_promt(t_var *data);
 
-char	*fix_content(char *content, t_var *data);
 char	*get_word(char *text, char *separator);
 
 #endif

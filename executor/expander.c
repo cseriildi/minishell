@@ -6,13 +6,13 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 16:01:42 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/02 11:20:13 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-char	*expander(t_var *data, char *str)
+char	*fix_content(t_var *data, char *str, bool expandable)
 {
 	char	*expanded;
 	int		index;
@@ -30,8 +30,8 @@ char	*expander(t_var *data, char *str)
 			chunk = ft_substr(str, index + 1, len - 2);
 		else
 			chunk = ft_substr(str, index, len);
-		if (str[index] != '\'' && chunk)
-			chunk = fix_content(chunk, data);
+		if (expandable && str[index] != '\'' && chunk)
+			chunk = expand(chunk, data);
 		if (chunk == NULL)
 		{
 			free(expanded);
@@ -79,7 +79,7 @@ int	get_chunk_size(char *str)
 	return (i + is_quoted);
 }
 
-char	*fix_content(char *content, t_var *data)
+char	*expand(char *content, t_var *data)
 {
 	char	*first;
 	char	*var_name;
