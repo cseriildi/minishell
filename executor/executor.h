@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 14:10:25 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/02 15:23:48 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ void	exec_command(t_var *data);
 bool	is_builtin(char *cmd);
 char	**get_paths(t_var *data);
 char	*get_abs_cmd(t_var *data, char *cmd);
-char	*expander(t_var *data, char *str);
+char	*fix_content(t_var *data, char *str, bool expandable);
+char	*expand(char *content, t_var *data);
 bool	redirect_in(t_var *data, t_exec *tree);
 bool	redirect_out(t_var *data, t_exec *tree);
 int is_directory(const char *path);
