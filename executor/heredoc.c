@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 17:19:05 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/02 11:23:37 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,15 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 	{
 		ft_putstr_fd("> ", STDOUT_FILENO);
 		line = get_next_line(STDIN_FILENO);
+		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
+			&& line[ft_strlen(limiter)] == '\n')
+		{
+			ft_free(&line);
+			break ;
+		}
 		if (expanding == true)
 		{
-			expanded_line = fix_content(line, data);
+			expanded_line = expand(line, data);
 			if (expanded_line == NULL)
 			{
 				safe_close(&fd_to_write);
@@ -67,12 +73,6 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 				safe_exit(data, MALLOC_FAIL);
 			}
 			line = expanded_line;
-		}
-		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
-			&& line[ft_strlen(limiter)] == '\n')
-		{
-			ft_free(&line);
-			break ;
 		}
 		ft_putstr_fd(line, fd_to_write);
 		ft_free(&line);
