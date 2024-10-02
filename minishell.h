@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 15:24:27 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/02 17:46:40 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,4 +180,7 @@ void	get_promt(t_var *data);
 
 char	*get_word(char *text, char *separator);
 
+long long	ft_atoll(const char *str);
+char	*ft_lltoa(long long nb);
+bool	is_ll_overflow(t_var *data, char *str);
 #endif
