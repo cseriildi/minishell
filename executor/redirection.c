@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 15:49:21 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/02 11:24:59 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ bool	redirect_in(t_var *data, t_exec *exec)
 		else if (temp->type == HERE_DOC)
 		{
 			expandable = !ft_strchr(temp->data, '\'') && !ft_strchr(temp->data, '\"');
-			fixed_limiter = expander(data, temp->data);
+			fixed_limiter = fix_content(data, temp->data, false);
 			if (here_doc(data, fixed_limiter, expandable) == false)
 				return (false);
 		}

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 17:36:02 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/02 11:25:21 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
 	{
-		data->cmd_list[i] = expander(data, temp->data);
+		data->cmd_list[i] = fix_content(data, temp->data, true);
 		if (!data->cmd_list[i])
 			safe_exit(data, MALLOC_FAIL);
 		i++;
