@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 15:25:21 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/03 16:35:08 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,9 +359,40 @@ char	*get_abs_cmd(t_var *data, char *cmd)
 
 	if (!*cmd)
 		return (NULL);
+	if (*cmd == '/')
+	{
+		path_cmd = ft_strdup(cmd);
+		if (path_cmd == NULL)
+		{
+			print_error(1, "minishell: malloc failed");
+			safe_exit(data, MALLOC_FAIL);
+		}
+		return (path_cmd);
+	}
+	if (*cmd == '.')
+	{
+		if (cmd[1] == '.' || cmd[1] == '/' || cmd[1] == '\0')
+		{
+			path_cmd = ft_strdup(cmd);
+			if (path_cmd == NULL)
+			{
+				print_error(1, "minishell: malloc failed");
+				safe_exit(data, MALLOC_FAIL);
+			}
+			return (path_cmd);
+		}
+	}
 	path = get_paths(data);
 	if (!path)
-		return (cmd);
+	{
+		path_cmd = ft_strdup(cmd);
+		if (path_cmd == NULL)
+		{
+			print_error(1, "minishell: malloc failed");
+			safe_exit(data, MALLOC_FAIL);
+		}
+		return (path_cmd);
+	}
 	i = -1;
 	while (path[++i] != NULL)
 	{
