@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 19:11:51 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/03 13:32:00 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ void	print_export(char *line)
 	printf("declare -x ");
 	while (line[i] && line[i] != '=')
 		printf("%c", line[i++]);
-	printf("=\"%s\"\n", line + i + 1);
+	if (line[i] == '=')
+		printf("=\"%s\"\n", line + i + 1);
 }
 
 void	ex_util(t_var *data, char **line)
@@ -64,7 +65,6 @@ void	ex_util(t_var *data, char **line)
 
 void	ft_export(t_var *data)
 {
-	char	**line;
 	int		i;
 
 	data->exit_code = EXIT_SUCCESS;
@@ -75,13 +75,7 @@ void	ft_export(t_var *data)
 	{
 		if (is_valid_var(data, data->cmd_list[i]) == true)
 		{
-			line = ft_split(data->cmd_list[1], '=');
-			if (!line)
-			{
-				print_error(2, "export: ", strerror(errno));
-				safe_exit(data, MALLOC_FAIL);
-			}
-			if (replace_var(data, line[0], line[1]) == false)
+			if (replace_var(data, data->cmd_list[i]) == false)
 			{
 				if (add_var_to_env(data, data->cmd_list[i]) == MALLOC_FAIL)
 				{
@@ -89,7 +83,6 @@ void	ft_export(t_var *data)
 					safe_exit(data, MALLOC_FAIL);
 				}
 			}
-			free_array(&line);
 		}
 	}
 }

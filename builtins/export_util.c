@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:38:19 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/02 19:08:29 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/03 13:06:07 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ bool	is_valid_var(t_var *data, char *line)
 		}
 		i++;
 	}
-	if (i != 0 && line[i] && line[i] != '=')
-		return (false);
 	return (true);
 }
 
