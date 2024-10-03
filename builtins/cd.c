@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 16:18:24 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/03 14:01:05 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,24 @@ int	cd_in_env(t_var *data, char *pwd)
 {
 	char	*tmp;
 
-	if (replace_var(data, "PWD", pwd) == false)
+	tmp = ft_strjoin("PWD=", pwd);
+	if (!tmp)
+		return (MALLOC_FAIL);
+	if (replace_var(data, tmp) == false)
 	{
-		tmp = ft_strjoin("PWD=", pwd);
-		if (!tmp)
-			return (MALLOC_FAIL);
 		if (add_var_to_env(data, tmp) == MALLOC_FAIL)
 			return (free(tmp), MALLOC_FAIL);
-		free(tmp);
 	}
-	if (replace_var(data, "OLDPWD", data->pwd) == false)
+	free(tmp);
+	tmp = ft_strjoin("OLDPWD=", data->pwd);
+	if (!tmp)
+		return (MALLOC_FAIL);
+	if (replace_var(data, tmp) == false)
 	{
-		tmp = ft_strjoin("OLDPWD=", data->pwd);
-		if (!tmp)
-			return (MALLOC_FAIL);
 		if (add_var_to_env(data, tmp) == MALLOC_FAIL)
 			return (free(tmp), MALLOC_FAIL);
-		free(tmp);
 	}
+	free(tmp);
 	return (EXIT_SUCCESS);
 }
 
