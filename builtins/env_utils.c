@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 17:23:57 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/03 13:30:26 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,26 +64,36 @@ void	init_env(t_var *data)
 	data->env[i] = NULL;
 }
 
-bool	replace_var(t_var *data, char *key, char *content)
+bool	replace_var(t_var *data, char *line)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		len;
+	char	*key;
+	bool	exists;
 
 	i = 0;
-	if (!key || !content)
-		return (false);
-	len = ft_strlen(key);
-	while (len != 0 && data->env && data->env[i])
+	key = get_word(line, "=");
+	if (!key)
 	{
-		if (ft_strncmp(data->env[i], key, len) == 0
-			&& data->env[i][len] == '=')
+		print_error(2, "export: ", strerror(errno));
+		safe_exit(data, MALLOC_FAIL);
+	}
+	exists = (ft_getenv(data, key) != NULL);
+	len = ft_strlen(key);
+	free(key);
+	if (exists == false || ft_strchr(line, '=') == NULL)
+		return (exists);
+	while (data->env && data->env[i])
+	{
+		if (ft_strncmp(data->env[i], line, len) == 0
+			&& (data->env[i][len] == '\0' || data->env[i][len] == '='))
 		{
 			ft_free(&data->env[i]);
-			data->env[i] = ft_strjoin2(key, content, "=");
+			data->env[i] = ft_strdup(line);
 			if (!data->env[i])
 			{
-				data->exit_code = MALLOC_FAIL;
-				return (false);
+				print_error(2, "export: ", strerror(errno));
+				safe_exit(data, MALLOC_FAIL);
 			}
 			return (true);
 		}
