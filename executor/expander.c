@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 15:34:30 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/03 15:21:56 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ char	*fix_content(t_var *data, char *str, bool expandable)
 			safe_exit(data, MALLOC_FAIL);
 		}
 		tmp = ft_strjoin(expanded, chunk);
-		free(expanded);
-		free(chunk);
+		ft_free(&expanded);
+		ft_free(&chunk);
 		expanded = tmp;
 		if (expanded == NULL)
 		{
