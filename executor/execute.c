@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 14:01:36 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/03 15:25:21 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,29 @@ bool good_redir_path(char *redir, t_var *data)
 bool	redirs_exist(t_var *data, t_exec *exec)
 {
 	t_exec	*temp2;
+	char	*filename;
 
 	temp2 = exec;
 	while (temp2 != NULL)
 	{
 		if (is_in_out_app(temp2) == 1)
 		{
+			filename = ft_strdup(temp2->data);
 			temp2->data = fix_content(data, temp2->data, true);
+			if (temp2->data == NULL)
+			{
+				free(filename);
+				print_error(1, "minishell: malloc failed");
+				safe_exit(data, MALLOC_FAIL);
+			}
+			if (!*temp2->data && filename[0] == '$')
+			{
+				data->exit_code = 1;
+				print_error(3, "minishell: ", filename, ": ambiguous redirect");
+				free(filename);
+				return (0);
+			}
+			free(filename);
 			if (is_directory(temp2->data) == 1)
 			{
 				data->exit_code = 1;
@@ -274,6 +290,7 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 {
 	int		i;
 	t_exec	*temp;
+	char *cmd;
 
 	temp = exec;
 	i = 0;
@@ -289,8 +306,24 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
 	{
-		data->cmd_list[i] = fix_content(data, temp->data, true);
-		if (!data->cmd_list[i])
+		cmd = ft_strdup(temp->data);
+		if (!cmd)
+			safe_exit(data, MALLOC_FAIL);
+		temp->data = fix_content(data, temp->data, true);
+		if (!temp->data)
+		{
+			free(cmd);
+			safe_exit(data, MALLOC_FAIL);
+		}
+		if (*cmd == '$' && *temp->data == '\0')
+		{
+			free(cmd);
+			temp = temp->down;
+			continue ;
+		}
+		free(cmd);
+		data->cmd_list[i] = ft_strdup(temp->data);
+		if (data->cmd_list[i] == NULL)
 			safe_exit(data, MALLOC_FAIL);
 		i++;
 		temp = temp->down;
@@ -324,6 +357,8 @@ char	*get_abs_cmd(t_var *data, char *cmd)
 	char	**path;
 	char	*path_cmd;
 
+	if (!*cmd)
+		return (NULL);
 	path = get_paths(data);
 	if (!path)
 		return (cmd);
