@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 17:46:40 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/03 21:28:15 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ typedef struct s_var
 	t_token	*tokens;
 	t_exec	*exec;
 	t_table	*p_table;
+	t_token	*command_list;
 	char	**cmd_list;
 	char	*line;
 	int		index;
@@ -143,7 +144,7 @@ t_table	*create_table(void);
 //utils
 void	free_all(t_var *data);
 void	safe_exit(t_var *data, int exit_code);
-void	free_tokens(t_var *data);
+void	free_tokens(t_token **token);
 void	free_array(char ***arr);
 void	print_error(int count, ...);
 
