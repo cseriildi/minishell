@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/01 16:04:32 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/03 21:25:51 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	lexer(t_var *data)
 	data->index = 0;
 	while (data->line[data->index])
 	{
-		while (data->line[data->index] && ft_strchr(" \t\n\v\f\r" ,data->line[data->index]))
+		while (data->line[data->index] && ft_strchr(" \t\n\v\f\r", data->line[data->index]))
 			data->index++;
 		if (data->line[data->index])
 			get_next_token(data);

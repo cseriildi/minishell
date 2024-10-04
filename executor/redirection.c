@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 16:29:28 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/04 05:06:49 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,7 @@ bool	redirect_in(t_var *data, t_exec *exec)
 		else if (temp->type == HERE_DOC)
 		{
 			expandable = !ft_strchr(temp->data, '\'') && !ft_strchr(temp->data, '\"');
-			temp->data = fix_content(data, temp->data, false);
-			if (temp->data == NULL)
-			{
-				print_error(1, "Minishell: Malloc fail");
-				safe_exit(data, MALLOC_FAIL);
-			}
+			fix_content(data, temp, false);
 			if (here_doc(data, temp->data, expandable) == false)
 				return (false);
 		}

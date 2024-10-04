@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 11:23:37 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/04 05:01:18 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,25 @@ void	generate_random_filename(t_var *data)
 	safe_close(&rand_fd);
 }
 
+void print_command_list(t_token *command_list, int fd)
+{
+	t_token	*current;
+
+	current = command_list;
+	while (current != NULL)
+	{
+		ft_putstr_fd(current->content, STDOUT_FILENO);
+		ft_putstr_fd(" ", fd);
+		current = current->next;
+	}
+	ft_putstr_fd("\n", fd);
+}
+
 bool	here_doc(t_var *data, char *limiter, bool expanding)
 {
 	char	*line;
 	int		fd_to_write;
 	int		fd_to_read;
-	char	*expanded_line;
 
 	data->here_doc_filename = ft_calloc(1, 19);
 	if (data->here_doc_filename == NULL)
@@ -64,18 +77,22 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 		}
 		if (expanding == true)
 		{
-			expanded_line = expand(line, data);
-			if (expanded_line == NULL)
+			if (expand(line, data, false) == MALLOC_FAIL)
 			{
 				safe_close(&fd_to_write);
 				safe_close(&fd_to_read);
+				ft_free(&line);
 				print_error(1, "minishell: malloc failed");	
 				safe_exit(data, MALLOC_FAIL);
 			}
-			line = expanded_line;
+			print_command_list(data->command_list, fd_to_write);
+			free_tokens(&data->command_list);
 		}
-		ft_putstr_fd(line, fd_to_write);
-		ft_free(&line);
+		else
+		{
+			ft_putstr_fd(line, fd_to_write);
+			ft_free(&line);	
+		}
 	}
 	safe_close(&fd_to_write);
 	safe_dup2(&fd_to_read, STDIN_FILENO, data);

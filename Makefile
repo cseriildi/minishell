@@ -6,7 +6,7 @@
 #    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/10/02 17:32:45 by icseri           ###   ########.fr        #
+#    Updated: 2024/10/03 20:33:21 by icseri           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRCS = main.c \
 		executor/expander.c \
 		executor/heredoc.c \
 		executor/redirection.c \
+		executor/expand_utils.c \
 		builtins/env_utils.c \
 		builtins/builtins.c \
 		builtins/cd.c \

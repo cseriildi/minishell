@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 15:55:38 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/03 21:28:43 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tokens(t_var *data)
+void	free_tokens(t_token **token)
 {
 	t_token	*current;
 	t_token	*next;
 
-	if (data->tokens)
+	if (token && *token)
 	{
-		current = data->tokens;
+		current = *token;
 		while (current != NULL)
 		{
 			next = current->next;
@@ -27,10 +27,9 @@ void	free_tokens(t_var *data)
 			free(current);
 			current = next;
 		}
-		data->tokens = NULL;
+		*token = NULL;
 	}
 }
-
 void	free_array(char ***arr)
 {
 	int	i;
@@ -49,7 +48,8 @@ void	free_all(t_var *data)
 {
 	if (data)
 	{
-		free_tokens(data);
+		free_tokens(&data->tokens);
+		free_tokens(&data->command_list);
 		ft_free(&data->promt);
 		ft_free(&data->line);
 		delete_file(data, data->here_doc_filename);

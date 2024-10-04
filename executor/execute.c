@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 16:35:08 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/04 05:09:03 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,7 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 		if (is_in_out_app(temp2) == 1)
 		{
 			filename = ft_strdup(temp2->data);
-			temp2->data = fix_content(data, temp2->data, true);
-			if (temp2->data == NULL)
-			{
-				free(filename);
-				print_error(1, "minishell: malloc failed");
-				safe_exit(data, MALLOC_FAIL);
-			}
+			fix_content(data, temp2, true);
 			if (!*temp2->data && filename[0] == '$')
 			{
 				data->exit_code = 1;
@@ -290,10 +284,18 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 {
 	int		i;
 	t_exec	*temp;
+	t_exec	*next;
 	char *cmd;
 
 	temp = exec;
 	i = 0;
+	while (temp != NULL && temp->type == WORD)
+	{
+		next = temp->down;
+		fix_content(data, temp, true);
+		temp = next;
+	}
+	temp = exec;
 	while (temp != NULL && temp->type == WORD)
 	{
 		i++;
@@ -309,22 +311,13 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 		cmd = ft_strdup(temp->data);
 		if (!cmd)
 			safe_exit(data, MALLOC_FAIL);
-		temp->data = fix_content(data, temp->data, true);
-		if (!temp->data)
-		{
-			free(cmd);
-			safe_exit(data, MALLOC_FAIL);
-		}
 		if (*cmd == '$' && *temp->data == '\0')
 		{
 			free(cmd);
 			temp = temp->down;
 			continue ;
 		}
-		free(cmd);
-		data->cmd_list[i] = ft_strdup(temp->data);
-		if (data->cmd_list[i] == NULL)
-			safe_exit(data, MALLOC_FAIL);
+		data->cmd_list[i] = cmd;
 		i++;
 		temp = temp->down;
 	}

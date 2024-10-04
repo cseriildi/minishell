@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/09/30 15:13:23 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/03 21:19:05 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	init(t_var *data)
 	data->promt = NULL;
 	data->cmd_list = NULL;
 	data->line = NULL;
+	data->command_list = NULL;
 	data->exit_code = 0;
 	data->subshell_level = 1;
 	data->pwd = NULL;
