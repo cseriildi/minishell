@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/15 14:53:39 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 16:28:59 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	init(t_var *data)
 	data->cmd_list = NULL;
 	data->line = NULL;
 	data->command_list = NULL;
+	data->heredoc_input = NULL;
+	data->is_heredoc = false;
 	data->exit_code = 0;
 	data->proc_count = 0;
 	data->pwd = NULL;

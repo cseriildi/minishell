@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/04 05:01:18 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 19:18:23 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,18 @@ void	generate_random_filename(t_var *data)
 	safe_close(&rand_fd);
 }
 
-void print_command_list(t_token *command_list, int fd)
+void print_heredoc(t_var *data, int fd)
 {
 	t_token	*current;
 
-	current = command_list;
+	current = data->heredoc_input;
 	while (current != NULL)
 	{
-		ft_putstr_fd(current->content, STDOUT_FILENO);
-		ft_putstr_fd(" ", fd);
+		ft_putstr_fd(current->content, fd);
 		current = current->next;
 	}
-	ft_putstr_fd("\n", fd);
+	data->is_heredoc = false;
+	free_tokens(&data->heredoc_input);
 }
 
 bool	here_doc(t_var *data, char *limiter, bool expanding)
@@ -63,30 +63,37 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 	if (fd_to_read == -1)
 	{
 		safe_close(&fd_to_write);
+		delete_file(data, data->here_doc_filename);
 		return (false);
 	}
 	while (true)
 	{
 		ft_putstr_fd("> ", STDOUT_FILENO);
 		line = get_next_line(STDIN_FILENO);
+		if (ft_strchr(line, '\n') == NULL)
+		{
+			//throw error when ctrl D in heredoc	
+			break;
+		}
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
-			&& line[ft_strlen(limiter)] == '\n')
+			&& line[ft_strlen(limiter)] ==  '\n' )
 		{
 			ft_free(&line);
 			break ;
 		}
 		if (expanding == true)
 		{
+			data->is_heredoc = true;
 			if (expand(line, data, false) == MALLOC_FAIL)
 			{
 				safe_close(&fd_to_write);
 				safe_close(&fd_to_read);
 				ft_free(&line);
+				delete_file(data, data->here_doc_filename);
 				print_error(1, "minishell: malloc failed");	
 				safe_exit(data, MALLOC_FAIL);
 			}
-			print_command_list(data->command_list, fd_to_write);
-			free_tokens(&data->command_list);
+			print_heredoc(data, fd_to_write);
 		}
 		else
 		{
@@ -95,7 +102,8 @@ bool	here_doc(t_var *data, char *limiter, bool expanding)
 		}
 	}
 	safe_close(&fd_to_write);
-	safe_dup2(&fd_to_read, STDIN_FILENO, data);
+	if (data->cmd_list[0])
+		safe_dup2(&fd_to_read, STDIN_FILENO, data);
 	delete_file(data, data->here_doc_filename);
 	return (true);
 }

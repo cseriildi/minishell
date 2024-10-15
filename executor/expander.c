@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/15 13:55:15 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 17:06:01 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,7 +224,10 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 		else
 		{
 			if (starts_with_dollar && *safe_getenv(data, var_name) == '\0')
+			{
+				ft_free(&var_name);
 				continue ;
+			}
 			expanded_var = easy_split(safe_getenv(data, var_name), " \t\n\v\f\r");
 			ft_free(&var_name);
 			if (!expanded_var)
@@ -273,7 +276,10 @@ int	add_chunk(t_var *data, char *str, bool to_join)
 
 	if (!str)
 		return (EXIT_SUCCESS);
-	list = &data->command_list;
+	if (data->is_heredoc == true)
+		list = &data->heredoc_input;
+	else
+		list = &data->command_list;
 	if (list)
 	{
 		curr = *list;

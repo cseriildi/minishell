@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/15 14:30:20 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 16:28:26 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ typedef struct s_var
 	t_exec	*exec;
 	t_table	*p_table;
 	t_token	*command_list;
+	t_token *heredoc_input;
+	bool	is_heredoc;
 	char	**cmd_list;
 	char	*line;
 	int		index;

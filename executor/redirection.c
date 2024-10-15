@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/04 05:06:49 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 19:19:22 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ bool	redirect_in(t_var *data, t_exec *exec)
 		}
 		else if (temp->type == HERE_DOC)
 		{
+			//move the heredocs to parent process
 			expandable = !ft_strchr(temp->data, '\'') && !ft_strchr(temp->data, '\"');
 			fix_content(data, temp, false);
 			if (here_doc(data, temp->data, expandable) == false)
