@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/04 05:31:33 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 11:43:33 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,6 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 		}
 		else
 		{
-			printf("var_name: %d\n", starts_with_dollar);
 			if (starts_with_dollar && *safe_getenv(data, var_name) == '\0')
 				continue ;
 			expanded_var = easy_split(safe_getenv(data, var_name), " \t\n\v\f\r");
