@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/04 05:09:03 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 14:57:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		data->pid = fork();
 		if (data->pid == -1)
 			safe_exit(data, FORK_FAIL);
+		data->proc_count++;
 		signals.child_pid = data->pid;
 		if (data->pid == 0)
 		{
@@ -140,7 +141,9 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 			signals.child_pid = -1;
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
-			//printf("This is for debugging! exit code: %d\n", data->exit_code);
+			while (--data->proc_count > 0)
+				wait(NULL);
+			//ft_printf("This is for debugging! exit code: %d\n", data->exit_code);
 		}
 	}
 }
@@ -151,6 +154,7 @@ void	first_sequence(t_var *data, t_exec *exec)
 	data->pid = fork();
 	if (data->pid == -1)
 		safe_exit(data, FORK_FAIL);
+	data->proc_count++;
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[0]);
@@ -165,6 +169,7 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	data->pid = fork();
 	if (data->pid == -1)
 		safe_exit(data, FORK_FAIL);
+	data->proc_count++;
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[1]);
@@ -186,6 +191,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 	data->pid = fork();
 	if (data->pid == -1)
 		safe_exit(data, FORK_FAIL);
+	data->proc_count++;
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[1]);
@@ -198,11 +204,12 @@ void	last_sequence(t_var *data, t_exec *exec)
 	{
 		safe_close(&data->pipe1_fd[0]);
 		safe_close(&data->pipe1_fd[1]);
-		wait(NULL);
 		waitpid(data->pid, &data->exit_status, 0);
 		if (WIFEXITED(data->exit_status))
 			data->exit_code = WEXITSTATUS(data->exit_status);
-		//printf("This is for debugging nexit code: %d\n", data->exit_code);
+		while (--data->proc_count > 0)
+			wait(NULL);
+		//ft_printf("This is for debugging nexit code: %d\n", data->exit_code);
 	}
 }
 

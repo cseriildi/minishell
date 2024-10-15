@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/15 11:43:33 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 13:55:15 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,8 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 			return (ft_free(&content), MALLOC_FAIL);
 		len += ft_strlen(first);
 		if (add_chunk(data, first, true) == MALLOC_FAIL)
-			return (ft_free(&content), MALLOC_FAIL);
+			return (ft_free(&content), ft_free(&first), MALLOC_FAIL);
+		ft_free(&first);
 		var = ft_strchr(content + len, '$');
 		if (!var)
 			break ;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_parsing_table.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:08:11 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/27 11:30:40 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/15 14:57:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,10 @@ t_table	*create_table(void)
 
 void	print_p_table(t_table *parsing_table)
 {
-	printf("TABLE: \n");
+	ft_printf("TABLE: \n");
 	while (parsing_table != NULL)
 	{
-		printf("%d	%d	%d	%d	%d\n", parsing_table->state,
+		ft_printf("%d	%d	%d	%d	%d\n", parsing_table->state,
 			parsing_table->event, parsing_table->action,
 			parsing_table->next_s, parsing_table->nb_reduce);
 		parsing_table = parsing_table->next;

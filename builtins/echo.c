@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:42 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 22:31:17 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 14:57:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void	ft_echo(t_var *data)
 		i++;
 	while (data->cmd_list[i])
 	{
-		printf("%s", data->cmd_list[i]);
+		ft_printf("%s", data->cmd_list[i]);
 		if (data->cmd_list[i + 1] != NULL)
-			printf(" ");
+			ft_printf(" ");
 		i++;
 	}
 	if (n_flag == false)
-		printf("\n");
+		ft_printf("\n");
 	data->exit_code = EXIT_SUCCESS;
 }
 

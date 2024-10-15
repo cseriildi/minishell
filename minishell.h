@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 21:28:15 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 14:30:20 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ typedef struct s_var
 	char	*pwd;
 	char	*promt;
 	char	**env;
-	int		subshell_level;
+	int		proc_count;
 	int		stdout_copy;
 	char	*here_doc_filename;
 	bool	missing_quote;

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 14:01:05 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 14:57:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	ft_cd(t_var *data)
 			return ;
 		}
 		else 
-			printf("%s\n", dest);
+			ft_printf("%s\n", dest);
 	}
 	if (chdir(dest) == -1)
 	{

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/03 21:19:05 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 14:53:39 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	init(t_var *data)
 	data->line = NULL;
 	data->command_list = NULL;
 	data->exit_code = 0;
-	data->subshell_level = 1;
+	data->proc_count = 0;
 	data->pwd = NULL;
 	data->pipe1_fd[0] = -1;
 	data->pipe1_fd[1] = -1;

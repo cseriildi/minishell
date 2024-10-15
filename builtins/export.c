@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 13:32:00 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/15 14:57:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void	print_export(char *line)
 	int	i;
 
 	i = 0;
-	printf("declare -x ");
+	ft_printf("declare -x ");
 	while (line[i] && line[i] != '=')
-		printf("%c", line[i++]);
+		ft_printf("%c", line[i++]);
 	if (line[i] == '=')
-		printf("=\"%s\"\n", line + i + 1);
+		ft_printf("=\"%s\"\n", line + i + 1);
 }
 
 void	ex_util(t_var *data, char **line)
