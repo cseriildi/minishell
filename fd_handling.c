@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_handling.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 14:50:52 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/16 14:01:58 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	delete_file(t_var *data, char *filename)
 		print_error(4, "minishell: ", filename, ": ", strerror(errno));
 		data->exit_code = UNLINK_FAIL;
 	}
+	//ft_free(&filename); //i don't know if it's allocated or not, have to check
+	filename = NULL; //remove if it's allocated, otherwise remove the previous line
 }
 
 void	safe_dup2(int *old_fd, int new_fd, t_var *data)

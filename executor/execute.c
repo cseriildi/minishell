@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/15 14:57:48 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/16 16:57:24 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 {
 	t_exec	*temp2;
 	char	*filename;
+	//int		count;
 
 	temp2 = exec;
 	while (temp2 != NULL)
@@ -59,8 +60,9 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 		if (is_in_out_app(temp2) == 1)
 		{
 			filename = ft_strdup(temp2->data);
+			//count = count_exec();
 			fix_content(data, temp2, true);
-			if (!*temp2->data && filename[0] == '$')
+			if (!*temp2->data /* || count != count_exec() */)
 			{
 				data->exit_code = 1;
 				print_error(3, "minishell: ", filename, ": ambiguous redirect");
@@ -68,7 +70,7 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 				return (0);
 			}
 			free(filename);
-			if (is_directory(temp2->data) == 1)
+			if ((temp2->type != RED_IN || exec->type == 2) && is_directory(temp2->data) == 1)
 			{
 				data->exit_code = 1;
 				print_error(3, "minishell: ", temp2->data, ": Is a directory");
@@ -117,11 +119,14 @@ void	execute(t_var *data)
 
 void	only_one_sequence(t_var *data, t_exec *exec)
 {
+	heredoc(data, exec);
+
+	//is builtin will not work if not expanded before
 	if (is_builtin(exec->data) == true || exec->type != WORD)
 	{
-		data->stdout_copy = dup(STDOUT_FILENO);
+		//data->stdout_copy = dup(STDOUT_FILENO);
 		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
-		safe_dup2(&data->stdout_copy, STDOUT_FILENO, data);
+		//safe_dup2(&data->stdout_copy, STDOUT_FILENO, data);
 	}
 	else
 	{
@@ -150,6 +155,9 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 
 void	first_sequence(t_var *data, t_exec *exec)
 {
+	heredoc(data, exec);
+	/* if (redirs_exist(data, exec) == 0)
+		return ; */
 	pipe(data->pipe1_fd);
 	data->pid = fork();
 	if (data->pid == -1)
@@ -165,6 +173,9 @@ void	first_sequence(t_var *data, t_exec *exec)
 
 void	middle_sequence(t_var *data, t_exec *exec)
 {
+	heredoc(data, exec);
+/* 	if (redirs_exist(data, exec) == 0)
+		return ; */
 	pipe(data->pipe2_fd);
 	data->pid = fork();
 	if (data->pid == -1)
@@ -188,6 +199,9 @@ void	middle_sequence(t_var *data, t_exec *exec)
 
 void	last_sequence(t_var *data, t_exec *exec)
 {
+	heredoc(data, exec);
+/* 	if (redirs_exist(data, exec) == 0)
+		return ; */
 	data->pid = fork();
 	if (data->pid == -1)
 		safe_exit(data, FORK_FAIL);
@@ -217,22 +231,18 @@ void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 {
 	create_cmd_list(data, exec);
 	if (redirs_exist(data, exec) == 0)
-	{
-		safe_dup2(&read_fd, STDIN_FILENO, data);
-		safe_dup2(&write_fd, STDOUT_FILENO, data);
 		return ;
-	}
-	if (redirect_in(data, exec) == false)
+	if (redirect_in(data, exec, read_fd) == false)
 		return ;
-	safe_dup2(&read_fd, STDIN_FILENO, data);
-	safe_dup2(&write_fd, STDOUT_FILENO, data);
-	if (redirect_out(data, exec) == false)
+	if (redirect_out(data, exec, write_fd) == false)
 		return ;
 	if (data->cmd_list != NULL)
 	{
 		if (exec_builtin(data) == false)
 			exec_command(data);
 	}
+	safe_close(&write_fd);
+	safe_close(&read_fd);
 }
 
 int is_directory(const char *path)
