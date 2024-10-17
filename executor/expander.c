@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/15 17:06:01 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/16 16:21:34 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 			if(expand(chunk, data, (seq->data[index] == '$')) == MALLOC_FAIL)
 			{
 				print_error(1, "minishell: malloc failed");
+				//ft_free(&chunk);
 				safe_exit(data, MALLOC_FAIL);
 			}
 		}
@@ -136,10 +137,13 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 			if(add_chunk(data, chunk, true) == MALLOC_FAIL)
 			{
 				print_error(1, "minishell: malloc failed");
+				ft_free(&chunk);
 				safe_exit(data, MALLOC_FAIL);
 			}
+			ft_free(&chunk);
 		}
 		index += len;
+		//ft_free(&chunk);
 	}
 	fix_exec(data, seq);
 	free_tokens(&data->command_list);
@@ -204,7 +208,7 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 		if (!*var_name)
 		{
 			if (add_chunk(data, "$", true) == MALLOC_FAIL)
-				return (ft_free(&content), MALLOC_FAIL);
+				return (ft_free(&content), ft_free(&var_name), MALLOC_FAIL);
 		}
 		else if (*var_name == '?')
 		{
@@ -219,7 +223,7 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 		else if (*var_name == ' ')
 		{
 			if (add_chunk(data, "$ ", true) == MALLOC_FAIL)
-				return (ft_free(&content), MALLOC_FAIL);
+				return (ft_free(&content), ft_free(&var_name), MALLOC_FAIL);
 		}
 		else
 		{
@@ -235,6 +239,11 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 			if (add_chunk(data, expanded_var[0], true) == MALLOC_FAIL)
 				return (ft_free(&content), free_array(&expanded_var), MALLOC_FAIL);
 			i = 0;
+			if (!expanded_var[0]) //this is new
+			{
+				free_array(&expanded_var);
+				continue;
+			}
 			while (expanded_var[++i])
 			{
 				if (add_chunk(data, expanded_var[i], false) == MALLOC_FAIL)
@@ -242,6 +251,7 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 			}
 			free_array(&expanded_var);
 		}
+		ft_free(&var_name);
 	}
 	ft_free(&content);
 	return (EXIT_SUCCESS);

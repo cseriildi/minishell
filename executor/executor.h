@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/04 05:07:07 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/16 12:54:01 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,12 @@ char	**get_paths(t_var *data);
 char	*get_abs_cmd(t_var *data, char *cmd);
 void	fix_content(t_var *data, t_exec *seq, bool expandable);
 int		expand(char *content, t_var *data, bool starts_with_dollar);
-bool	redirect_in(t_var *data, t_exec *tree);
-bool	redirect_out(t_var *data, t_exec *tree);
+bool	redirect_in(t_var *data, t_exec *tree, int read_fd);
+bool	redirect_out(t_var *data, t_exec *tree, int write_fd);
 int		is_directory(const char *path);
 
-bool	here_doc(t_var *data, char *limiter, bool expanding);
+void	do_heredoc(t_var *data, char *limiter, bool expanding);
+void	heredoc(t_var *data, t_exec *exec);
 
 int		get_chunk_size(char *str);
 

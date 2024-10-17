@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/15 16:52:01 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/16 13:16:12 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	safe_exit(t_var *data, int exit_code)
 		free_array(&data->env);
 		free_table(&(data->p_table));
 		free_all(data);
+		delete_file(data, data->here_doc_filename);
 		free(data);
 	}
 	exit(exit_code);
