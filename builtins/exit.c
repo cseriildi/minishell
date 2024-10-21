@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:52 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 17:47:31 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/17 09:22:33 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ void	set_exit_code(t_var *data)
 
 void	ft_exit(t_var *data)
 {
-	int		i;
-	
-	i = 0;
 	ft_putendl_fd("exit", STDERR_FILENO);
 	if (!data->cmd_list[1])
 		safe_exit(data, data->exit_code);

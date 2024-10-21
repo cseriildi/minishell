@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:56 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/15 14:57:48 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/21 13:55:54 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,20 @@ void	bubble_sort_with_context(int *arr, int n, char **env)
 	}
 }
 
-void	print_export(char *line)
+void	print_export(t_var *data, char *line)
 {
 	int	i;
 
 	i = 0;
-	ft_printf("declare -x ");
+	ft_putstr_fd("declare -x ", data->fd_to_write);
 	while (line[i] && line[i] != '=')
-		ft_printf("%c", line[i++]);
+		ft_putchar_fd(line[i++], data->fd_to_write);
 	if (line[i] == '=')
-		ft_printf("=\"%s\"\n", line + i + 1);
+	{
+		ft_putstr_fd("=\"", data->fd_to_write);
+		ft_putstr_fd(line + i + 1, data->fd_to_write);
+		ft_putendl_fd("\"", data->fd_to_write);
+	}
 }
 
 void	ex_util(t_var *data, char **line)

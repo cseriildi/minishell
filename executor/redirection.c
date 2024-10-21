@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/16 16:55:52 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/21 17:45:33 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	redirect_in(t_var *data, t_exec *exec, int read_fd)
 
 	fd = -1;
 	temp = exec;
-	while (data->cmd_list[0] && temp != NULL)
+	while (data->cmd_list && data->cmd_list[0] && temp != NULL)
 	{
 		if (temp->type == RED_IN)
 		{
@@ -76,10 +76,17 @@ bool	redirect_out(t_var *data, t_exec *exec, int write_fd)
 			return (false);
 		temp = temp->down;
 	}
+	if (data->proc_count == 0)
+	{
+		if (fd != -1)
+			data->fd_to_write = fd;
+		return (true);
+	}
 	if (fd == -1)
-		fd = write_fd;
-	if (data->exec->next != NULL || (data->exec->next == NULL && data->cmd_list[0] && !is_builtin(data->cmd_list[0])))
+		safe_dup2(&write_fd, STDOUT_FILENO, data);
+	else
 		safe_dup2(&fd, STDOUT_FILENO, data);
 	safe_close(&fd);
-	return (true);
+	safe_close(&write_fd);
+	return true;
 }

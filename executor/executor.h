@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/16 12:54:01 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/18 12:47:32 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,8 @@ int		get_chunk_size(char *str);
 
 t_token	*create_new_token(char *content, int type);
 void	add_token_to_back(t_token **lst, t_token *new);
+void	fix_exec(t_var *data, t_exec *exec);
+int add_chunk(t_var *data, char *str, bool to_join);
+t_exec *create_exec_node(char *content);
 
 #endif

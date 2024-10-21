@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/16 13:16:12 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/21 14:01:01 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	free_all(t_var *data)
 		safe_close(&data->pipe2_fd[0]);
 		safe_close(&data->pipe2_fd[1]);
 		safe_close(&data->stdout_copy);
+		safe_close(&data->fd_to_write);
+		data->fd_to_write = STDOUT_FILENO;
 	}
 }
 

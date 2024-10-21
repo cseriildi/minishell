@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:38:19 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/03 13:06:07 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/21 13:56:31 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	no_arg_export(t_var *data)
 	while (++i < count)
 	{
 		if (ft_strncmp(data->env[indices[i]], "_=", 2))
-			print_export(data->env[indices[i]]);
+			print_export(data, data->env[indices[i]]);
 	}
 	free(indices);
 }

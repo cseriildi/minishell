@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 12:28:57 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 13:13:59 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/21 13:56:45 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ bool	is_valid_var(t_var *data, char *line);
 void	no_arg_export(t_var *data);
 void	ex_util2(t_var *data);
 void	bubble_sort_with_context(int *arr, int n, char **env);
-void	print_export(char *line);
+void	print_export(t_var *data, char *line);
 
 char	*get_word(char *text, char *separator);
 bool is_n_flag(char *str);

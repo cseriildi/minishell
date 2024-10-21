@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/16 13:56:27 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/18 12:52:20 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	generate_random_filename(t_var *data)
 {
 	int		rand_fd;
-
+	//check out why is the random filename not working
 	rand_fd = safe_open("/dev/urandom", READ, data);
 	rand_fd = -1;
 	if (rand_fd == -1)
@@ -109,6 +109,8 @@ void heredoc(t_var *data, t_exec *seq)
 		{
 			expandable = !ft_strchr(current->data, '\'') && !ft_strchr(current->data, '\"');
 			fix_content(data, current, false);
+/* 			fix_exec(data, current);
+			free_tokens(&data->command_list); */
 			do_heredoc(data, current->data, expandable);
 		}
 		current = current->down;

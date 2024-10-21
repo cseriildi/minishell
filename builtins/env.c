@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:49 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/15 14:57:48 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/21 13:50:57 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_env(t_var *data)
 	while (data->env && data->env[++i])
 	{
 		if (ft_strchr(data->env[i], '='))
-			ft_printf("%s\n", data->env[i]);
+			ft_putendl_fd(data->env[i], data->fd_to_write);
 	}
 	data->exit_code = EXIT_SUCCESS;
 }

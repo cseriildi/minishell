@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:44:24 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/04 04:11:27 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/21 17:36:27 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 bool	exec_builtin(t_var *data)
 {
+	//write ft_printf_fd and in the builtins use that to either write to the STDOUT or to a file, and at the end close the file
 	if (data->cmd_list[0] == NULL)
 		return (true);
 	if (ft_strncmp(data->cmd_list[0], "cd", 3) == 0)

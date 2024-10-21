@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/15 16:28:59 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/21 14:02:50 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	init(t_var *data)
 	data->pipe2_fd[0] = -1;
 	data->pipe2_fd[1] = -1;
 	data->stdout_copy = -1;
+	data->fd_to_write = STDOUT_FILENO;
 	data->here_doc_filename = NULL;
 	data->pwd = getcwd(NULL, 0);
 	if (!data->pwd)

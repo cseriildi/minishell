@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/16 16:57:24 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/21 14:56:50 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 			filename = ft_strdup(temp2->data);
 			//count = count_exec();
 			fix_content(data, temp2, true);
+			fix_exec(data, temp2);
+			free_tokens(&data->command_list);
 			if (!*temp2->data /* || count != count_exec() */)
 			{
 				data->exit_code = 1;
@@ -120,20 +122,18 @@ void	execute(t_var *data)
 void	only_one_sequence(t_var *data, t_exec *exec)
 {
 	heredoc(data, exec);
-
+	create_cmd_list(data, exec);
+/* 	if (!exec->data)
+		return ; */
 	//is builtin will not work if not expanded before
-	if (is_builtin(exec->data) == true || exec->type != WORD)
-	{
-		//data->stdout_copy = dup(STDOUT_FILENO);
+	if (!data->cmd_list || !*data->cmd_list || is_builtin(data->cmd_list[0]) == true)
 		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
-		//safe_dup2(&data->stdout_copy, STDOUT_FILENO, data);
-	}
 	else
 	{
+		data->proc_count++;
 		data->pid = fork();
 		if (data->pid == -1)
 			safe_exit(data, FORK_FAIL);
-		data->proc_count++;
 		signals.child_pid = data->pid;
 		if (data->pid == 0)
 		{
@@ -156,13 +156,14 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 void	first_sequence(t_var *data, t_exec *exec)
 {
 	heredoc(data, exec);
+	create_cmd_list(data, exec);
 	/* if (redirs_exist(data, exec) == 0)
 		return ; */
 	pipe(data->pipe1_fd);
+	data->proc_count++;
 	data->pid = fork();
 	if (data->pid == -1)
 		safe_exit(data, FORK_FAIL);
-	data->proc_count++;
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[0]);
@@ -174,13 +175,14 @@ void	first_sequence(t_var *data, t_exec *exec)
 void	middle_sequence(t_var *data, t_exec *exec)
 {
 	heredoc(data, exec);
+	create_cmd_list(data, exec);
 /* 	if (redirs_exist(data, exec) == 0)
 		return ; */
 	pipe(data->pipe2_fd);
+	data->proc_count++;
 	data->pid = fork();
 	if (data->pid == -1)
 		safe_exit(data, FORK_FAIL);
-	data->proc_count++;
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[1]);
@@ -200,12 +202,13 @@ void	middle_sequence(t_var *data, t_exec *exec)
 void	last_sequence(t_var *data, t_exec *exec)
 {
 	heredoc(data, exec);
+	create_cmd_list(data, exec);
 /* 	if (redirs_exist(data, exec) == 0)
 		return ; */
+	data->proc_count++;
 	data->pid = fork();
 	if (data->pid == -1)
 		safe_exit(data, FORK_FAIL);
-	data->proc_count++;
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[1]);
@@ -229,7 +232,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 
 void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 {
-	create_cmd_list(data, exec);
+	//create_cmd_list(data, exec);
 	if (redirs_exist(data, exec) == 0)
 		return ;
 	if (redirect_in(data, exec, read_fd) == false)
@@ -305,6 +308,8 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 	char *cmd;
 
 	temp = exec;
+	if (temp->type != WORD)
+		return;
 	i = 0;
 	while (temp != NULL && temp->type == WORD)
 	{
@@ -312,10 +317,13 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 		fix_content(data, temp, true);
 		temp = next;
 	}
+/* 	fix_exec(data, temp);
+	free_tokens(&data->command_list); */
 	temp = exec;
-	while (temp != NULL && temp->type == WORD)
+	while (temp != NULL)
 	{
-		i++;
+		if (temp->type == WORD)
+			i++;
 		temp = temp->down;
 	}
 	data->cmd_list = malloc(sizeof(char *) * (i + 1));
@@ -323,19 +331,21 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 		safe_exit(data, MALLOC_FAIL);
 	temp = exec;
 	i = 0;
-	while (temp != NULL && temp->type == WORD)
+	while (temp != NULL)
 	{
-		cmd = ft_strdup(temp->data);
-		if (!cmd)
-			safe_exit(data, MALLOC_FAIL);
-		if (*cmd == '$' && *temp->data == '\0')
-		{
-			free(cmd);
-			temp = temp->down;
-			continue ;
+		if (temp->type == WORD) {
+			cmd = ft_strdup(temp->data);
+			if (!cmd)
+				safe_exit(data, MALLOC_FAIL);
+			if (*cmd == '$' && *temp->data == '\0')
+			{
+				free(cmd);
+				temp = temp->down;
+				continue ;
+			}
+			data->cmd_list[i] = cmd;
+			i++;
 		}
-		data->cmd_list[i] = cmd;
-		i++;
 		temp = temp->down;
 	}
 	data->cmd_list[i] = NULL;

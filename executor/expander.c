@@ -3,37 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/16 16:21:34 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/18 14:12:41 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-int add_chunk(t_var *data, char *str, bool to_join);
-t_exec *create_exec_node(char *content);
 
 void	fix_exec(t_var *data, t_exec *exec)
 {
 	t_exec	*temp;
-	//t_exec	*prev;
-	//t_exec	*next;
+//	t_exec	*prev;
+//	t_exec	*next;
 	t_exec	*new;
 	t_token	*curr;
 	char	*tmp;
 
 	curr = data->command_list;
 	temp = exec;
-	if (curr == NULL)
+	if (!curr)
 	{
-		ft_free(&temp->data);
-		free(temp);
-		temp = temp->down;
+		if (temp->type == WORD)
+			temp->type = NONE;
 		return ;
 	}
-	if (curr->content == NULL)
-		tmp = NULL;
+	if (!curr->content)
+	{
+		if (temp->type == WORD)
+			temp->type = NONE;
+		curr = curr->next;
+	}
 	else
 	{
 		tmp = ft_strdup(curr->content);
@@ -42,14 +43,18 @@ void	fix_exec(t_var *data, t_exec *exec)
 			print_error(1, "minishell: malloc failed");
 			safe_exit(data, MALLOC_FAIL);
 		}
+		ft_free(&temp->data);
+		temp->data = tmp;
+		curr = curr->next;
 	}
-	free(temp->data);
-	temp->data = tmp;
-	curr = curr->next;
 	while (curr)
 	{
 		if (curr->content == NULL)
-			tmp = NULL;
+		{
+			curr = curr->next;
+			continue ;
+		}
+			//tmp = NULL;
 		else
 		{
 			tmp = ft_strdup(curr->content);
@@ -110,6 +115,7 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 
 	index = 0;
 	len = 0;
+
 	//data->command_list = NULL;
 	while (seq->data[index])
 	{
@@ -134,7 +140,7 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 		}
 		else
 		{
-			if(add_chunk(data, chunk, true) == MALLOC_FAIL)
+			if(add_chunk(data, chunk, expandable) == MALLOC_FAIL)
 			{
 				print_error(1, "minishell: malloc failed");
 				ft_free(&chunk);
@@ -189,13 +195,14 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 	int		len;
 
 	len = 0;
+	(void)starts_with_dollar;
 	while (content[len])
 	{
 		first = get_word(content + len, "$");
 		if (!first)
 			return (ft_free(&content), MALLOC_FAIL);
 		len += ft_strlen(first);
-		if (add_chunk(data, first, true) == MALLOC_FAIL)
+		if (*first && add_chunk(data, first, true) == MALLOC_FAIL)
 			return (ft_free(&content), ft_free(&first), MALLOC_FAIL);
 		ft_free(&first);
 		var = ft_strchr(content + len, '$');
@@ -227,7 +234,7 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 		}
 		else
 		{
-			if (starts_with_dollar && *safe_getenv(data, var_name) == '\0')
+			if (/* starts_with_dollar &&   */*safe_getenv(data, var_name) == '\0')
 			{
 				ft_free(&var_name);
 				continue ;
@@ -263,7 +270,7 @@ char *get_var_name(char *str)
 
 	if (str[0] == '?')
 		return (ft_substr(str, 0, 1));
-	if (str[0] == ' ')
+	if (str[0] == ' ') //what about other whitespaces
 		return (ft_substr(str, 0, 1));
 	i = 0;
 	while (str[i] && str[i] != '=')
@@ -284,7 +291,7 @@ int	add_chunk(t_var *data, char *str, bool to_join)
 	t_token	*new;
 	char	*tmp;
 
-	if (!str)
+	if (!str /* || !*str */) //new: || !*str
 		return (EXIT_SUCCESS);
 	if (data->is_heredoc == true)
 		list = &data->heredoc_input;
