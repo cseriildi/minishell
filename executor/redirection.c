@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/21 17:45:33 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/21 18:23:41 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,15 @@ bool	redirect_in(t_var *data, t_exec *exec, int read_fd)
 			return (delete_file(data, data->here_doc_filename), false);
 		temp = temp->down;
 	}
-	if (fd == -1)
-		fd = read_fd;
-	safe_dup2(&fd, STDIN_FILENO, data);
+	if (data->cmd_list && data->cmd_list[0])
+	{
+		if (fd == -1)
+			safe_dup2(&read_fd, STDIN_FILENO, data);
+		else
+			safe_dup2(&fd, STDIN_FILENO, data);
+	}
 	safe_close(&fd);
+	safe_close(&read_fd);
 	delete_file(data, data->here_doc_filename);
 	return (true);
 }
@@ -76,16 +81,19 @@ bool	redirect_out(t_var *data, t_exec *exec, int write_fd)
 			return (false);
 		temp = temp->down;
 	}
-	if (data->proc_count == 0)
+	if (data->cmd_list && data->cmd_list[0])
 	{
-		if (fd != -1)
-			data->fd_to_write = fd;
-		return (true);
+		if (data->proc_count == 0)
+		{
+			if (fd != -1)
+				data->fd_to_write = fd;
+			return (true);
+		}
+		if (fd == -1)
+			safe_dup2(&write_fd, STDOUT_FILENO, data);
+		else
+			safe_dup2(&fd, STDOUT_FILENO, data);
 	}
-	if (fd == -1)
-		safe_dup2(&write_fd, STDOUT_FILENO, data);
-	else
-		safe_dup2(&fd, STDOUT_FILENO, data);
 	safe_close(&fd);
 	safe_close(&write_fd);
 	return true;

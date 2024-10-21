@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/21 14:56:50 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/21 19:41:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
+//things to fix:
+// when command is: . or ..
+// when PATH="" throw No such file or directory instead of command not found
+// 2_path_check.sh:47: should be Permission denied instead of command not found
+// export X="  A  B  "
+// > $notexists should be ambigous redirects or when > $VAR and VAR is containing more then one word 
+// don't check for directory when command does not exist -> mkdir hello; hello world
+// ctrl D while heredoc
 
 int	is_in_out_app(t_exec *exec)
 {
@@ -306,7 +315,8 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 	t_exec	*temp;
 	t_exec	*next;
 	char *cmd;
-
+	
+	free_array(&data->cmd_list);
 	temp = exec;
 	if (temp->type != WORD)
 		return;
