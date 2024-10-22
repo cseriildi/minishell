@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 13:30:26 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/22 08:35:41 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_getenv(t_var *data, char *var_name)
 	if (var_name && *var_name)
 	{
 		len = ft_strlen(var_name);
-		while (data->env[i])
+		while (data->env && data->env[i])
 		{
 			if (ft_strncmp(data->env[i], var_name, len) == 0
 				&& data->env[i][len] == '=')

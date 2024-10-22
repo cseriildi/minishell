@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 17:46:40 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/22 08:36:11 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,9 @@ typedef struct s_var
 	t_token	*tokens;
 	t_exec	*exec;
 	t_table	*p_table;
+	t_token	*command_list;
+	t_token *heredoc_input;
+	bool	is_heredoc;
 	char	**cmd_list;
 	char	*line;
 	int		index;
@@ -104,10 +107,11 @@ typedef struct s_var
 	char	*pwd;
 	char	*promt;
 	char	**env;
-	int		subshell_level;
+	int		proc_count;
 	int		stdout_copy;
 	char	*here_doc_filename;
 	bool	missing_quote;
+	int		fd_to_write;
 }	t_var;
 
 typedef struct s_signals
@@ -143,7 +147,7 @@ t_table	*create_table(void);
 //utils
 void	free_all(t_var *data);
 void	safe_exit(t_var *data, int exit_code);
-void	free_tokens(t_var *data);
+void	free_tokens(t_token **token);
 void	free_array(char ***arr);
 void	print_error(int count, ...);
 

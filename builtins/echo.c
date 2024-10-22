@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:42 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 16:55:35 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/22 08:35:46 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,13 @@ void	ft_echo(t_var *data)
 		i++;
 	while (data->cmd_list[i])
 	{
-		printf("%s", data->cmd_list[i]);
+		ft_putstr_fd(data->cmd_list[i], data->fd_to_write);
 		if (data->cmd_list[i + 1] != NULL)
-			printf(" ");
+			ft_putchar_fd(' ', data->fd_to_write);
 		i++;
 	}
 	if (n_flag == false)
-		printf("\n");
+		ft_putchar_fd('\n', data->fd_to_write);
 	data->exit_code = EXIT_SUCCESS;
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:32 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/25 14:09:39 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/22 08:34:25 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_token	*create_new_token(char *content, int type)
 	new_node->type = type;
 	new_node->next = NULL;
 	new_node->content = ft_strdup(content);
-	if (new_node->content == NULL)
+	if (new_node->content == NULL && content != NULL) //new: && content != NULL
 	{
 		free(new_node);
 		return (NULL);

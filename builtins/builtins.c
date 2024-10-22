@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:44:24 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 12:57:32 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 08:35:59 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ bool	exec_builtin(t_var *data)
 {
 	if (data->cmd_list[0] == NULL)
 		return (true);
-	else if (ft_strncmp(data->cmd_list[0], "cd", 3) == 0)
+	if (ft_strncmp(data->cmd_list[0], "cd", 3) == 0)
 		ft_cd(data);
 	else if (ft_strncmp(data->cmd_list[0], "echo", 5) == 0)
 		ft_echo(data);

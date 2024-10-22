@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 11:50:42 by pvass             #+#    #+#             */
-/*   Updated: 2024/09/27 13:13:35 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/22 08:36:33 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	print_tokens(t_token **tokens)
 	current = head;
 	while (current != NULL)
 	{
-		printf("%s\n", current->content);
-		printf("%d\n", current->type);
+		ft_printf("%s\n", current->content);
+		ft_printf("%d\n", current->type);
 		current = current->next;
 	}
 }
@@ -75,7 +75,7 @@ void	print_exec(t_exec *exec)
 
 	temp = exec;
 	temp2 = exec;
-	printf("PRINTING EXEC:\n");
+	ft_printf("PRINTING EXEC:\n");
 	while (temp != NULL)
 	{
 		temp2 = temp;

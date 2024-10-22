@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/01 17:37:08 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/22 08:33:50 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	parse_accept(t_var *data, t_stack *stack, t_stack *result)
 		return (free_stack(&result), -1);
 	free_stack(&result);
 	reverse_exec(&data->exec);
-	free_tokens(data);
+	free_tokens(&data->tokens);
 	return (0);
 }
 
@@ -81,7 +81,7 @@ int	parse_reject(t_var *data, t_stack *stack, t_stack *result)
 	//what is this newline?
 	free_stack(&result);
 	free_stack(&stack);
-	free_tokens(data);
+	free_tokens(&data->tokens);
 	return (0);
 }
 

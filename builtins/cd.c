@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/03 14:01:05 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/22 08:35:50 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	ft_cd(t_var *data)
 			return ;
 		}
 		else 
-			printf("%s\n", dest);
+			ft_putendl_fd(dest, data->fd_to_write);
 	}
 	if (chdir(dest) == -1)
 	{

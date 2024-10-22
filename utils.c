@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/30 15:55:38 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/22 08:36:04 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	free_tokens(t_var *data)
+void	free_tokens(t_token **token)
 {
 	t_token	*current;
 	t_token	*next;
 
-	if (data->tokens)
+	if (token && *token)
 	{
-		current = data->tokens;
+		current = *token;
 		while (current != NULL)
 		{
 			next = current->next;
@@ -27,10 +27,9 @@ void	free_tokens(t_var *data)
 			free(current);
 			current = next;
 		}
-		data->tokens = NULL;
+		*token = NULL;
 	}
 }
-
 void	free_array(char ***arr)
 {
 	int	i;
@@ -49,7 +48,9 @@ void	free_all(t_var *data)
 {
 	if (data)
 	{
-		free_tokens(data);
+		free_tokens(&data->tokens);
+		free_tokens(&data->command_list);
+		free_tokens(&data->heredoc_input);
 		ft_free(&data->promt);
 		ft_free(&data->line);
 		delete_file(data, data->here_doc_filename);
@@ -61,6 +62,8 @@ void	free_all(t_var *data)
 		safe_close(&data->pipe2_fd[0]);
 		safe_close(&data->pipe2_fd[1]);
 		safe_close(&data->stdout_copy);
+		safe_close(&data->fd_to_write);
+		data->fd_to_write = STDOUT_FILENO;
 	}
 }
 
@@ -72,6 +75,7 @@ void	safe_exit(t_var *data, int exit_code)
 		free_array(&data->env);
 		free_table(&(data->p_table));
 		free_all(data);
+		delete_file(data, data->here_doc_filename);
 		free(data);
 	}
 	exit(exit_code);
