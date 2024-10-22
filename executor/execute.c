@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 10:27:42 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/22 15:10:31 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 //things to fix:
 // export X="  A  B  "
-// > $notexists should be ambigous redirects or when > $VAR and VAR is containing more then one word 
+
 
 int	is_in_out_app(t_exec *exec)
 {
@@ -138,10 +138,13 @@ void	execute(t_var *data)
 
 void	only_one_sequence(t_var *data, t_exec *exec)
 {
-	heredoc(data, exec);
-	create_cmd_list(data, exec);
+	t_exec *temp;
+
+	temp = exec;
+	heredoc(data, temp);
+	create_cmd_list(data, temp);
 	if (!data->cmd_list || !*data->cmd_list || is_builtin(data->cmd_list[0]) == true)
-		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
+		exec_sequence(data, temp, STDIN_FILENO, STDOUT_FILENO);
 	else
 	{
 		data->proc_count++;
@@ -151,7 +154,7 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		signals.child_pid = data->pid;
 		if (data->pid == 0)
 		{
-			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
+			exec_sequence(data, temp, STDIN_FILENO, STDOUT_FILENO);
 			safe_exit(data, data->exit_code);
 		}
 		else
@@ -160,16 +163,18 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 			signals.child_pid = -1;
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
-			while (--data->proc_count > 0)
-				wait(NULL);
+			data->proc_count--;
 		}
 	}
 }
 
 void	first_sequence(t_var *data, t_exec *exec)
 {
-	heredoc(data, exec);
-	create_cmd_list(data, exec);
+	t_exec *temp;
+
+	temp = exec;
+	heredoc(data, temp);
+	create_cmd_list(data, temp);
 	pipe(data->pipe1_fd);
 	data->proc_count++;
 	data->pid = fork();
@@ -178,15 +183,18 @@ void	first_sequence(t_var *data, t_exec *exec)
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[0]);
-		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
+		exec_sequence(data, temp, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, data->exit_code);
 	}
 }
 
 void	middle_sequence(t_var *data, t_exec *exec)
 {
-	heredoc(data, exec);
-	create_cmd_list(data, exec);
+	t_exec *temp;
+
+	temp = exec;
+	heredoc(data, temp);
+	create_cmd_list(data, temp);
 	pipe(data->pipe2_fd);
 	data->proc_count++;
 	data->pid = fork();
@@ -196,7 +204,7 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	{
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);
-		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
+		exec_sequence(data, temp, data->pipe1_fd[0], data->pipe2_fd[1]);
 		safe_exit(data, data->exit_code);
 	}
 	else
@@ -210,8 +218,11 @@ void	middle_sequence(t_var *data, t_exec *exec)
 
 void	last_sequence(t_var *data, t_exec *exec)
 {
-	heredoc(data, exec);
-	create_cmd_list(data, exec);
+	t_exec *temp;
+
+	temp = exec;
+	heredoc(data, temp);
+	create_cmd_list(data, temp);
 	data->proc_count++;
 	data->pid = fork();
 	if (data->pid == -1)
@@ -219,9 +230,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[1]);
-		data->stdout_copy = dup(STDOUT_FILENO);
-		exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
-		safe_dup2(&data->stdout_copy, STDOUT_FILENO, data);
+		exec_sequence(data, temp, data->pipe1_fd[0], STDOUT_FILENO);
 		safe_exit(data, data->exit_code);
 	}
 	else
@@ -231,7 +240,8 @@ void	last_sequence(t_var *data, t_exec *exec)
 		waitpid(data->pid, &data->exit_status, 0);
 		if (WIFEXITED(data->exit_status))
 			data->exit_code = WEXITSTATUS(data->exit_status);
-		while (--data->proc_count > 0)
+		data->proc_count--;
+		while (data->proc_count-- > 0)
 			wait(NULL);
 	}
 }
@@ -274,11 +284,29 @@ void	exec_command(t_var *data)
 	abs_cmd = ft_strdup(cmd);
 	if (!abs_cmd)
 		safe_exit(data, MALLOC_FAIL);
-	if (access(cmd, F_OK) != 0 || ft_strchr(cmd, '\\') == NULL)
+	if(ft_strchr(cmd, '/') || *safe_getenv(data, "PATH") == '\0')
+	{
+		if (access(cmd, F_OK) != 0)
+		{
+			print_error(3, "minishell: ", cmd, ": No such file or directory");
+			safe_exit(data, COMMAND_NOT_FOUND);
+		}
+	}
+	else
 	{
 		free(abs_cmd);
 		abs_cmd = get_abs_cmd(data, cmd);
 	}
+/* 	if (access(cmd, F_OK) != 0)
+	{
+		if (ft_strchr(cmd, '/') || *safe_getenv(data, "PATH") == '\0')
+		{
+			print_error(3, "minishell: ", cmd, ": No such file or directory");
+			safe_exit(data, COMMAND_NOT_FOUND);
+		}
+		free(abs_cmd);
+		abs_cmd = get_abs_cmd(data, cmd);
+	} */
 	if (abs_cmd == NULL || ft_strncmp("..", cmd, 3) == 0 || ft_strncmp(".", cmd, 2) == 0)
 	{
 		print_error(3, "minishell: ", cmd, ": command not found");
@@ -290,11 +318,11 @@ void	exec_command(t_var *data)
 		{
 			print_error(2, cmd, ": Is a directory");
 			ft_free(&abs_cmd);
-			safe_exit(data, 126);
+			safe_exit(data, ERRORS_AFTER_EXECVE);
 		}
 		print_error(4, "minishell: ", abs_cmd, ": ", strerror(errno));
 		ft_free(&abs_cmd);
-		safe_exit(data, COMMAND_NOT_FOUND);
+		safe_exit(data, ERRORS_AFTER_EXECVE);
 	}
 }
 

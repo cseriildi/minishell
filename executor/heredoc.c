@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:47:57 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 11:30:58 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 void	generate_random_filename(t_var *data)
 {
 	int		rand_fd;
-	//check out why is the random filename not working
+	
 	rand_fd = safe_open("/dev/urandom", READ, data);
-	rand_fd = -1;
 	if (rand_fd == -1)
 	{
 		ft_memcpy(data->here_doc_filename, "temp_heredoc_file", 18);
@@ -51,7 +50,7 @@ void	do_heredoc(t_var *data, char *limiter, bool expanding)
 	char	*line;
 	int		fd_to_write;
 
-	delete_file(data, data->here_doc_filename);
+	delete_file(data);
 	data->here_doc_filename = ft_calloc(1, 19);
 	if (data->here_doc_filename == NULL)
 		safe_exit(data, MALLOC_FAIL);
@@ -65,9 +64,7 @@ void	do_heredoc(t_var *data, char *limiter, bool expanding)
 		line = get_next_line(STDIN_FILENO);
 		if (ft_strchr(line, '\n') == NULL)
 		{
-			safe_close(&fd_to_write);
 			ft_free(&line);
-			delete_file(data, data->here_doc_filename);
 			print_error(3, "\nminishell: warning: here-document delimited by end-of-file (wanted `", limiter, "')");
 			break;
 		}
@@ -84,7 +81,6 @@ void	do_heredoc(t_var *data, char *limiter, bool expanding)
 			{
 				safe_close(&fd_to_write);
 				ft_free(&line);
-				delete_file(data, data->here_doc_filename);
 				print_error(1, "minishell: malloc failed");	
 				safe_exit(data, MALLOC_FAIL);
 			}
@@ -112,8 +108,6 @@ void heredoc(t_var *data, t_exec *seq)
 		{
 			expandable = !ft_strchr(current->data, '\'') && !ft_strchr(current->data, '\"');
 			fix_content(data, current, false);
-/* 			fix_exec(data, current);
-			free_tokens(&data->command_list); */
 			do_heredoc(data, current->data, expandable);
 		}
 		current = current->down;

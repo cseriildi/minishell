@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:36:04 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 15:03:59 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,17 +53,16 @@ void	free_all(t_var *data)
 		free_tokens(&data->heredoc_input);
 		ft_free(&data->promt);
 		ft_free(&data->line);
-		delete_file(data, data->here_doc_filename);
-		ft_free(&data->here_doc_filename);
+		delete_file(data);
 		free_array(&data->cmd_list);
 		free_exec_all(&(data->exec));
 		safe_close(&data->pipe1_fd[0]);
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);
 		safe_close(&data->pipe2_fd[1]);
-		safe_close(&data->stdout_copy);
 		safe_close(&data->fd_to_write);
 		data->fd_to_write = STDOUT_FILENO;
+		data->proc_count = 0;
 	}
 }
 
@@ -75,7 +74,6 @@ void	safe_exit(t_var *data, int exit_code)
 		free_array(&data->env);
 		free_table(&(data->p_table));
 		free_all(data);
-		delete_file(data, data->here_doc_filename);
 		free(data);
 	}
 	exit(exit_code);

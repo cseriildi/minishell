@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 09:16:53 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 15:16:34 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ typedef struct s_var
 	char	*promt;
 	char	**env;
 	int		proc_count;
-	int		stdout_copy;
 	char	*here_doc_filename;
 	bool	missing_quote;
 	int		fd_to_write;
@@ -134,6 +133,7 @@ typedef enum s_err
 	FORK_FAIL,
 	UNLINK_FAIL,
 	NON_NUMERIC_EXIT,
+	ERRORS_AFTER_EXECVE = 126,
 	COMMAND_NOT_FOUND = 127,
 }	t_err;
 
@@ -176,7 +176,7 @@ void	init_signals(t_var *data);
 
 int		safe_open(char *filename, int mode, t_var *data);
 void	safe_close(int *fd);
-void	delete_file(t_var *data, char *filename);
+void	delete_file(t_var *data);
 void	safe_dup2(int *old_fd, int new_fd, t_var *data);
 
 //init

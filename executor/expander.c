@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 10:14:20 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/22 11:25:29 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 		}
 		else
 		{
-			if(add_chunk(data, chunk, expandable) == MALLOC_FAIL)
+			if(add_chunk(data, chunk, true) == MALLOC_FAIL) //just changed to true
 			{
 				print_error(1, "minishell: malloc failed");
 				ft_free(&chunk);

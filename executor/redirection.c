@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirection.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:34:39 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 14:23:13 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ bool	redirect_in(t_var *data, t_exec *exec, int read_fd)
 			continue ;
 		}
 		if (fd == -1)
-			return (delete_file(data, data->here_doc_filename), false);
+			return (delete_file(data), false);
 		temp = temp->down;
 	}
 	if (data->cmd_list && data->cmd_list[0])
@@ -49,7 +49,6 @@ bool	redirect_in(t_var *data, t_exec *exec, int read_fd)
 	}
 	safe_close(&fd);
 	safe_close(&read_fd);
-	delete_file(data, data->here_doc_filename);
 	return (true);
 }
 
