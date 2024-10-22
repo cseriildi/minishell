@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 09:04:12 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/22 09:38:54 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,7 +264,7 @@ void	exec_command(t_var *data)
 	abs_cmd = ft_strdup(cmd);
 	if (!abs_cmd)
 		safe_exit(data, MALLOC_FAIL);
-	if (access(cmd, F_OK) != 0 || is_directory(cmd) == true)
+	if (access(cmd, F_OK) != 0 || ft_strchr(cmd, '\\') == NULL)
 	{
 		free(abs_cmd);
 		abs_cmd = get_abs_cmd(data, cmd);
