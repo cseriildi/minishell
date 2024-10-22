@@ -6,14 +6,13 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 09:40:37 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 09:43:33 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 //things to fix:
-// when PATH="" throw No such file or directory instead of command not found
 // 2_path_check.sh:47: should be Permission denied instead of command not found
 // export X="  A  B  "
 // > $notexists should be ambigous redirects or when > $VAR and VAR is containing more then one word 
@@ -145,9 +144,6 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 {
 	heredoc(data, exec);
 	create_cmd_list(data, exec);
-/* 	if (!exec->data)
-		return ; */
-	//is builtin will not work if not expanded before
 	if (!data->cmd_list || !*data->cmd_list || is_builtin(data->cmd_list[0]) == true)
 		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 	else
@@ -170,7 +166,6 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 				data->exit_code = WEXITSTATUS(data->exit_status);
 			while (--data->proc_count > 0)
 				wait(NULL);
-			//ft_printf("This is for debugging! exit code: %d\n", data->exit_code);
 		}
 	}
 }
@@ -179,8 +174,6 @@ void	first_sequence(t_var *data, t_exec *exec)
 {
 	heredoc(data, exec);
 	create_cmd_list(data, exec);
-	/* if (redirs_exist(data, exec) == 0)
-		return ; */
 	pipe(data->pipe1_fd);
 	data->proc_count++;
 	data->pid = fork();
@@ -198,8 +191,6 @@ void	middle_sequence(t_var *data, t_exec *exec)
 {
 	heredoc(data, exec);
 	create_cmd_list(data, exec);
-/* 	if (redirs_exist(data, exec) == 0)
-		return ; */
 	pipe(data->pipe2_fd);
 	data->proc_count++;
 	data->pid = fork();
@@ -225,8 +216,6 @@ void	last_sequence(t_var *data, t_exec *exec)
 {
 	heredoc(data, exec);
 	create_cmd_list(data, exec);
-/* 	if (redirs_exist(data, exec) == 0)
-		return ; */
 	data->proc_count++;
 	data->pid = fork();
 	if (data->pid == -1)
@@ -248,13 +237,11 @@ void	last_sequence(t_var *data, t_exec *exec)
 			data->exit_code = WEXITSTATUS(data->exit_status);
 		while (--data->proc_count > 0)
 			wait(NULL);
-		//ft_printf("This is for debugging nexit code: %d\n", data->exit_code);
 	}
 }
 
 void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 {
-	//create_cmd_list(data, exec);
 	if (redirs_exist(data, exec) == 0)
 		return ;
 	if (redirect_in(data, exec, read_fd) == false)
@@ -274,13 +261,9 @@ int is_directory(const char *path)
 {
     struct stat path_stat;
 
-    // Get information about the file at 'path'
     if (stat(path, &path_stat) != 0) {
-		//perror("stat");
-        return 0;  // Error occurred
+        return 0;
     }
-
-    // Check if it is a directory
     return S_ISDIR(path_stat.st_mode);
 }
 
@@ -295,27 +278,24 @@ void	exec_command(t_var *data)
 	abs_cmd = ft_strdup(cmd);
 	if (!abs_cmd)
 		safe_exit(data, MALLOC_FAIL);
-	if (access(cmd, F_OK) == 0)
-	{
-		if (is_directory(cmd) == 1)
-		{
-			print_error(3, "minishell: ", cmd, ": Is a directory");
-			free(abs_cmd);
-			safe_exit(data, 126);
-		}
-	}
-	else
+	if (access(cmd, F_OK) != 0 || ft_strchr(cmd, '\\') == NULL)
 	{
 		free(abs_cmd);
 		abs_cmd = get_abs_cmd(data, cmd);
 	}
-	if (abs_cmd == NULL || ft_strncmp("..", cmd, 3) == 0)
+	if (abs_cmd == NULL || ft_strncmp("..", cmd, 3) == 0 || ft_strncmp(".", cmd, 2) == 0)
 	{
 		print_error(3, "minishell: ", cmd, ": command not found");
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
 	if (execve(abs_cmd, data->cmd_list, data->env) == -1)
 	{
+		if (ft_strncmp(cmd, abs_cmd, ft_strlen(cmd) + 1)  == 0 && is_directory(cmd) == 1)
+		{
+			print_error(2, cmd, ": Is a directory");
+			ft_free(&abs_cmd);
+			safe_exit(data, 126);
+		}
 		print_error(4, "minishell: ", abs_cmd, ": ", strerror(errno));
 		ft_free(&abs_cmd);
 		safe_exit(data, COMMAND_NOT_FOUND);
@@ -379,6 +359,8 @@ char	**get_paths(t_var *data)
 	int		i;
 	char	**path;
 
+	if (*safe_getenv(data, "PATH") == '\0')
+		return (NULL);
 	i = 0;
 	while (data->env[i] != NULL)
 	{
