@@ -6,20 +6,18 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:35:05 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 09:40:37 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 //things to fix:
-// when command is: . or ..
 // when PATH="" throw No such file or directory instead of command not found
 // 2_path_check.sh:47: should be Permission denied instead of command not found
 // export X="  A  B  "
 // > $notexists should be ambigous redirects or when > $VAR and VAR is containing more then one word 
 // don't check for directory when command does not exist -> mkdir hello; hello world
-// ctrl D while heredoc
 
 int	is_in_out_app(t_exec *exec)
 {
@@ -57,23 +55,38 @@ bool good_redir_path(char *redir, t_var *data)
 	return (res);
 }
 
+int	count_exec(t_exec *exec)
+{
+	t_exec	*temp;
+	int		i;
+
+	i = 0;
+	temp = exec;
+	while (temp != NULL)
+	{
+		i++;
+		temp = temp->down;
+	}
+	return (i);
+}
+
 bool	redirs_exist(t_var *data, t_exec *exec)
 {
 	t_exec	*temp2;
 	char	*filename;
-	//int		count;
+	int		count;
 
 	temp2 = exec;
 	while (temp2 != NULL)
 	{
 		if (is_in_out_app(temp2) == 1)
 		{
+			count = count_exec(temp2);
 			filename = ft_strdup(temp2->data);
-			//count = count_exec();
 			fix_content(data, temp2, true);
 			fix_exec(data, temp2);
 			free_tokens(&data->command_list);
-			if (!*temp2->data /* || count != count_exec() */)
+			if (!*temp2->data || count != count_exec(temp2))
 			{
 				data->exit_code = 1;
 				print_error(3, "minishell: ", filename, ": ambiguous redirect");

@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:36:11 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 09:16:53 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,7 @@ void	safe_exit(t_var *data, int exit_code);
 void	free_tokens(t_token **token);
 void	free_array(char ***arr);
 void	print_error(int count, ...);
+char 	**easy_split(char *str, char *delim);
 
 //builtins
 bool	exec_builtin(t_var *data);

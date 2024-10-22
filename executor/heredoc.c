@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:33:40 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 08:47:57 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ void	do_heredoc(t_var *data, char *limiter, bool expanding)
 		line = get_next_line(STDIN_FILENO);
 		if (ft_strchr(line, '\n') == NULL)
 		{
-			//throw error when ctrl D in heredoc	
+			safe_close(&fd_to_write);
+			ft_free(&line);
+			delete_file(data, data->here_doc_filename);
+			print_error(3, "\nminishell: warning: here-document delimited by end-of-file (wanted `", limiter, "')");
 			break;
 		}
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0

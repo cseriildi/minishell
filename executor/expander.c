@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:34:46 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 09:16:44 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,7 +183,6 @@ int	get_chunk_size(char *str)
 }
 char *get_var_name(char *str);
 void	join_to_last_token(t_var *data, char *to_join);
-char **easy_split(char *str, char *delim);
 int	expand(char *content, t_var *data, bool starts_with_dollar)
 {
 	char	*first;
