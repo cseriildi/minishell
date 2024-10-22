@@ -3,20 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 09:43:33 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 10:27:42 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 //things to fix:
-// 2_path_check.sh:47: should be Permission denied instead of command not found
 // export X="  A  B  "
 // > $notexists should be ambigous redirects or when > $VAR and VAR is containing more then one word 
-// don't check for directory when command does not exist -> mkdir hello; hello world
 
 int	is_in_out_app(t_exec *exec)
 {
@@ -83,9 +81,7 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 			count = count_exec(temp2);
 			filename = ft_strdup(temp2->data);
 			fix_content(data, temp2, true);
-			fix_exec(data, temp2);
-			free_tokens(&data->command_list);
-			if (!*temp2->data || count != count_exec(temp2))
+			if (!temp2->data || !*temp2->data || count != count_exec(temp2))
 			{
 				data->exit_code = 1;
 				print_error(3, "minishell: ", filename, ": ambiguous redirect");
@@ -320,8 +316,6 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 		fix_content(data, temp, true);
 		temp = next;
 	}
-/* 	fix_exec(data, temp);
-	free_tokens(&data->command_list); */
 	temp = exec;
 	while (temp != NULL)
 	{

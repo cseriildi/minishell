@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 09:16:44 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/22 10:14:20 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,16 @@ void	fix_exec(t_var *data, t_exec *exec)
 	{
 		if (temp->type == WORD)
 			temp->type = NONE;
+		else
+			ft_free(&temp->data);
 		return ;
 	}
 	if (!curr->content)
 	{
 		if (temp->type == WORD)
 			temp->type = NONE;
+		else
+			ft_free(&temp->data);
 		curr = curr->next;
 	}
 	else
@@ -116,7 +120,6 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 	index = 0;
 	len = 0;
 
-	//data->command_list = NULL;
 	while (seq->data[index])
 	{
 		len = get_chunk_size(seq->data + index);
