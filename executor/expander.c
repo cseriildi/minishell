@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 11:25:29 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/23 19:51:58 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 void	fix_exec(t_var *data, t_exec *exec)
 {
 	t_exec	*temp;
-//	t_exec	*prev;
-//	t_exec	*next;
 	t_exec	*new;
 	t_token	*curr;
 	char	*tmp;
@@ -37,7 +35,6 @@ void	fix_exec(t_var *data, t_exec *exec)
 			temp->type = NONE;
 		else
 			ft_free(&temp->data);
-		curr = curr->next;
 	}
 	else
 	{
@@ -49,29 +46,18 @@ void	fix_exec(t_var *data, t_exec *exec)
 		}
 		ft_free(&temp->data);
 		temp->data = tmp;
-		curr = curr->next;
 	}
+	curr = curr->next;
 	while (curr)
 	{
-		if (curr->content == NULL)
+		if ((!curr->next && !*curr->content) || !curr->content)
 		{
 			curr = curr->next;
 			continue ;
 		}
-			//tmp = NULL;
-		else
-		{
-			tmp = ft_strdup(curr->content);
-			if (tmp == NULL)
-			{
-				print_error(1, "minishell: malloc failed");
-				safe_exit(data, MALLOC_FAIL);
-			}
-		}
-		new = create_exec_node(tmp);
+		new = create_exec_node(curr->content);
 		if (!new)
 		{
-			ft_free(&tmp);
 			print_error(1, "minishell: malloc failed");
 			safe_exit(data, MALLOC_FAIL);
 		}
@@ -80,14 +66,7 @@ void	fix_exec(t_var *data, t_exec *exec)
 		temp->down = new;
 		temp = temp->down;
 		curr = curr->next;
-		/* prev = temp;
-		new->type = WORD prev->type ;
-		next = temp->down;
-		prev->down = new;
-		new->down = next;
-		curr = curr->next; */
 	}
-	//free_tokens(&data->command_list);
 }
 
 t_exec *create_exec_node(char *content)
@@ -98,7 +77,9 @@ t_exec *create_exec_node(char *content)
 	res = malloc(sizeof(t_stack));
 	if (!res)
 		return (NULL);
-	res->data = content;
+	res->data = ft_strdup(content);
+	if (!res->data)
+		return NULL;
 	res->state = 0;
 	res->type = WORD;
 	res->next = NULL;
@@ -134,7 +115,7 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 		}
 		if (expandable  && seq->data[index] != '\'' && !(len == 2 && seq->data[index] == '\"'))
 		{
-			if(expand(chunk, data, (seq->data[index] == '$')) == MALLOC_FAIL)
+			if(expand(chunk, data, seq->data[index] == '\"') == MALLOC_FAIL)
 			{
 				print_error(1, "minishell: malloc failed");
 				//ft_free(&chunk);
@@ -143,7 +124,7 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 		}
 		else
 		{
-			if(add_chunk(data, chunk, true) == MALLOC_FAIL) //just changed to true
+			if(add_chunk(data, chunk, data->to_join++) == MALLOC_FAIL)
 			{
 				print_error(1, "minishell: malloc failed");
 				ft_free(&chunk);
@@ -156,6 +137,7 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 	}
 	fix_exec(data, seq);
 	free_tokens(&data->command_list);
+	//data->to_join = 1;
 }
 
 int	get_chunk_size(char *str)
@@ -186,7 +168,7 @@ int	get_chunk_size(char *str)
 }
 char *get_var_name(char *str);
 void	join_to_last_token(t_var *data, char *to_join);
-int	expand(char *content, t_var *data, bool starts_with_dollar)
+int	expand(char *content, t_var *data, bool is_quoted)
 {
 	char	*first;
 	char	*var_name;
@@ -195,16 +177,16 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 	char	*number;
 	int		i;
 	int		len;
-
+	char	*var_from_env;
+	
 	len = 0;
-	(void)starts_with_dollar;
 	while (content[len])
 	{
 		first = get_word(content + len, "$");
 		if (!first)
 			return (ft_free(&content), MALLOC_FAIL);
 		len += ft_strlen(first);
-		if (*first && add_chunk(data, first, true) == MALLOC_FAIL)
+		if (*first && add_chunk(data, first, data->to_join++) == MALLOC_FAIL)
 			return (ft_free(&content), ft_free(&first), MALLOC_FAIL);
 		ft_free(&first);
 		var = ft_strchr(content + len, '$');
@@ -216,8 +198,9 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 		len += ft_strlen(var_name) + 1;
 		if (!*var_name)
 		{
-			if (add_chunk(data, "$", true) == MALLOC_FAIL)
-				return (ft_free(&content), ft_free(&var_name), MALLOC_FAIL);
+			ft_free(&var_name);
+			if (add_chunk(data, "$", data->to_join++) == MALLOC_FAIL)
+				return (ft_free(&content), MALLOC_FAIL);
 		}
 		else if (*var_name == '?')
 		{
@@ -225,42 +208,40 @@ int	expand(char *content, t_var *data, bool starts_with_dollar)
 			number = ft_itoa(data->exit_code);
 			if (!number)
 				return (ft_free(&content), MALLOC_FAIL);
-			if (add_chunk(data, number, true) == MALLOC_FAIL)
+			if (add_chunk(data, number, data->to_join++) == MALLOC_FAIL)
 				return (ft_free(&content), ft_free(&number), MALLOC_FAIL);
 			ft_free(&number);
 		}
 		else if (*var_name == ' ')
 		{
-			if (add_chunk(data, "$ ", true) == MALLOC_FAIL)
-				return (ft_free(&content), ft_free(&var_name), MALLOC_FAIL);
+			ft_free(&var_name);
+			if (add_chunk(data, "$ ", data->to_join++) == MALLOC_FAIL)
+				return (ft_free(&content), MALLOC_FAIL);
 		}
 		else
 		{
-			if (/* starts_with_dollar &&   */*safe_getenv(data, var_name) == '\0')
+			var_from_env = safe_getenv(data, var_name);
+			ft_free(&var_name);
+			if (*var_from_env == '\0' || is_quoted)
 			{
-				ft_free(&var_name);
+				if (is_quoted && add_chunk(data, var_from_env, data->to_join++) == MALLOC_FAIL)
+					return (ft_free(&content), MALLOC_FAIL);
 				continue ;
 			}
-			expanded_var = easy_split(safe_getenv(data, var_name), " \t\n\v\f\r");
-			ft_free(&var_name);
+			expanded_var = easy_split(var_from_env, " \t\n\v\f\r");
 			if (!expanded_var)
 				return (ft_free(&content), MALLOC_FAIL);
-			if (add_chunk(data, expanded_var[0], true) == MALLOC_FAIL)
-				return (ft_free(&content), free_array(&expanded_var), MALLOC_FAIL);
-			i = 0;
-			if (!expanded_var[0]) //this is new
-			{
-				free_array(&expanded_var);
-				continue;
-			}
+			data->to_join = ft_strchr(" \t\n\v\f\r", *var_from_env) == NULL;
+			i = -1;
 			while (expanded_var[++i])
 			{
-				if (add_chunk(data, expanded_var[i], false) == MALLOC_FAIL)
+				if (add_chunk(data, expanded_var[i], data->to_join) == MALLOC_FAIL)
 					return (ft_free(&content), free_array(&expanded_var), MALLOC_FAIL);
+				data->to_join = 0;
 			}
+			data->to_join = ft_strchr(" \t\n\v\f\r", var_from_env[ft_strlen(var_from_env) - 1]) == NULL;
 			free_array(&expanded_var);
 		}
-		ft_free(&var_name);
 	}
 	ft_free(&content);
 	return (EXIT_SUCCESS);

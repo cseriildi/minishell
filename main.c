@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:36:19 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/23 19:56:04 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,11 @@ t_signals	signals;
 int	main(void)
 {
 	t_var	*data;
-
+	bool	is_interactive;
+	char	*line;
+	
+	is_interactive = isatty(STDIN_FILENO);
+	//is_interactive = true; //just to avoid get_next_line leaks
 	data = malloc(sizeof(t_var));
 	if (!data)
 		return (MALLOC_FAIL);
@@ -27,11 +31,22 @@ int	main(void)
 		data->missing_quote = false;
 		get_promt(data);
 		signals.interactive = 1;
-		data->line = readline(data->promt);
+		if (is_interactive)
+			data->line = readline(data->promt);
+		else
+		{
+			line = get_next_line(STDIN_FILENO);
+			if (line)
+			{
+				data->line = ft_strtrim(line, "\n");
+				free(line);	
+			}
+		}
 		signals.interactive = 0;
 		if (!data->line)
 		{
-			ft_putendl_fd("exit", STDERR_FILENO);
+			if (isatty(STDIN_FILENO))
+				ft_putendl_fd("exit", STDERR_FILENO);
 			safe_exit(data, data->exit_code);
 		}
 		if (*data->line)

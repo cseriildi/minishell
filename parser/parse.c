@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/22 08:33:50 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/23 17:36:06 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,7 @@ int	parse_reject(t_var *data, t_stack *stack, t_stack *result)
 		print_error(3, "minishell: syntax error near unexpected token `",
 		data->tokens->content, "'");
 	if (data->tokens->type == 0)
-		print_error(3, "minishell: syntax error near unexpected token `",
-		"newline", "'");
-	//what is this newline?
+		print_error(1, "minishell: syntax error near unexpected token `newline'");
 	free_stack(&result);
 	free_stack(&stack);
 	free_tokens(&data->tokens);

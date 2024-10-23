@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:34:56 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/23 19:43:47 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ char	**get_paths(t_var *data);
 char	*get_abs_cmd(t_var *data, char *cmd);
 void	fix_content(t_var *data, t_exec *seq, bool expandable);
 int		expand(char *content, t_var *data, bool starts_with_dollar);
-bool	redirect_in(t_var *data, t_exec *tree, int read_fd);
-bool	redirect_out(t_var *data, t_exec *tree, int write_fd);
+bool	redirect_in(t_var *data, t_exec *tree, int *read_fd);
+bool	redirect_out(t_var *data, t_exec *tree, int *write_fd);
 int		is_directory(const char *path);
 
 void	do_heredoc(t_var *data, char *limiter, bool expanding);

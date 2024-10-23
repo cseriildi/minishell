@@ -6,13 +6,13 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 14:23:13 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/23 19:43:14 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-bool	redirect_in(t_var *data, t_exec *exec, int read_fd)
+bool	redirect_in(t_var *data, t_exec *exec, int *read_fd)
 {
 	int		fd;
 	t_exec	*temp;
@@ -43,16 +43,16 @@ bool	redirect_in(t_var *data, t_exec *exec, int read_fd)
 	if (data->cmd_list && data->cmd_list[0])
 	{
 		if (fd == -1)
-			safe_dup2(&read_fd, STDIN_FILENO, data);
+			safe_dup2(read_fd, STDIN_FILENO, data);
 		else
 			safe_dup2(&fd, STDIN_FILENO, data);
 	}
 	safe_close(&fd);
-	safe_close(&read_fd);
+	safe_close(read_fd);
 	return (true);
 }
 
-bool	redirect_out(t_var *data, t_exec *exec, int write_fd)
+bool	redirect_out(t_var *data, t_exec *exec, int *write_fd)
 {
 	int		fd;
 	t_exec	*temp;
@@ -89,11 +89,11 @@ bool	redirect_out(t_var *data, t_exec *exec, int write_fd)
 			return (true);
 		}
 		if (fd == -1)
-			safe_dup2(&write_fd, STDOUT_FILENO, data);
+			safe_dup2(write_fd, STDOUT_FILENO, data);
 		else
 			safe_dup2(&fd, STDOUT_FILENO, data);
 	}
 	safe_close(&fd);
-	safe_close(&write_fd);
+	safe_close(write_fd);
 	return true;
 }

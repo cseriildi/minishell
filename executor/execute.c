@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 15:10:31 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/23 19:43:27 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,9 +250,9 @@ void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 {
 	if (redirs_exist(data, exec) == 0)
 		return ;
-	if (redirect_in(data, exec, read_fd) == false)
+	if (redirect_in(data, exec, &read_fd) == false)
 		return ;
-	if (redirect_out(data, exec, write_fd) == false)
+	if (redirect_out(data, exec, &write_fd) == false)
 		return ;
 	if (data->cmd_list != NULL)
 	{
@@ -261,6 +261,8 @@ void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 	}
 	safe_close(&write_fd);
 	safe_close(&read_fd);
+	safe_close(&data->fd_to_write);
+	data->fd_to_write = STDOUT_FILENO;
 }
 
 int is_directory(const char *path)
@@ -297,19 +299,9 @@ void	exec_command(t_var *data)
 		free(abs_cmd);
 		abs_cmd = get_abs_cmd(data, cmd);
 	}
-/* 	if (access(cmd, F_OK) != 0)
-	{
-		if (ft_strchr(cmd, '/') || *safe_getenv(data, "PATH") == '\0')
-		{
-			print_error(3, "minishell: ", cmd, ": No such file or directory");
-			safe_exit(data, COMMAND_NOT_FOUND);
-		}
-		free(abs_cmd);
-		abs_cmd = get_abs_cmd(data, cmd);
-	} */
 	if (abs_cmd == NULL || ft_strncmp("..", cmd, 3) == 0 || ft_strncmp(".", cmd, 2) == 0)
 	{
-		print_error(3, "minishell: ", cmd, ": command not found");
+		print_error(2, cmd, ": command not found");
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
 	if (execve(abs_cmd, data->cmd_list, data->env) == -1)

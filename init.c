@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/22 15:16:52 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/23 16:13:14 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	init(t_var *data)
 	data->pipe2_fd[1] = -1;
 	data->fd_to_write = STDOUT_FILENO;
 	data->here_doc_filename = NULL;
+	data->to_join = 1;
 	data->pwd = getcwd(NULL, 0);
 	if (!data->pwd)
 		safe_exit(data, MALLOC_FAIL);

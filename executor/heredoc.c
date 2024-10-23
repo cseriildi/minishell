@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 11:30:58 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/23 17:31:53 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,13 @@ void	do_heredoc(t_var *data, char *limiter, bool expanding)
 		return ;
 	while (true)
 	{
-		ft_putstr_fd("> ", STDOUT_FILENO);
+		if (isatty(STDIN_FILENO))
+			ft_putstr_fd("> ", STDOUT_FILENO);
 		line = get_next_line(STDIN_FILENO);
 		if (ft_strchr(line, '\n') == NULL)
 		{
 			ft_free(&line);
-			print_error(3, "\nminishell: warning: here-document delimited by end-of-file (wanted `", limiter, "')");
+			print_error(3, "minishell: warning: here-document delimited by end-of-file (wanted `", limiter, "')");
 			break;
 		}
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0

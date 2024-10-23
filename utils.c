@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 15:03:59 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/23 16:13:40 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	free_all(t_var *data)
 		safe_close(&data->fd_to_write);
 		data->fd_to_write = STDOUT_FILENO;
 		data->proc_count = 0;
+		data->to_join = 1;
 	}
 }
 

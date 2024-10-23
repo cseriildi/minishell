@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 15:16:34 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/23 16:12:53 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ typedef struct s_var
 	char	*here_doc_filename;
 	bool	missing_quote;
 	int		fd_to_write;
+	int		to_join;
 }	t_var;
 
 typedef struct s_signals
