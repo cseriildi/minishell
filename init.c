@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/24 13:27:52 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:57:37 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	get_promt(t_var *data)
 	char	*home;
 	char	*tmp;
 
-	home = ft_getenv(data, "HOME");
+	home = ft_getenv(data, "HOME", false);
 	if (home != NULL && ft_strncmp(data->pwd, home, ft_strlen(home)) == 0)
 	{
 		tmp = ft_strjoin("~", data->pwd + ft_strlen(home));

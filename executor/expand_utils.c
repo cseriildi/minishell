@@ -6,13 +6,13 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 18:30:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/04 01:05:39 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 19:02:45 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-int get_delim_len(char *str, char *delim)
+int	get_delim_len(char *str, char *delim)
 {
 	int		i;
 
@@ -22,7 +22,7 @@ int get_delim_len(char *str, char *delim)
 	return (i);
 }
 
-int get_len(char *str, char *delim)
+int	get_len(char *str, char *delim)
 {
 	int		i;
 
@@ -32,7 +32,7 @@ int get_len(char *str, char *delim)
 	return (i);
 }
 
-int count_words(char *str, char *delim)
+int	count_words(char *str, char *delim)
 {
 	int		i;
 	int		count;
@@ -52,8 +52,7 @@ int count_words(char *str, char *delim)
 	return (count);
 }
 
-
-char **easy_split(char *str, char *delim)
+char	**easy_split(char *str, char *delim)
 {
 	int		i;
 	int		len;
@@ -81,5 +80,3 @@ char **easy_split(char *str, char *delim)
 	}
 	return (words);
 }
-
-
