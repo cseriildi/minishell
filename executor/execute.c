@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/23 19:43:27 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:07:08 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,6 +291,7 @@ void	exec_command(t_var *data)
 		if (access(cmd, F_OK) != 0)
 		{
 			print_error(3, "minishell: ", cmd, ": No such file or directory");
+			ft_free(&abs_cmd);
 			safe_exit(data, COMMAND_NOT_FOUND);
 		}
 	}
@@ -302,6 +303,7 @@ void	exec_command(t_var *data)
 	if (abs_cmd == NULL || ft_strncmp("..", cmd, 3) == 0 || ft_strncmp(".", cmd, 2) == 0)
 	{
 		print_error(2, cmd, ": command not found");
+		ft_free(&abs_cmd);
 		safe_exit(data, COMMAND_NOT_FOUND);
 	}
 	if (execve(abs_cmd, data->cmd_list, data->env) == -1)

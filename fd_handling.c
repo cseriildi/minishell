@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fd_handling.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/23 18:02:33 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:32:40 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	safe_close(int *fd)
 void	delete_file(t_var *data)
 {
 	if (data->here_doc_filename == NULL || access(data->here_doc_filename, F_OK) == -1)
-		return ;
+		return (ft_free(&data->here_doc_filename));
 	if (unlink(data->here_doc_filename) == -1)
 	{
 		print_error(4, "minishell: ", data->here_doc_filename, ": ", strerror(errno));

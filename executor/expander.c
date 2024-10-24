@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/23 19:51:58 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:10:22 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ void	fix_exec(t_var *data, t_exec *exec)
 
 	curr = data->command_list;
 	temp = exec;
-	if (!curr)
+	new = NULL;
+	tmp = NULL;
+	if (curr == NULL)
 	{
 		if (temp->type == WORD)
 			temp->type = NONE;
@@ -29,7 +31,7 @@ void	fix_exec(t_var *data, t_exec *exec)
 			ft_free(&temp->data);
 		return ;
 	}
-	if (!curr->content)
+	if (curr->content == NULL)
 	{
 		if (temp->type == WORD)
 			temp->type = NONE;
@@ -86,9 +88,12 @@ t_exec *create_exec_node(char *content)
 	exec = exec_new(&res);
 	if (!exec)
 	{
+		free(res->data);
 		free(res);
 		return (NULL);
 	}
+	free(res->data);
+	free(res);
 	return (exec);
 }
 
@@ -133,11 +138,9 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 			ft_free(&chunk);
 		}
 		index += len;
-		//ft_free(&chunk);
 	}
 	fix_exec(data, seq);
 	free_tokens(&data->command_list);
-	//data->to_join = 1;
 }
 
 int	get_chunk_size(char *str)
@@ -222,9 +225,9 @@ int	expand(char *content, t_var *data, bool is_quoted)
 		{
 			var_from_env = safe_getenv(data, var_name);
 			ft_free(&var_name);
-			if (*var_from_env == '\0' || is_quoted)
+			if (*var_from_env == '\0' || is_quoted || is_directory(var_from_env) == 1)
 			{
-				if (is_quoted && add_chunk(data, var_from_env, data->to_join++) == MALLOC_FAIL)
+				if ((is_quoted || is_directory(var_from_env) == 1) && add_chunk(data, var_from_env, data->to_join++) == MALLOC_FAIL)
 					return (ft_free(&content), MALLOC_FAIL);
 				continue ;
 			}
