@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:35:41 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/24 18:37:39 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
 
-char	*ft_getenv(t_var *data, char *var_name)
+char	*ft_getenv(t_var *data, char *var_name, bool is_safe)
 {
 	int	i;
 	int	len;
@@ -29,17 +29,9 @@ char	*ft_getenv(t_var *data, char *var_name)
 			i++;
 		}
 	}
-	return (NULL);
-}
-
-char *safe_getenv(t_var *data, char *var_name)
-{
-	char *res;
-
-	res = ft_getenv(data, var_name);
-	if (!res)
+	if (is_safe)
 		return ("");
-	return (res);
+	return (NULL);
 }
 
 void	init_env(t_var *data)
@@ -53,15 +45,35 @@ void	init_env(t_var *data)
 		size++;
 	data->env = malloc(sizeof(char *) * (size + 1));
 	if (!data->env)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	i = 0;
 	while (i < size)
 	{
 		data->env[i] = ft_strdup(environ[i]);
 		if (!data->env[i++])
-			safe_exit(data, MALLOC_FAIL);
+			malloc_failed(data);
 	}
 	data->env[i] = NULL;
+}
+
+bool	find_and_replace(t_var *data, char *line, int len)
+{
+	int		i;
+
+	i = -1;
+	while (data->env && data->env[++i])
+	{
+		if (!ft_strncmp(data->env[i], line, len)
+			&& (!data->env[i][len] || data->env[i][len] == '='))
+		{
+			ft_free(&data->env[i]);
+			data->env[i] = ft_strdup(line);
+			if (!data->env[i])
+				malloc_failed(data);
+			return (true);
+		}
+	}
+	return (false);
 }
 
 bool	replace_var(t_var *data, char *line)
@@ -71,35 +83,16 @@ bool	replace_var(t_var *data, char *line)
 	char	*key;
 	bool	exists;
 
-	i = 0;
 	key = get_word(line, "=");
 	if (!key)
-	{
-		print_error(2, "export: ", strerror(errno));
-		safe_exit(data, MALLOC_FAIL);
-	}
-	exists = (ft_getenv(data, key) != NULL);
+		malloc_failed(data);
+	exists = (ft_getenv(data, key, false) != NULL);
 	len = ft_strlen(key);
 	free(key);
 	if (exists == false || ft_strchr(line, '=') == NULL)
 		return (exists);
-	while (data->env && data->env[i])
-	{
-		if (ft_strncmp(data->env[i], line, len) == 0
-			&& (data->env[i][len] == '\0' || data->env[i][len] == '='))
-		{
-			ft_free(&data->env[i]);
-			data->env[i] = ft_strdup(line);
-			if (!data->env[i])
-			{
-				print_error(2, "export: ", strerror(errno));
-				safe_exit(data, MALLOC_FAIL);
-			}
-			return (true);
-		}
-		i++;
-	}
-	return (false);
+	i = -1;
+	return (find_and_replace(data, line, len));
 }
 
 int	add_var_to_env(t_var *data, char *line)

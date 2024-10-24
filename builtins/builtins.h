@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 12:28:57 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:35:55 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/24 13:37:52 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ void	bubble_sort_with_context(int *arr, int n, char **env);
 void	print_export(t_var *data, char *line);
 
 char	*get_word(char *text, char *separator);
-bool is_n_flag(char *str);
+bool	is_n_flag(char *str);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:42 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:35:46 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/24 16:27:25 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_echo(t_var *data)
 	data->exit_code = EXIT_SUCCESS;
 }
 
-bool is_n_flag(char *str)
+bool	is_n_flag(char *str)
 {
 	int	i;
 

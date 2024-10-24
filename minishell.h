@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/23 16:12:53 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:37:43 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ typedef struct s_var
 	t_exec	*exec;
 	t_table	*p_table;
 	t_token	*command_list;
-	t_token *heredoc_input;
+	t_token	*heredoc_input;
 	bool	is_heredoc;
 	char	**cmd_list;
 	char	*line;
@@ -121,7 +121,7 @@ typedef struct s_signals
 	int		interactive;
 }	t_signals;
 
-extern t_signals	signals;
+extern t_signals	g_signals;
 
 typedef enum s_err
 {
@@ -138,55 +138,60 @@ typedef enum s_err
 	COMMAND_NOT_FOUND = 127,
 }	t_err;
 
+//read input
+void		read_input(t_var *data);
+
 //lexer
-void	lexer(t_var *data);
+void		lexer(t_var *data);
 
 //parser
-void	parse(t_var *data);
-t_table	*create_table(void);
+void		parse(t_var *data);
+t_table		*create_table(void);
 
 //utils
-void	free_all(t_var *data);
-void	safe_exit(t_var *data, int exit_code);
-void	free_tokens(t_token **token);
-void	free_array(char ***arr);
-void	print_error(int count, ...);
-char 	**easy_split(char *str, char *delim);
+void		free_all(t_var *data);
+void		safe_exit(t_var *data, int exit_code);
+void		free_tokens(t_token **token);
+void		free_array(char ***arr);
+void		print_error(int count, ...);
+char		**easy_split(char *str, char *delim);
 
 //builtins
-bool	exec_builtin(t_var *data);
-bool	is_builtin(char *cmd);
+bool		exec_builtin(t_var *data);
+bool		is_builtin(char *cmd);
 
 //executor
-void	execute(t_var *data);
+void		execute(t_var *data);
 
 //env
-void	init_env(t_var *data);
-char	*ft_getenv(t_var *data, char *var_name);
-char	*safe_getenv(t_var *data, char *var_name);
-char	*ft_strjoin2(char *str1, char *str2, char *delimiter);
+void		init_env(t_var *data);
+char		*ft_getenv(t_var *data, char *var_name, bool is_safe);
+char		*ft_strjoin2(char *str1, char *str2, char *delimiter);
 
 //exec_utils
-void	free_table(t_table **p_table);
-void	free_exec_all(t_exec **exec);
-void	print_exec(t_exec *exec);
-
-void	init_signals(t_var *data);
+void		free_table(t_table **p_table);
+void		free_exec_all(t_exec **exec);
+void		print_exec(t_exec *exec);
+void		init_signals(t_var *data);
 
 //fd_handling
 
-int		safe_open(char *filename, int mode, t_var *data);
-void	safe_close(int *fd);
-void	delete_file(t_var *data);
-void	safe_dup2(int *old_fd, int new_fd, t_var *data);
+int			safe_open(char *filename, int mode, t_var *data);
+void		safe_close(int *fd);
+void		delete_file(t_var *data);
+void		safe_dup2(int *old_fd, int new_fd, t_var *data);
 
 //init
-void	init(t_var *data);
-void	get_promt(t_var *data);
+void		init(t_var *data);
+void		get_promt(t_var *data);
 
-char	*get_word(char *text, char *separator);
+char		*get_word(char *text, char *separator);
 
 long long	ft_atoll(const char *str);
-char	*ft_lltoa(long long nb);
-bool	is_ll_overflow(t_var *data, char *str);
+char		*ft_lltoa(long long nb);
+bool		is_ll_overflow(t_var *data, char *str);
+
+//cleanup
+void		malloc_failed(t_var *data);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/23 18:02:33 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 12:29:32 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,8 @@ int	safe_open(char *filename, int mode, t_var *data)
 		fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	else
 		return (-1);
-	if (fd == -1)
-	{
-		/* print_error(4, "minishell: ", filename, ": ", strerror(errno));
-		data->exit_code = CANNOT_OPEN_FILE; */
-		if (access(filename, X_OK) == -1)
-			data->exit_code = 1;
-	}
+	if (fd == -1 && access(filename, X_OK) == -1)
+		data->exit_code = 1;
 	return (fd);
 }
 
@@ -44,11 +39,13 @@ void	safe_close(int *fd)
 
 void	delete_file(t_var *data)
 {
-	if (data->here_doc_filename == NULL || access(data->here_doc_filename, F_OK) == -1)
+	if (data->here_doc_filename == NULL
+		|| access(data->here_doc_filename, F_OK) == -1)
 		return ;
 	if (unlink(data->here_doc_filename) == -1)
 	{
-		print_error(4, "minishell: ", data->here_doc_filename, ": ", strerror(errno));
+		print_error(4, "minishell: ",
+			data->here_doc_filename, ": ", strerror(errno));
 		data->exit_code = UNLINK_FAIL;
 	}
 	ft_free(&data->here_doc_filename);

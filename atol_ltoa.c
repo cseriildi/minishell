@@ -6,13 +6,13 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:25:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/02 18:41:34 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 12:36:24 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-long long ft_atoll(const char *str)
+long long	ft_atoll(const char *str)
 {
 	int			sign;
 	long long	nbr;
@@ -97,27 +97,22 @@ char	*ft_lltoa(long long nb)
 
 bool	is_ll_overflow(t_var *data, char *str)
 {
-	char 		*new_str;
-	char		*trimmed;
-	int 		i;
-	int			j;
+	char	*new_str;
+	char	*trimmed;
+	int		i;
+	int		j;
 
 	new_str = ft_lltoa(ft_atoll(str));
 	if (!new_str)
-	{
-		print_error(1, "minishell: malloc failed");
-		safe_exit(data, MALLOC_FAIL);
-	}
+		malloc_failed(data);
 	trimmed = ft_strtrim(str, "\t\n\v\f\r ");
 	if (!trimmed)
 	{
 		free(new_str);
-		print_error(1, "minishell: malloc failed");
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	}
-	i = 0;
-	j = (trimmed[i] == '-' && trimmed[i + 1] && new_str[i] == '-');
-	i += (trimmed[i] == '+' || trimmed[i] == '-');
+	j = (trimmed[0] == '-' && trimmed[1] && new_str[0] == '-');
+	i = (trimmed[0] == '+' || trimmed[0] == '-');
 	while (trimmed[i] && trimmed[i + 1] && trimmed[i] == '0')
 		i++;
 	if (ft_strncmp(new_str + j, trimmed + i, ft_strlen(new_str + j) + 1))

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/23 16:13:40 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 13:35:56 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	free_tokens(t_token **token)
 		*token = NULL;
 	}
 }
+
 void	free_array(char ***arr)
 {
 	int	i;
@@ -64,6 +65,7 @@ void	free_all(t_var *data)
 		data->fd_to_write = STDOUT_FILENO;
 		data->proc_count = 0;
 		data->to_join = 1;
+		data->missing_quote = false;
 	}
 }
 
@@ -76,6 +78,7 @@ void	safe_exit(t_var *data, int exit_code)
 		free_table(&(data->p_table));
 		free_all(data);
 		free(data);
+		get_next_line(-1);
 	}
 	exit(exit_code);
 }

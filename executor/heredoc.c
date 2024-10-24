@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/23 17:31:53 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 12:56:09 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	do_heredoc(t_var *data, char *limiter, bool expanding)
 	delete_file(data);
 	data->here_doc_filename = ft_calloc(1, 19);
 	if (data->here_doc_filename == NULL)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	generate_random_filename(data);
 	fd_to_write = safe_open(data->here_doc_filename, CREATE, data);
 	if (fd_to_write == -1)
@@ -82,8 +82,7 @@ void	do_heredoc(t_var *data, char *limiter, bool expanding)
 			{
 				safe_close(&fd_to_write);
 				ft_free(&line);
-				print_error(1, "minishell: malloc failed");	
-				safe_exit(data, MALLOC_FAIL);
+				malloc_failed(data);
 			}
 			print_heredoc(data, fd_to_write);
 		}

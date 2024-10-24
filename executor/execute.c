@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/23 19:43:27 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:37:20 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,7 @@ bool good_redir_path(char *redir, t_var *data)
 		return (1);
 	new = ft_substr(redir, 0, count);
 	if (new == NULL)
-	{
-		print_error(1, "minishell: malloc failed");
-		safe_exit(data, MALLOC_FAIL);
-	}
+		malloc_failed(data);
 	res = is_directory(new);
 	free(new);
 	return (res);
@@ -151,7 +148,7 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		data->pid = fork();
 		if (data->pid == -1)
 			safe_exit(data, FORK_FAIL);
-		signals.child_pid = data->pid;
+		g_signals.child_pid = data->pid;
 		if (data->pid == 0)
 		{
 			exec_sequence(data, temp, STDIN_FILENO, STDOUT_FILENO);
@@ -160,7 +157,7 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		else
 		{
 			waitpid(data->pid, &data->exit_status, 0);
-			signals.child_pid = -1;
+			g_signals.child_pid = -1;
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
 			data->proc_count--;
@@ -285,8 +282,8 @@ void	exec_command(t_var *data)
 		return ;
 	abs_cmd = ft_strdup(cmd);
 	if (!abs_cmd)
-		safe_exit(data, MALLOC_FAIL);
-	if(ft_strchr(cmd, '/') || *safe_getenv(data, "PATH") == '\0')
+		malloc_failed(data);
+	if(ft_strchr(cmd, '/') || *ft_getenv(data, "PATH", true) == '\0')
 	{
 		if (access(cmd, F_OK) != 0)
 		{
@@ -345,7 +342,7 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 	}
 	data->cmd_list = malloc(sizeof(char *) * (i + 1));
 	if (!data->cmd_list)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	temp = exec;
 	i = 0;
 	while (temp != NULL)
@@ -353,7 +350,7 @@ void	create_cmd_list(t_var *data, t_exec *exec)
 		if (temp->type == WORD) {
 			cmd = ft_strdup(temp->data);
 			if (!cmd)
-				safe_exit(data, MALLOC_FAIL);
+				malloc_failed(data);
 			if (*cmd == '$' && *temp->data == '\0')
 			{
 				free(cmd);
@@ -373,7 +370,7 @@ char	**get_paths(t_var *data)
 	int		i;
 	char	**path;
 
-	if (*safe_getenv(data, "PATH") == '\0')
+	if (*ft_getenv(data, "PATH", true) == '\0')
 		return (NULL);
 	i = 0;
 	while (data->env[i] != NULL)
@@ -382,7 +379,7 @@ char	**get_paths(t_var *data)
 		{
 			path = ft_split(data->env[i] + 5, ':');
 			if (!path)
-				safe_exit(data, MALLOC_FAIL);
+				malloc_failed(data);
 			return (path);
 		}
 		i++;
@@ -402,10 +399,7 @@ char	*get_abs_cmd(t_var *data, char *cmd)
 	{
 		path_cmd = ft_strdup(cmd);
 		if (path_cmd == NULL)
-		{
-			print_error(1, "minishell: malloc failed");
-			safe_exit(data, MALLOC_FAIL);
-		}
+			malloc_failed(data);
 		return (path_cmd);
 	}
 	if (*cmd == '.')
@@ -414,10 +408,7 @@ char	*get_abs_cmd(t_var *data, char *cmd)
 		{
 			path_cmd = ft_strdup(cmd);
 			if (path_cmd == NULL)
-			{
-				print_error(1, "minishell: malloc failed");
-				safe_exit(data, MALLOC_FAIL);
-			}
+				malloc_failed(data);
 			return (path_cmd);
 		}
 	}
@@ -426,10 +417,7 @@ char	*get_abs_cmd(t_var *data, char *cmd)
 	{
 		path_cmd = ft_strdup(cmd);
 		if (path_cmd == NULL)
-		{
-			print_error(1, "minishell: malloc failed");
-			safe_exit(data, MALLOC_FAIL);
-		}
+			malloc_failed(data);
 		return (path_cmd);
 	}
 	i = -1;
@@ -439,7 +427,7 @@ char	*get_abs_cmd(t_var *data, char *cmd)
 		if (!path_cmd)
 		{
 			free_array(&path);
-			safe_exit(data, MALLOC_FAIL);
+			malloc_failed(data);
 		}
 		if (access(path_cmd, F_OK) == 0)
 		{

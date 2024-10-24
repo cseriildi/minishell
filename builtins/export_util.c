@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:38:19 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/22 08:35:25 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/24 18:43:33 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ void	no_arg_export(t_var *data)
 		count++;
 	indices = malloc(count * sizeof(int));
 	if (indices == NULL)
-	{
-		print_error(2, "export: ", strerror(errno));
-		safe_exit(data, MALLOC_FAIL);
-	}
+		malloc_failed(data);
 	i = -1;
 	while (++i < count)
 		indices[i] = i;
@@ -40,12 +37,6 @@ void	no_arg_export(t_var *data)
 	free(indices);
 }
 
-void	p_error_exp(t_var *data)
-{
-	print_error(2, "minishell: malloc failed: ", strerror(errno));
-	safe_exit(data, MALLOC_FAIL);
-}
-
 bool	is_valid_var(t_var *data, char *line)
 {
 	int		i;
@@ -54,7 +45,9 @@ bool	is_valid_var(t_var *data, char *line)
 	if (line[i] && line[i] == '=')
 	{
 		data->exit_code = 1;
-		return (print_error(3, "minishell: export: `", line,"': not a valid identifier"), false);
+		print_error(3, "minishell: export: `",
+			line, "': not a valid identifier");
+		return (false);
 	}
 	while (line[i] && line[i] != '=')
 	{
@@ -62,15 +55,11 @@ bool	is_valid_var(t_var *data, char *line)
 			|| (!ft_isalnum(line[i]) && line[i] != '_'))
 		{
 			data->exit_code = 1;
-			return (print_error(3, "minishell: export: `", line,"': not a valid identifier"), false);
+			print_error(3, "minishell: export: `",
+				line, "': not a valid identifier");
+			return (false);
 		}
 		i++;
 	}
 	return (true);
-}
-
-void	ex_util2(t_var *data)
-{
-	print_error(2, "export: ", strerror(errno));
-	data->exit_code = MALLOC_FAIL;
 }

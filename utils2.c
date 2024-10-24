@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:55:59 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/09/30 15:56:11 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/24 13:36:16 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,39 @@ char	*ft_strjoin2(char *str1, char *str2, char *delimiter)
 	if (!new_str)
 		return (NULL);
 	return (new_str);
+}
+
+void	malloc_failed(t_var *data)
+{
+	print_error(1, "minishell: malloc failed");
+	safe_exit(data, MALLOC_FAIL);
+}
+
+void	read_input(t_var *data)
+{
+	char	*line;
+
+	get_promt(data);
+	g_signals.interactive = 1;
+	if (isatty(STDIN_FILENO))
+		data->line = readline(data->promt);
+	else
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line)
+		{
+			data->line = ft_strtrim(line, "\n");
+			free(line);
+		}
+		//maybe we should check for ctrl D (if no \n in line)
+	}
+	g_signals.interactive = 0;
+	if (!data->line)
+	{
+		if (isatty(STDIN_FILENO))
+			ft_putendl_fd("exit", STDERR_FILENO);
+		safe_exit(data, data->exit_code);
+	}
+	if (*data->line)
+		add_history(data->line);
 }

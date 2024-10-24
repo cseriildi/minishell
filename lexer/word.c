@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   word.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:54:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:34:10 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/24 18:45:49 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ void	word(t_var *data)
 		return ;
 	content = ft_substr(data->line, data->index, end_index);
 	if (!content)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	data->index += ft_strlen(content);
 	new_token = create_new_token(content, WORD);
 	free(content);
 	if (!new_token)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	add_token_to_back(&data->tokens, new_token);
 }
 
@@ -57,11 +57,11 @@ int	find_end_of_word(t_var *data, char *line)
 {
 	char	*letter;
 	int		index;
-	
+
 	index = 0;
 	while (line[index])
 	{
-		if (line[index] ==  '\'' || line[index] == '\"')
+		if (line[index] == '\'' || line[index] == '\"')
 			index += find_end_of_quote(data, line + index);
 		else
 		{

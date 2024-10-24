@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 15:01:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 08:34:33 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/24 18:45:13 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ void	lexer(t_var *data)
 	data->index = 0;
 	while (data->line[data->index])
 	{
-		while (data->line[data->index] && ft_strchr(" \t\n\v\f\r", data->line[data->index]))
+		while (data->line[data->index]
+			&& ft_strchr(" \t\n\v\f\r", data->line[data->index]))
 			data->index++;
 		if (data->line[data->index])
 			get_next_token(data);
@@ -41,6 +42,6 @@ void	lexer(t_var *data)
 	}
 	new_token = create_new_token("END", END);
 	if (new_token == NULL)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	add_token_to_back(&data->tokens, new_token);
 }

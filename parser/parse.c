@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:03:07 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/23 17:36:06 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:55:07 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,11 @@ int	parse_accept(t_var *data, t_stack *stack, t_stack *result)
 int	parse_reject(t_var *data, t_stack *stack, t_stack *result)
 {
 	data->exit_code = 2;
+	print_error(1, "minishell: syntax error near unexpected token `");
 	if (data->tokens->type != 0)
-		print_error(3, "minishell: syntax error near unexpected token `",
-		data->tokens->content, "'");
+		print_error(2, data->tokens->content, "'");
 	if (data->tokens->type == 0)
-		print_error(1, "minishell: syntax error near unexpected token `newline'");
+		print_error(1, "newline'");
 	free_stack(&result);
 	free_stack(&stack);
 	free_tokens(&data->tokens);
@@ -93,7 +93,7 @@ void	parse(t_var *data)
 	run = TRUE;
 	stack = init_stack();
 	if (stack == NULL)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	result = NULL;
 	while (run == 1)
 	{
@@ -108,6 +108,5 @@ void	parse(t_var *data)
 			run = parse_reject(data, stack, result);
 	}
 	if (run == -1)
-		return (free_stack(&result), free_stack(&stack),
-			safe_exit(data, MALLOC_FAIL));
+		return (free_stack(&result), free_stack(&stack), malloc_failed(data));
 }

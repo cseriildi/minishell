@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/23 19:51:58 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:37:33 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,7 @@ void	fix_exec(t_var *data, t_exec *exec)
 	{
 		tmp = ft_strdup(curr->content);
 		if (tmp == NULL)
-		{
-			print_error(1, "minishell: malloc failed");
-			safe_exit(data, MALLOC_FAIL);
-		}
+			malloc_failed(data);
 		ft_free(&temp->data);
 		temp->data = tmp;
 	}
@@ -57,10 +54,7 @@ void	fix_exec(t_var *data, t_exec *exec)
 		}
 		new = create_exec_node(curr->content);
 		if (!new)
-		{
-			print_error(1, "minishell: malloc failed");
-			safe_exit(data, MALLOC_FAIL);
-		}
+			malloc_failed(data);
 		new->type = temp->type;
 		new->down = temp->down;
 		temp->down = new;
@@ -109,35 +103,22 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 		else
 			chunk = ft_substr(seq->data, index, len);
 		if (chunk == NULL)
-		{
-			print_error(1, "minishell: malloc failed");
-			safe_exit(data, MALLOC_FAIL);
-		}
+			malloc_failed(data);
 		if (expandable  && seq->data[index] != '\'' && !(len == 2 && seq->data[index] == '\"'))
 		{
 			if(expand(chunk, data, seq->data[index] == '\"') == MALLOC_FAIL)
-			{
-				print_error(1, "minishell: malloc failed");
-				//ft_free(&chunk);
-				safe_exit(data, MALLOC_FAIL);
-			}
+				malloc_failed(data);
 		}
 		else
 		{
 			if(add_chunk(data, chunk, data->to_join++) == MALLOC_FAIL)
-			{
-				print_error(1, "minishell: malloc failed");
-				ft_free(&chunk);
-				safe_exit(data, MALLOC_FAIL);
-			}
+				return (ft_free(&chunk), malloc_failed(data));
 			ft_free(&chunk);
 		}
 		index += len;
-		//ft_free(&chunk);
 	}
 	fix_exec(data, seq);
 	free_tokens(&data->command_list);
-	//data->to_join = 1;
 }
 
 int	get_chunk_size(char *str)
@@ -220,7 +201,7 @@ int	expand(char *content, t_var *data, bool is_quoted)
 		}
 		else
 		{
-			var_from_env = safe_getenv(data, var_name);
+			var_from_env = ft_getenv(data, var_name, true);
 			ft_free(&var_name);
 			if (*var_from_env == '\0' || is_quoted)
 			{

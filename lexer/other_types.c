@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   other_types.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 14:02:02 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 13:41:00 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/24 12:56:38 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	redirection(t_var *data)
 	else
 		new_token = create_new_token(">", RED_OUT);
 	if (!new_token)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	add_token_to_back(&data->tokens, new_token);
 }
 
@@ -42,7 +42,7 @@ void	input(t_var *data)
 	else
 		new_token = create_new_token("<", RED_IN);
 	if (!new_token)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	add_token_to_back(&data->tokens, new_token);
 }
 
@@ -53,6 +53,6 @@ void	pipes(t_var *data)
 	data->index++;
 	new_token = create_new_token("|", PIPE);
 	if (!new_token)
-		safe_exit(data, MALLOC_FAIL);
+		malloc_failed(data);
 	add_token_to_back(&data->tokens, new_token);
 }
