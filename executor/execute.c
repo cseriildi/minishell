@@ -6,15 +6,11 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 18:55:58 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 21:31:35 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
-
-//things to fix:
-// export X="  A  B  "
-
 
 int	is_in_out_app(t_exec *exec)
 {
@@ -24,7 +20,7 @@ int	is_in_out_app(t_exec *exec)
 		return (0);
 }
 
-bool good_redir_path(char *redir, t_var *data)
+bool	good_redir_path(char *redir, t_var *data)
 {
 	char	*new;
 	int		i;

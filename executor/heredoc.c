@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 19:48:18 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 21:30:16 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,9 @@ void	do_heredoc(t_var *data, char *limiter, bool expanding)
 		if (isatty(STDIN_FILENO))
 			ft_putstr_fd("> ", STDOUT_FILENO);
 		line = get_next_line(STDIN_FILENO);
-		if ((!ft_strncmp(line, limiter, len)
-				&& line[ft_strlen(limiter)] == '\n')
-			|| ft_strchr(line, '\n') == NULL)
+		if (ft_strchr(line, '\n') == NULL
+			|| (ft_strncmp(line, limiter, len) == 0
+				&& line[ft_strlen(limiter)] == '\n'))
 		{
 			if (ft_strchr(line, '\n') == NULL)
 				print_error(4, "minishell: warning: here-document ",
