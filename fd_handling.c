@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 12:29:32 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 18:56:43 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	delete_file(t_var *data)
 {
 	if (data->here_doc_filename == NULL
 		|| access(data->here_doc_filename, F_OK) == -1)
-		return ;
+		return (ft_free(&data->here_doc_filename));
 	if (unlink(data->here_doc_filename) == -1)
 	{
 		print_error(4, "minishell: ",
