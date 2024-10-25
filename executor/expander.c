@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 22:50:32 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/10/25 10:01:52 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,8 +239,8 @@ char	*get_var_name(char *str)
 
 	if (str[0] == '?')
 		return (ft_substr(str, 0, 1));
-	if (ft_strchr(" \t\n\v\f\r", str[0]) == 0)
-		return (ft_strdup(" "));
+	if (str[0] == ' ')
+		return (ft_substr(str, 0, 1));
 	i = 0;
 	while (str[i] && str[i] != '=')
 	{
