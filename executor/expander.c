@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/25 10:01:52 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/25 10:20:42 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,8 +209,8 @@ int	expand(char *content, t_var *data, bool is_quoted)
 			ft_free(&var_name);
 			if (!*var_from_env || is_quoted || is_directory(var_from_env) == 1)
 			{
-				if (add_chunk(data, var_from_env, data->to_join++) == MALLOC_FAIL
-					&& (is_quoted || is_directory(var_from_env) == 1))
+				if ((is_quoted || is_directory(var_from_env) == 1)
+					&& add_chunk(data, var_from_env, data->to_join++) == MALLOC_FAIL)
 					return (ft_free(&content), MALLOC_FAIL);
 				continue ;
 			}
