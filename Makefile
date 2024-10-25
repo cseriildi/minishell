@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
+#    By: icseri <icseri@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/10/22 08:36:15 by pvass            ###   ########.fr        #
+#    Updated: 2024/10/25 13:00:10 by icseri           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,7 @@ SRCS = main.c \
 		executor/heredoc.c \
 		executor/redirection.c \
 		executor/expand_utils.c \
+		executor/expand_utils2.c \
 		builtins/env_utils.c \
 		builtins/builtins.c \
 		builtins/cd.c \

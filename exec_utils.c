@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/19 11:50:42 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/22 08:36:33 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/25 10:57:03 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,28 @@ void	print_exec(t_exec *exec)
 	}
 }
 
-/* void safe_clear(t_var *data)
+t_exec	*create_exec_node(char *content)
 {
-	if (data)
+	t_stack	*res;
+	t_exec	*exec;
+
+	res = malloc(sizeof(t_stack));
+	if (!res)
+		return (NULL);
+	res->data = ft_strdup(content);
+	if (!res->data)
+		return (NULL);
+	res->state = 0;
+	res->type = WORD;
+	res->next = NULL;
+	exec = exec_new(&res);
+	if (!exec)
 	{
-		free_tokens(data);
-		ft_free(&data->promt);
-		ft_free(&data->line);
-		free_exec_all(&(data->exec));
+		free(res->data);
+		free(res);
+		return (NULL);
 	}
-} */
+	free(res->data);
+	free(res);
+	return (exec);
+}

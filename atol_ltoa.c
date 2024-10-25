@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:25:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 12:36:24 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/25 11:18:09 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ bool	is_ll_overflow(t_var *data, char *str)
 	new_str = ft_lltoa(ft_atoll(str));
 	if (!new_str)
 		malloc_failed(data);
-	trimmed = ft_strtrim(str, "\t\n\v\f\r ");
+	trimmed = ft_strtrim(str, WHITE_SPACES);
 	if (!trimmed)
 	{
 		free(new_str);
