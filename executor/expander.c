@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 18:56:07 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 22:50:32 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,17 +65,17 @@ void	fix_exec(t_var *data, t_exec *exec)
 	}
 }
 
-t_exec *create_exec_node(char *content)
+t_exec	*create_exec_node(char *content)
 {
-	t_stack *res;
-	t_exec *exec;
-	
+	t_stack	*res;
+	t_exec	*exec;
+
 	res = malloc(sizeof(t_stack));
 	if (!res)
 		return (NULL);
 	res->data = ft_strdup(content);
 	if (!res->data)
-		return NULL;
+		return (NULL);
 	res->state = 0;
 	res->type = WORD;
 	res->next = NULL;
@@ -99,7 +99,6 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 
 	index = 0;
 	len = 0;
-
 	while (seq->data[index])
 	{
 		len = get_chunk_size(seq->data + index);
@@ -109,14 +108,15 @@ void	fix_content(t_var *data, t_exec *seq, bool expandable)
 			chunk = ft_substr(seq->data, index, len);
 		if (chunk == NULL)
 			malloc_failed(data);
-		if (expandable  && seq->data[index] != '\'' && !(len == 2 && seq->data[index] == '\"'))
+		if (expandable && seq->data[index] != '\''
+			&& !(len == 2 && seq->data[index] == '\"'))
 		{
-			if(expand(chunk, data, seq->data[index] == '\"') == MALLOC_FAIL)
+			if (expand(chunk, data, seq->data[index] == '\"') == MALLOC_FAIL)
 				malloc_failed(data);
 		}
 		else
 		{
-			if(add_chunk(data, chunk, data->to_join++) == MALLOC_FAIL)
+			if (add_chunk(data, chunk, data->to_join++) == MALLOC_FAIL)
 				return (ft_free(&chunk), malloc_failed(data));
 			ft_free(&chunk);
 		}
@@ -152,8 +152,7 @@ int	get_chunk_size(char *str)
 	}
 	return (i + is_quoted);
 }
-char *get_var_name(char *str);
-void	join_to_last_token(t_var *data, char *to_join);
+
 int	expand(char *content, t_var *data, bool is_quoted)
 {
 	char	*first;
@@ -164,7 +163,7 @@ int	expand(char *content, t_var *data, bool is_quoted)
 	int		i;
 	int		len;
 	char	*var_from_env;
-	
+
 	len = 0;
 	while (content[len])
 	{
@@ -208,9 +207,10 @@ int	expand(char *content, t_var *data, bool is_quoted)
 		{
 			var_from_env = ft_getenv(data, var_name, true);
 			ft_free(&var_name);
-			if (*var_from_env == '\0' || is_quoted || is_directory(var_from_env) == 1)
+			if (!*var_from_env || is_quoted || is_directory(var_from_env) == 1)
 			{
-				if ((is_quoted || is_directory(var_from_env) == 1) && add_chunk(data, var_from_env, data->to_join++) == MALLOC_FAIL)
+				if (add_chunk(data, var_from_env, data->to_join++) == MALLOC_FAIL
+					&& (is_quoted || is_directory(var_from_env) == 1))
 					return (ft_free(&content), MALLOC_FAIL);
 				continue ;
 			}
@@ -233,14 +233,14 @@ int	expand(char *content, t_var *data, bool is_quoted)
 	return (EXIT_SUCCESS);
 }
 
-char *get_var_name(char *str)
+char	*get_var_name(char *str)
 {
 	int		i;
 
 	if (str[0] == '?')
 		return (ft_substr(str, 0, 1));
-	if (str[0] == ' ') //what about other whitespaces
-		return (ft_substr(str, 0, 1));
+	if (ft_strchr(" \t\n\v\f\r", str[0]) == 0)
+		return (ft_strdup(" "));
 	i = 0;
 	while (str[i] && str[i] != '=')
 	{
@@ -252,15 +252,14 @@ char *get_var_name(char *str)
 	return (ft_substr(str, 0, i));
 }
 
-
 int	add_chunk(t_var *data, char *str, bool to_join)
 {
 	t_token	*curr;
-	t_token **list;
+	t_token	**list;
 	t_token	*new;
 	char	*tmp;
 
-	if (!str /* || !*str */) //new: || !*str
+	if (!str)
 		return (EXIT_SUCCESS);
 	if (data->is_heredoc == true)
 		list = &data->heredoc_input;

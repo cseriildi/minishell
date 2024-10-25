@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 13:00:14 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 18:37:39 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 22:36:45 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,6 @@ bool	find_and_replace(t_var *data, char *line, int len)
 
 bool	replace_var(t_var *data, char *line)
 {
-	int		i;
 	int		len;
 	char	*key;
 	bool	exists;
@@ -91,7 +90,6 @@ bool	replace_var(t_var *data, char *line)
 	free(key);
 	if (exists == false || ft_strchr(line, '=') == NULL)
 		return (exists);
-	i = -1;
 	return (find_and_replace(data, line, len));
 }
 

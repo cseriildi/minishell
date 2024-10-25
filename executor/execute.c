@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 21:31:35 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/24 22:55:36 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	is_in_out_app(t_exec *exec)
 {
 	if (exec->type == RED_IN || exec->type == RED_OUT || exec->type == APPEND)
 		return (1);
-	else 
+	else
 		return (0);
 }
 
@@ -82,22 +82,25 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 				return (0);
 			}
 			free(filename);
-			if ((temp2->type != RED_IN || exec->type == 2) && is_directory(temp2->data) == 1)
+			if ((temp2->type != RED_IN || exec->type == WORD)
+				&& is_directory(temp2->data) == true)
 			{
 				data->exit_code = 1;
 				print_error(3, "minishell: ", temp2->data, ": Is a directory");
 				return (0);
 			}
-			if (temp2->type != RED_IN && good_redir_path(temp2->data, data) == 0)
+			if (temp2->type != RED_IN && !good_redir_path(temp2->data, data))
 			{
 				data->exit_code = 1;
-				print_error(3, "minishell: ", temp2->data, ": No such file or directory");
+				print_error(3, "minishell: ",
+					temp2->data, ": No such file or directory");
 				return (0);
 			}
 			if (temp2->type == RED_IN && access(temp2->data, F_OK) == -1)
 			{
 				data->exit_code = 1;
-				print_error(3, "minishell: ", temp2->data, ": No such file or directory");
+				print_error(3, "minishell: ",
+					temp2->data, ": No such file or directory");
 				return (0);
 			}
 		}
@@ -131,13 +134,10 @@ void	execute(t_var *data)
 
 void	only_one_sequence(t_var *data, t_exec *exec)
 {
-	t_exec *temp;
-
-	temp = exec;
-	heredoc(data, temp);
-	create_cmd_list(data, temp);
+	heredoc(data, exec);
+	create_cmd_list(data, exec);
 	if (!data->cmd_list || !*data->cmd_list || is_builtin(data->cmd_list[0]) == true)
-		exec_sequence(data, temp, STDIN_FILENO, STDOUT_FILENO);
+		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 	else
 	{
 		data->proc_count++;
@@ -147,7 +147,7 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		g_signals.child_pid = data->pid;
 		if (data->pid == 0)
 		{
-			exec_sequence(data, temp, STDIN_FILENO, STDOUT_FILENO);
+			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 			safe_exit(data, data->exit_code);
 		}
 		else
@@ -163,11 +163,8 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 
 void	first_sequence(t_var *data, t_exec *exec)
 {
-	t_exec *temp;
-
-	temp = exec;
-	heredoc(data, temp);
-	create_cmd_list(data, temp);
+	heredoc(data, exec);
+	create_cmd_list(data, exec);
 	pipe(data->pipe1_fd);
 	data->proc_count++;
 	data->pid = fork();
@@ -176,18 +173,15 @@ void	first_sequence(t_var *data, t_exec *exec)
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[0]);
-		exec_sequence(data, temp, STDIN_FILENO, data->pipe1_fd[1]);
+		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, data->exit_code);
 	}
 }
 
 void	middle_sequence(t_var *data, t_exec *exec)
 {
-	t_exec *temp;
-
-	temp = exec;
-	heredoc(data, temp);
-	create_cmd_list(data, temp);
+	heredoc(data, exec);
+	create_cmd_list(data, exec);
 	pipe(data->pipe2_fd);
 	data->proc_count++;
 	data->pid = fork();
@@ -197,7 +191,7 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	{
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);
-		exec_sequence(data, temp, data->pipe1_fd[0], data->pipe2_fd[1]);
+		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
 		safe_exit(data, data->exit_code);
 	}
 	else
@@ -211,11 +205,8 @@ void	middle_sequence(t_var *data, t_exec *exec)
 
 void	last_sequence(t_var *data, t_exec *exec)
 {
-	t_exec *temp;
-
-	temp = exec;
-	heredoc(data, temp);
-	create_cmd_list(data, temp);
+	heredoc(data, exec);
+	create_cmd_list(data, exec);
 	data->proc_count++;
 	data->pid = fork();
 	if (data->pid == -1)
@@ -223,7 +214,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[1]);
-		exec_sequence(data, temp, data->pipe1_fd[0], STDOUT_FILENO);
+		exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
 		safe_exit(data, data->exit_code);
 	}
 	else
@@ -241,7 +232,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 
 void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 {
-	if (redirs_exist(data, exec) == 0)
+	if (redirs_exist(data, exec) == false)
 		return ;
 	if (redirect_in(data, exec, &read_fd) == false)
 		return ;
@@ -258,13 +249,12 @@ void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 	data->fd_to_write = STDOUT_FILENO;
 }
 
-int is_directory(const char *path)
+bool is_directory(const char *path)
 {
     struct stat path_stat;
 
-    if (stat(path, &path_stat) != 0) {
-        return 0;
-    }
+    if (stat(path, &path_stat) != 0)
+        return false;
     return S_ISDIR(path_stat.st_mode);
 }
 
