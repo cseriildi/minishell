@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 12:54:43 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 18:45:49 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/25 11:19:12 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	find_end_of_word(t_var *data, char *line)
 			index += find_end_of_quote(data, line + index);
 		else
 		{
-			letter = ft_strchr(" \t\n\v\f\r|><", line[index]);
+			letter = ft_strchr(SEPARATORS, line[index]);
 			if (letter && *letter)
 				break ;
 		}

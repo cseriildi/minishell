@@ -6,7 +6,7 @@
 #    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/10/25 12:10:23 by pvass            ###   ########.fr        #
+#    Updated: 2024/10/25 13:04:39 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRCS = main.c \
 		executor/get_absolute_command.c \
 		executor/create_command_list.c \
 		executor/redirs_exist.c \
+		executor/expand_utils2.c \
 		builtins/env_utils.c \
 		builtins/builtins.c \
 		builtins/cd.c \

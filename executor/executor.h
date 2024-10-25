@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/25 11:48:08 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/25 13:04:12 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,6 @@
 # define EXECUTOR_H
 
 # include "../minishell.h"
-
-typedef struct s_stack
-{
-	int				type;
-	char			*data;
-	int				state;
-	struct s_stack	*next;
-}	t_stack;
-t_exec	*exec_new(t_stack **res);
 
 void	only_one_sequence(t_var *data, t_exec *tree);
 void	first_sequence(t_var *data, t_exec *tree);
@@ -59,5 +50,8 @@ bool	good_redir_path(char *redir, t_var *data);
 bool	is_directory(const char *path);
 char	**get_paths(t_var *data);
 bool	redirs_exist(t_var *data, t_exec *exec);
+
+char	*get_chunk(t_var *data, char *str, int index, int len);
+int		join_to_last(t_token *curr, char *str);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 18:30:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 19:02:45 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/25 12:57:59 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,23 @@ char	**easy_split(char *str, char *delim)
 		i += len;
 	}
 	return (words);
+}
+
+char	*get_var_name(char *str)
+{
+	int		i;
+
+	if (str[0] == '?')
+		return (ft_substr(str, 0, 1));
+	if (str[0] == ' ')
+		return (ft_substr(str, 0, 1));
+	i = 0;
+	while (str[i] && str[i] != '=')
+	{
+		if ((i == 0 && (!ft_isalpha(str[i]) && str[i] != '_'))
+			|| (!ft_isalnum(str[i]) && str[i] != '_'))
+			break ;
+		i++;
+	}
+	return (ft_substr(str, 0, i));
 }

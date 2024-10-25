@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 12:22:01 by icseri            #+#    #+#             */
-/*   Updated: 2024/09/27 12:33:44 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/25 12:32:47 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,14 +54,6 @@ typedef enum e_parser_element
 	P_IO_HERE,
 	P_HERE_END
 }	t_prs_elem;
-
-typedef struct s_stack
-{
-	int				type;
-	char			*data;
-	int				state;
-	struct s_stack	*next;
-}	t_stack;
 
 //TABLE UTILS
 t_table	*create_table(void);

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:55:59 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/24 13:36:16 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/25 10:58:33 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	read_input(t_var *data)
 			data->line = ft_strtrim(line, "\n");
 			free(line);
 		}
-		//maybe we should check for ctrl D (if no \n in line)
 	}
 	g_signals.interactive = 0;
 	if (!data->line)

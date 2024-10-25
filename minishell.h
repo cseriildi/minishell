@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/25 12:45:13 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/25 13:04:46 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@
 # define READ 0
 # define CREATE 1
 # define CREATE_OR_APPEND 2
+# define WHITE_SPACES " \t\n\v\f\r"
+# define SEPARATORS " \t\n\v\f\r|><"
 
 typedef enum s_token_type
 {
@@ -137,6 +139,17 @@ typedef enum s_err
 	ERRORS_AFTER_EXECVE = 126,
 	COMMAND_NOT_FOUND = 127,
 }	t_err;
+
+typedef struct s_stack
+{
+	int				type;
+	char			*data;
+	int				state;
+	struct s_stack	*next;
+}	t_stack;
+
+t_exec		*exec_new(t_stack **res);
+t_exec		*create_exec_node(char *content);
 
 //read input
 void		read_input(t_var *data);
