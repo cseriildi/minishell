@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 18:54:56 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/25 13:35:52 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int	main(void)
 		read_input(data);
 		lexer(data);
 		if (data->missing_quote == true)
+		{
+			free_all(data);
 			continue ;
+		}
 		parse(data);
 		execute(data);
 		free_all(data);

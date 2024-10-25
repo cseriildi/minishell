@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/25 10:45:54 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/25 13:05:40 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 			wait(NULL);
 	}
 }
+
 void	exec_sequence(t_var *data, t_exec *exec, int read_fd, int write_fd)
 {
 	if (redirs_exist(data, exec) == false)
