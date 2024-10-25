@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/25 09:52:02 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/25 11:48:08 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,13 @@ void	fix_exec(t_var *data, t_exec *exec);
 int		add_chunk(t_var *data, char *str, bool to_join);
 t_exec	*create_exec_node(char *content);
 char	*get_var_name(char *str);
+
+//UTILS
+int		is_in_out_app(t_exec *exec);
+int		count_exec(t_exec *exec);
+bool	good_redir_path(char *redir, t_var *data);
+bool	is_directory(const char *path);
+char	**get_paths(t_var *data);
+bool	redirs_exist(t_var *data, t_exec *exec);
 
 #endif

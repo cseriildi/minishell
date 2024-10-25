@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 18:37:43 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/25 12:45:13 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # include <fcntl.h>
 # include <termios.h>
 
-# define PARSING_TABLE "./parser/parse_table_numbs"
+# define PARSING_TABLE "./parser/Makefile"
 
 # define READ 0
 # define CREATE 1

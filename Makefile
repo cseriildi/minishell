@@ -6,7 +6,7 @@
 #    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/10/22 08:36:15 by pvass            ###   ########.fr        #
+#    Updated: 2024/10/25 12:10:23 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,11 @@ SRCS = main.c \
 		executor/heredoc.c \
 		executor/redirection.c \
 		executor/expand_utils.c \
+		executor/sequence_handling.c \
+		executor/execute_utils.c \
+		executor/get_absolute_command.c \
+		executor/create_command_list.c \
+		executor/redirs_exist.c \
 		builtins/env_utils.c \
 		builtins/builtins.c \
 		builtins/cd.c \
