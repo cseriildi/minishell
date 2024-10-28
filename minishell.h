@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/25 13:04:46 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/28 13:15:23 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ typedef struct s_var
 	bool	missing_quote;
 	int		fd_to_write;
 	int		to_join;
+	int		has_child;
 }	t_var;
 
 typedef struct s_signals
@@ -122,8 +123,6 @@ typedef struct s_signals
 	pid_t	child_pid;
 	int		interactive;
 }	t_signals;
-
-extern t_signals	g_signals;
 
 typedef enum s_err
 {
@@ -147,6 +146,14 @@ typedef struct s_stack
 	int				state;
 	struct s_stack	*next;
 }	t_stack;
+
+typedef enum e_signal_state
+{
+	SIG_DEFAULT		= 0,
+	SIG_IGNORE,
+	SIG_STANDARD,
+	SIG_RECORD
+}	t_sig;
 
 t_exec		*exec_new(t_stack **res);
 t_exec		*create_exec_node(char *content);
@@ -206,5 +213,9 @@ bool		is_ll_overflow(t_var *data, char *str);
 
 //cleanup
 void		malloc_failed(t_var *data);
+
+//signal
+void		setup_signal(int signo, t_sig state);
+void		handle_signal_std(int signo, siginfo_t *info, void *context);
 
 #endif

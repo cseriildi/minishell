@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:55:59 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/25 13:31:46 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/28 11:38:17 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	read_input(t_var *data)
 	char	*line;
 
 	get_promt(data);
-	g_signals.interactive = 1;
 	if (isatty(STDIN_FILENO))
 		data->line = readline(data->promt);
 	else
@@ -50,7 +49,6 @@ void	read_input(t_var *data)
 			free(line);
 		}
 	}
-	g_signals.interactive = 0;
 	if (!data->line)
 	{
 		if (isatty(STDIN_FILENO))

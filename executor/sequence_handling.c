@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/25 13:05:40 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/28 13:45:20 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		data->pid = fork();
 		if (data->pid == -1)
 			safe_exit(data, FORK_FAIL);
-		g_signals.child_pid = data->pid;
 		if (data->pid == 0)
 		{
 			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
@@ -32,11 +31,12 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		}
 		else
 		{
+			data->has_child = 1;
 			waitpid(data->pid, &data->exit_status, 0);
-			g_signals.child_pid = -1;
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
 			data->proc_count--;
+			data->has_child = 0;
 		}
 	}
 }
@@ -52,10 +52,13 @@ void	first_sequence(t_var *data, t_exec *exec)
 		safe_exit(data, FORK_FAIL);
 	if (data->pid == 0)
 	{
+		//handle_signal_std(0, NULL, data);
 		safe_close(&data->pipe1_fd[0]);
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, data->exit_code);
 	}
+	else 
+		data->has_child = 1;
 }
 
 void	middle_sequence(t_var *data, t_exec *exec)
@@ -76,6 +79,7 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	}
 	else
 	{
+		data->has_child = 1;
 		safe_close(&data->pipe1_fd[0]);
 		safe_close(&data->pipe1_fd[1]);
 		data->pipe1_fd[0] = data->pipe2_fd[0];
@@ -99,6 +103,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 	}
 	else
 	{
+		data->has_child = 1;
 		safe_close(&data->pipe1_fd[0]);
 		safe_close(&data->pipe1_fd[1]);
 		waitpid(data->pid, &data->exit_status, 0);
@@ -107,6 +112,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 		data->proc_count--;
 		while (data->proc_count-- > 0)
 			wait(NULL);
+		data->has_child = 1;
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/24 18:57:37 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/28 13:16:05 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 void	init(t_var *data)
 {
-	g_signals.child_pid = -1;
-	g_signals.interactive = 1;
+	data->pid = -1;
 	data->is_heredoc = false;
 	data->missing_quote = false;
 	data->pipe1_fd[0] = -1;
@@ -24,6 +23,7 @@ void	init(t_var *data)
 	data->pipe2_fd[1] = -1;
 	data->fd_to_write = STDOUT_FILENO;
 	data->to_join = 1;
+	data->has_child = 0;
 	data->pwd = getcwd(NULL, 0);
 	if (!data->pwd)
 		malloc_failed(data);
@@ -31,7 +31,12 @@ void	init(t_var *data)
 	if (data->p_table == NULL)
 		malloc_failed(data);
 	init_env(data);
-	init_signals(data);
+	handle_signal_std(0, NULL, data);
+	setup_signal(SIGINT, SIG_STANDARD);
+	setup_signal(SIGTERM, SIG_STANDARD);
+	setup_signal(SIGUSR1, SIG_STANDARD);
+	setup_signal(SIGQUIT, SIG_IGNORE);
+	setup_signal(SIGPIPE, SIG_STANDARD);
 }
 
 void	get_promt(t_var *data)

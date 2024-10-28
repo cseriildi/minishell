@@ -6,7 +6,7 @@
 #    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/10/25 13:04:39 by pvass            ###   ########.fr        #
+#    Updated: 2024/10/28 11:40:56 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,7 @@ SRCS = main.c \
 		builtins/export_util.c \
 		builtins/pwd.c \
 		builtins/unset.c \
-		signal/signals.c
+		signal/sig.c
 
 OBJS = ${SRCS:.c=.o}
 

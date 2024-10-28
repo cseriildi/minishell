@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 12:05:42 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/25 12:14:20 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/28 11:46:18 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	redirs_exist_2(t_var *data, t_exec *exec, t_exec *temp2)
 			temp2->data, ": No such file or directory");
 		return (0);
 	}
-	if (temp2->type == RED_IN && access(temp2->data, F_OK) == -1)
+	if ((temp2->type == RED_IN && access(temp2->data, F_OK) == -1)
+		|| !*temp2->data)
 	{
 		data->exit_code = 1;
 		print_error(3, "minishell: ",
@@ -52,7 +53,7 @@ bool	redirs_exist(t_var *data, t_exec *exec)
 			count = count_exec(temp2);
 			filename = ft_strdup(temp2->data);
 			fix_content(data, temp2, true);
-			if (!temp2->data || !*temp2->data || count != count_exec(temp2))
+			if (!temp2->data || count != count_exec(temp2))
 			{
 				data->exit_code = 1;
 				print_error(3, "minishell: ", filename, ": ambiguous redirect");
