@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/25 13:04:12 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 15:56:33 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ bool	redirect_in(t_var *data, t_exec *tree, int *read_fd);
 bool	redirect_out(t_var *data, t_exec *tree, int *write_fd);
 bool	is_directory(const char *path);
 
-void	do_heredoc(t_var *data, char *limiter, bool expanding);
-void	heredoc(t_var *data, t_exec *exec);
+bool	do_heredoc(t_var *data, char *limiter, bool expanding);
+bool	heredoc(t_var *data, t_exec *exec);
 
 int		get_chunk_size(char *str);
 

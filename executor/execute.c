@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/25 12:07:09 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 16:00:03 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	execute(t_var *data)
 	t_exec	*temp;
 
 	temp = data->exec;
-	if (temp == NULL)
+	if (temp == NULL || heredoc(data, temp) == FALSE)
 		return ;
 	if (temp->next == NULL)
 		only_one_sequence(data, temp);
@@ -27,11 +27,17 @@ void	execute(t_var *data)
 		temp = temp->next;
 		while (temp->next != NULL)
 		{
+			if (heredoc(data, temp) == FALSE)
+				return ;
 			middle_sequence(data, temp);
 			temp = temp->next;
 		}
 		if (temp->next == NULL)
+		{
+			if (heredoc(data, temp) == FALSE)
+				return ;
 			last_sequence(data, temp);
+		}
 	}
 }
 
