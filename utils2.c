@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:55:59 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/29 20:28:33 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 21:57:37 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,40 @@ void	read_input(t_var *data)
 	}
 	if (*data->line)
 		add_history(data->line);
+}
+
+int	ft_abs(char c)
+{
+	if (c < 0)
+		return (c * -1);
+	else
+		return (c);
+}
+
+char	*read_heredoc(char *limiter, int len)
+{
+	char	*line;
+	char	*temp;
+
+	if (isatty(STDIN_FILENO))
+		line = readline("> ");
+	else
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line)
+		{
+			temp = ft_strtrim(line, "\n");
+			ft_free(&line);
+			line = temp;
+		}
+	}
+	if (!line || ft_strncmp(line, limiter, len) == 0)
+	{
+		if (!line)
+			print_error(4, "minishell: warning: here-document ",
+				"delimited by end-of-file (wanted `", limiter, "')");
+		ft_free(&line);
+		return (NULL);
+	}
+	return (line);
 }
