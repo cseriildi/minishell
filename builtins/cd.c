@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 15:02:31 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 15:09:25 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ char	*get_dest(t_var *data)
 		ft_putendl_fd(dest, data->fd_to_write);
 	}
 	else if ((ft_strncmp(data->cmd_list[1], ".", 2) == 0
-		|| ft_strncmp(data->cmd_list[1], "./", 2) == 0)
+			|| ft_strncmp(data->cmd_list[1], "./", 2) == 0)
 		&& getcwd(NULL, 0) == NULL)
 		return (print_error(3, "cd: error retrieving current directory: ",
-			"getcwd: cannot access parent directories: ",
-			"No such file or directory"), NULL);
+				"getcwd: cannot access parent directories: ",
+				"No such file or directory"), NULL);
 	return (dest);
 }
 
@@ -77,7 +77,7 @@ char	*get_corrected_dest(t_var *data, char *dest)
 
 	len = ft_strlen(data->pwd) - 1;
 	if (data->pwd[len] == '/')
-		len--; 
+		len--;
 	while (--len && data->pwd[len] != '/')
 		continue ;
 	if (ft_strncmp("..", dest, 3) == 0 || ft_strncmp("../", dest, 4) == 0)
@@ -86,7 +86,6 @@ char	*get_corrected_dest(t_var *data, char *dest)
 		corrected_dest = ft_strdup(dest);
 	return (corrected_dest);
 }
-
 
 void	ft_cd(t_var *data)
 {
