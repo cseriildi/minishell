@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:55:59 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/29 21:57:37 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 22:10:15 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*read_heredoc(char *limiter, int len)
 			line = temp;
 		}
 	}
-	if (!line || ft_strncmp(line, limiter, len) == 0)
+	if (!line || ft_strncmp(line, limiter, len + 1) == 0)
 	{
 		if (!line)
 			print_error(4, "minishell: warning: here-document ",

@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 15:09:25 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 22:21:47 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+
+bool	get_dest_util(t_var *data)
+{
+	char	*temp;
+
+	temp = getcwd(NULL, 0);
+	if ((ft_strncmp(data->cmd_list[1], ".", 2) == 0
+			|| ft_strncmp(data->cmd_list[1], "./", 3) == 0)
+		&& temp == NULL)
+	{
+		print_error(3, "cd: error retrieving current directory: ",
+			"getcwd: cannot access parent directories: ",
+			"No such file or directory");
+		return (ft_free(&temp), TRUE);
+	}
+	else
+		return (ft_free(&temp), FALSE);
+}
 
 char	*get_dest(t_var *data)
 {
@@ -32,12 +50,8 @@ char	*get_dest(t_var *data)
 			return (print_error(1, "minishell: cd: OLDPWD not set"), NULL);
 		ft_putendl_fd(dest, data->fd_to_write);
 	}
-	else if ((ft_strncmp(data->cmd_list[1], ".", 2) == 0
-			|| ft_strncmp(data->cmd_list[1], "./", 2) == 0)
-		&& getcwd(NULL, 0) == NULL)
-		return (print_error(3, "cd: error retrieving current directory: ",
-				"getcwd: cannot access parent directories: ",
-				"No such file or directory"), NULL);
+	else if (get_dest_util(data) == TRUE)
+		return (NULL);
 	return (dest);
 }
 

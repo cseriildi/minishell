@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 21:54:53 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 22:03:44 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,10 @@ void	generate_random_filename(t_var *data)
 		safe_close(&rand_fd);
 		return ;
 	}
-	else
-	{
-		i = -1;
-		while (++i < 18)
-			data->here_doc_filename[i] = (ft_abs(data->here_doc_filename[i]) % 25) + 'A';
-	}
+	i = -1;
+	while (++i < 18)
+		data->here_doc_filename[i] = (ft_abs(data->here_doc_filename[i])
+				% 25) + 'A';
 	safe_close(&rand_fd);
 }
 
