@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 20:47:50 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 21:54:53 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	generate_random_filename(t_var *data)
 {
-	int		rand_fd;
+	int	rand_fd;
+	int	i;
 
 	delete_file(data);
 	data->here_doc_filename = ft_calloc(1, 19);
@@ -32,6 +33,12 @@ void	generate_random_filename(t_var *data)
 		safe_close(&rand_fd);
 		return ;
 	}
+	else
+	{
+		i = -1;
+		while (++i < 18)
+			data->here_doc_filename[i] = (ft_abs(data->here_doc_filename[i]) % 25) + 'A';
+	}
 	safe_close(&rand_fd);
 }
 
@@ -42,10 +49,9 @@ void	print_heredoc(t_var *data, int fd)
 	current = data->heredoc_input;
 	while (current != NULL)
 	{
-		ft_putstr_fd(current->content, fd);
+		ft_putendl_fd(current->content, fd);
 		current = current->next;
 	}
-	//data->is_heredoc = false;
 	free_tokens(&data->heredoc_input);
 }
 
@@ -53,7 +59,6 @@ void	write_to_temp_heredoc(t_var *data, char *line, bool expanding, int *fd)
 {
 	if (expanding == true)
 	{
-		//data->is_heredoc = true;
 		if (expand(line, data, false) == MALLOC_FAIL)
 		{
 			safe_close(fd);
@@ -83,25 +88,9 @@ bool	do_heredoc(t_var *data, char *limiter, bool expanding)
 	setup_signal(SIGQUIT, SIG_STANDARD);
 	while (fd_to_write != -1)
 	{
-		if (isatty(STDIN_FILENO))
-			line = readline("> ");
-		else
-		{
-			line = get_next_line(STDIN_FILENO);
-			if (line)
-			{
-				line = ft_strtrim(line, "\n");
-				free(line);
-			}
-		}
-		if (!line || ft_strncmp(line, limiter, len) == 0)
-		{
-			if (!line)
-				print_error(4, "minishell: warning: here-document ",
-					"delimited by end-of-file (wanted `", limiter, "')");
-			ft_free(&line);
+		line = read_heredoc(limiter, len);
+		if (line == NULL)
 			break ;
-		}
 		if (data->is_heredoc == FALSE)
 			return (safe_close(&fd_to_write), ft_free(&line), false);
 		write_to_temp_heredoc(data, line, expanding, &fd_to_write);

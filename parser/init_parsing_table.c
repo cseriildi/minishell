@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:08:11 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/29 19:39:00 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 20:52:14 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_table	*init_table(char **longlonglong_tab)
 t_table	*create_table(void)
 {
 	t_table	*table;
-	char **longlonglong_tab;
+	char	**longlonglong_tab;
 
 	longlonglong_tab = ft_split(PARSE_LINE, '\n');
 	if (longlonglong_tab == NULL)

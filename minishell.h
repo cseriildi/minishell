@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 17:50:22 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 21:31:41 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,6 +206,7 @@ void		init(t_var *data);
 void		get_prompt(t_var *data);
 
 char		*get_word(char *text, char *separator);
+char		*read_heredoc(char *limiter, int len);
 
 long long	ft_atoll(const char *str);
 char		*ft_lltoa(long long nb);
@@ -213,6 +214,8 @@ bool		is_ll_overflow(t_var *data, char *str);
 
 //cleanup
 void		malloc_failed(t_var *data);
+
+int			ft_abs(char c);
 
 //signal
 void		setup_signal(int signo, t_sig state);
