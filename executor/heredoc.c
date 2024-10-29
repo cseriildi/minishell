@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 16:00:19 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 20:47:50 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	write_to_temp_heredoc(t_var *data, char *line, bool expanding, int *fd)
 	else
 	{
 		ft_putstr_fd(line, *fd);
+		ft_putstr_fd("\n", *fd);
 		ft_free(&line);
 	}
 }
@@ -79,25 +80,33 @@ bool	do_heredoc(t_var *data, char *limiter, bool expanding)
 	generate_random_filename(data);
 	fd_to_write = safe_open(data->here_doc_filename, CREATE, data);
 	data->is_heredoc = true;
+	setup_signal(SIGQUIT, SIG_STANDARD);
 	while (fd_to_write != -1)
 	{
 		if (isatty(STDIN_FILENO))
-			ft_putstr_fd("> ", STDOUT_FILENO);
-		line = get_next_line(STDIN_FILENO);
-		if (data->is_heredoc == FALSE)
-			return (safe_close(&fd_to_write), ft_free(&line), false);
-		if (ft_strchr(line, '\n') == NULL
-			|| (ft_strncmp(line, limiter, len) == 0
-				&& line[ft_strlen(limiter)] == '\n'))
+			line = readline("> ");
+		else
 		{
-			if (ft_strchr(line, '\n') == NULL)
+			line = get_next_line(STDIN_FILENO);
+			if (line)
+			{
+				line = ft_strtrim(line, "\n");
+				free(line);
+			}
+		}
+		if (!line || ft_strncmp(line, limiter, len) == 0)
+		{
+			if (!line)
 				print_error(4, "minishell: warning: here-document ",
 					"delimited by end-of-file (wanted `", limiter, "')");
 			ft_free(&line);
 			break ;
 		}
+		if (data->is_heredoc == FALSE)
+			return (safe_close(&fd_to_write), ft_free(&line), false);
 		write_to_temp_heredoc(data, line, expanding, &fd_to_write);
 	}
+	setup_signal(SIGQUIT, SIG_IGNORE);
 	data->is_heredoc = false;
 	safe_close(&fd_to_write);
 	return (true);

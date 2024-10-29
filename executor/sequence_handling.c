@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/29 18:35:30 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 20:05:04 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ void	first_sequence(t_var *data, t_exec *exec)
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, data->exit_code);
 	}
+	else
+		setup_signal(SIGQUIT, SIG_STANDARD);
 }
 
 void	middle_sequence(t_var *data, t_exec *exec)
@@ -125,6 +127,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 			data->exit_code = WTERMSIG(data->exit_status) + 128;
 		while (--data->proc_count > 0)
 			wait(NULL);
+		setup_signal(SIGQUIT, SIG_IGNORE);
 	}
 }
 

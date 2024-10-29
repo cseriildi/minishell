@@ -3,28 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   init_parsing_table.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 14:08:11 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/22 08:33:56 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 19:39:00 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_table	*init_table(int fd)
+t_table	*init_table(char **longlonglong_tab)
 {
 	t_table	*table;
 	t_table	*temp;
 	char	**args;
 	char	*line;
+	int		i;
 
 	table = NULL;
-	line = get_next_line(fd);
-	if (line == NULL)
-		return (NULL);
-	free(line);
-	line = get_next_line(fd);
+	line = longlonglong_tab[0];
+	i = 1;
 	while (line != NULL)
 	{
 		args = ft_split(line, 9);
@@ -36,21 +34,21 @@ t_table	*init_table(int fd)
 		if (temp == NULL)
 			return (table_clear(&table), NULL);
 		table_add_back(&table, temp);
-		line = get_next_line(fd);
+		line = longlonglong_tab[i];
+		i++;
 	}
-	return (free(line), table);
+	return (free(line), free(longlonglong_tab), table);
 }
 
 t_table	*create_table(void)
 {
 	t_table	*table;
-	int		fd;
+	char **longlonglong_tab;
 
-	fd = open(PARSING_TABLE, O_RDONLY);
-	if (fd < 0)
+	longlonglong_tab = ft_split(PARSE_LINE, '\n');
+	if (longlonglong_tab == NULL)
 		return (NULL);
-	table = init_table(fd);
-	close(fd);
+	table = init_table(longlonglong_tab);
 	return (table);
 }
 

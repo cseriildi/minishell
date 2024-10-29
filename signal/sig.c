@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:44:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/29 18:47:21 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 20:50:54 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,20 @@ void	setup_signal(int signo, t_sig state)
 		print_error(1, "The signal is not supported");
 }
 
+bool	signal_homemade_check(t_var *data)
+{
+	char	*temp;
+
+	if (data->cmd_list == NULL || data->cmd_list[0] == NULL)
+		return (FALSE);
+	temp = ft_strrchr(data->cmd_list[0], '/');
+	if (temp == NULL)
+		return (FALSE);
+	if (ft_strncmp("/minishell", temp, 11) == 0)
+		return (TRUE);
+	return (FALSE);
+}
+
 void	handle_signal_std(int signo, siginfo_t *info, void *context)
 {
 	static t_var	*data;
@@ -52,7 +66,7 @@ void	handle_signal_std(int signo, siginfo_t *info, void *context)
 	{
 		if (data->is_heredoc == TRUE)
 			data->is_heredoc = FALSE;
-		if (data->pid != 0 && (!data->cmd_list || ft_strncmp("./minishell", data->cmd_list[0], 13) != 0))
+		if (data->pid != 0 && (!data->cmd_list || signal_homemade_check(data) == 0))
 			{
 				if (data->proc_count == 0 )
 					ioctl(STDIN_FILENO, TIOCSTI, "\n");
@@ -62,24 +76,24 @@ void	handle_signal_std(int signo, siginfo_t *info, void *context)
 				rl_replace_line("", 0);
 			}
 	}
-	/* else if (signo == SIGQUIT && data->pid == 0)
-	{
-		ioctl(STDIN_FILENO, TIOCSTI, "\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-	} */
 	else if (signo == SIGQUIT)
 	{
-		if (data->pid != 0 && data->proc_count != 0 && (!data->cmd_list || ft_strncmp("./minishell", data->cmd_list[0], 13) != 0))
+		if (data->is_heredoc == TRUE)
 		{
-			write(STDERR_FILENO, "\n", 1);
+			write(STDERR_FILENO, ">   \b\b", 7);
+			rl_replace_line("", 0);
+			return ;
+		}
+		if (data->pid != 0 && data->proc_count != 0 && signal_homemade_check(data) == 0)
+		{
+			write(STDERR_FILENO, "Quit (core dumped)\n", 20);
 			rl_on_new_line();
 			rl_replace_line("", 0);
 		}
 	}
 	else if (signo == SIGUSR1)
 		safe_exit(data, data->exit_code);
-	else if ((signo == SIGTERM && data->pid != 0) || \
-		signo == SIGPIPE)
+	else if ((signo == SIGTERM && data->pid != 0)
+			|| signo == SIGPIPE)
 		safe_exit(data, 128 + signo);
 }
