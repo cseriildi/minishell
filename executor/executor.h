@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 15:56:33 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 21:06:30 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,8 @@ bool	redirs_exist(t_var *data, t_exec *exec);
 
 char	*get_chunk(t_var *data, char *str, int index, int len);
 int		join_to_last(t_token *curr, char *str);
+
+void	last_sequence_child(t_var *data, t_exec *exec);
+void	only_one_seq_child(t_var *data, t_exec *exec);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:44:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/29 20:50:54 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 20:58:23 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,45 @@ bool	signal_homemade_check(t_var *data)
 	return (FALSE);
 }
 
+void	handle_signal_util_1(int signo, t_var *data)
+{
+	if (signo == SIGINT)
+	{
+		if (data->is_heredoc == TRUE)
+			data->is_heredoc = FALSE;
+		if (data->pid != 0 && (!data->cmd_list
+				|| signal_homemade_check(data) == 0))
+		{
+			if (data->proc_count == 0)
+				ioctl(STDIN_FILENO, TIOCSTI, "\n");
+			else
+				write(STDERR_FILENO, "\n", 1);
+			rl_on_new_line();
+			rl_replace_line("", 0);
+		}
+	}
+}
+
+void	handle_signal_util_2(int signo, t_var *data)
+{
+	if (signo == SIGQUIT)
+	{
+		if (data->is_heredoc == TRUE)
+		{
+			write(STDERR_FILENO, ">   \b\b", 7);
+			rl_replace_line("", 0);
+			return ;
+		}
+		if (data->pid != 0 && data->proc_count != 0
+			&& signal_homemade_check(data) == 0)
+		{
+			write(STDERR_FILENO, "Quit (core dumped)\n", 20);
+			rl_on_new_line();
+			rl_replace_line("", 0);
+		}
+	}
+}
+
 void	handle_signal_std(int signo, siginfo_t *info, void *context)
 {
 	static t_var	*data;
@@ -62,38 +101,11 @@ void	handle_signal_std(int signo, siginfo_t *info, void *context)
 		return ;
 	}
 	data->exit_code = 128 + signo;
-	if (signo == SIGINT)
-	{
-		if (data->is_heredoc == TRUE)
-			data->is_heredoc = FALSE;
-		if (data->pid != 0 && (!data->cmd_list || signal_homemade_check(data) == 0))
-			{
-				if (data->proc_count == 0 )
-					ioctl(STDIN_FILENO, TIOCSTI, "\n");
-				else
-					write(STDERR_FILENO, "\n", 1);
-				rl_on_new_line();
-				rl_replace_line("", 0);
-			}
-	}
-	else if (signo == SIGQUIT)
-	{
-		if (data->is_heredoc == TRUE)
-		{
-			write(STDERR_FILENO, ">   \b\b", 7);
-			rl_replace_line("", 0);
-			return ;
-		}
-		if (data->pid != 0 && data->proc_count != 0 && signal_homemade_check(data) == 0)
-		{
-			write(STDERR_FILENO, "Quit (core dumped)\n", 20);
-			rl_on_new_line();
-			rl_replace_line("", 0);
-		}
-	}
-	else if (signo == SIGUSR1)
+	handle_signal_util_1(signo, data);
+	handle_signal_util_2(signo, data);
+	if (signo == SIGUSR1)
 		safe_exit(data, data->exit_code);
 	else if ((signo == SIGTERM && data->pid != 0)
-			|| signo == SIGPIPE)
+		|| signo == SIGPIPE)
 		safe_exit(data, 128 + signo);
 }

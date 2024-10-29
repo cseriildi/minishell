@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sequence_handling.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/29 20:05:04 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 21:06:02 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,7 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 			safe_exit(data, FORK_FAIL);
 		}
 		if (data->pid == 0)
-		{
-			setup_signal(SIGINT, SIG_DEFAULT);
-			setup_signal(SIGQUIT, SIG_STANDARD);
-			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
-			safe_exit(data, data->exit_code);
-		}
+			only_one_seq_child(data, exec);
 		else
 		{
 			setup_signal(SIGQUIT, SIG_STANDARD);
@@ -109,13 +104,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 		safe_exit(data, FORK_FAIL);
 	}
 	if (data->pid == 0)
-	{
-		setup_signal(SIGINT, SIG_DEFAULT);
-		setup_signal(SIGQUIT, SIG_STANDARD);
-		safe_close(&data->pipe1_fd[1]);
-		exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
-		safe_exit(data, data->exit_code);
-	}
+		last_sequence_child(data, exec);
 	else
 	{
 		safe_close(&data->pipe1_fd[0]);

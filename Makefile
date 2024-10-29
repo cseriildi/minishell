@@ -6,7 +6,7 @@
 #    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/10/28 11:40:56 by pvass            ###   ########.fr        #
+#    Updated: 2024/10/29 21:07:47 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ SRCS = main.c \
 		executor/redirection.c \
 		executor/expand_utils.c \
 		executor/sequence_handling.c \
+		executor/sequence_children.c \
 		executor/execute_utils.c \
 		executor/get_absolute_command.c \
 		executor/create_command_list.c \
