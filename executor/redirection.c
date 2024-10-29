@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 21:10:19 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 12:38:43 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ bool	open_redins(t_var *data, t_exec *exec, int *fd)
 	t_exec	*temp;
 
 	temp = exec;
-	while (data->cmd_list && data->cmd_list[0] && temp != NULL)
+	while (temp != NULL)
 	{
 		if (temp->type == RED_IN)
 		{

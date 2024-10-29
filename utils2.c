@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:55:59 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/28 11:38:17 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 14:53:37 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void	read_input(t_var *data)
 {
 	char	*line;
 
-	get_promt(data);
+	get_prompt(data);
 	if (isatty(STDIN_FILENO))
-		data->line = readline(data->promt);
+		data->line = readline(data->prompt);
 	else
 	{
 		line = get_next_line(STDIN_FILENO);

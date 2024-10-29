@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 18:36:14 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 15:02:31 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ char	*get_dest(t_var *data)
 			return (print_error(1, "minishell: cd: OLDPWD not set"), NULL);
 		ft_putendl_fd(dest, data->fd_to_write);
 	}
+	else if ((ft_strncmp(data->cmd_list[1], ".", 2) == 0
+		|| ft_strncmp(data->cmd_list[1], "./", 2) == 0)
+		&& getcwd(NULL, 0) == NULL)
+		return (print_error(3, "cd: error retrieving current directory: ",
+			"getcwd: cannot access parent directories: ",
+			"No such file or directory"), NULL);
 	return (dest);
 }
 
@@ -64,9 +70,28 @@ int	cd_in_env(t_var *data)
 	return (EXIT_SUCCESS);
 }
 
+char	*get_corrected_dest(t_var *data, char *dest)
+{
+	int		len;
+	char	*corrected_dest;
+
+	len = ft_strlen(data->pwd) - 1;
+	if (data->pwd[len] == '/')
+		len--; 
+	while (--len && data->pwd[len] != '/')
+		continue ;
+	if (ft_strncmp("..", dest, 3) == 0 || ft_strncmp("../", dest, 4) == 0)
+		corrected_dest = ft_substr(data->pwd, 0, len);
+	else
+		corrected_dest = ft_strdup(dest);
+	return (corrected_dest);
+}
+
+
 void	ft_cd(t_var *data)
 {
 	char	*dest;
+	char	*corrected_dest;
 
 	data->exit_code = EXIT_SUCCESS;
 	dest = get_dest(data);
@@ -75,12 +100,17 @@ void	ft_cd(t_var *data)
 		data->exit_code = EXIT_FAILURE;
 		return ;
 	}
-	if (chdir(dest) == -1)
+	corrected_dest = get_corrected_dest(data, dest);
+	if (!corrected_dest)
+		malloc_failed(data);
+	if (chdir(corrected_dest) == -1)
 	{
 		print_error(4, "minishell: cd: ", dest, ": ", strerror(errno));
 		data->exit_code = EXIT_FAILURE;
+		ft_free(&corrected_dest);
 		return ;
 	}
+	ft_free(&corrected_dest);
 	if (cd_in_env(data) == MALLOC_FAIL)
 		malloc_failed(data);
 }

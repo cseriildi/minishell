@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/28 13:15:23 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 14:53:37 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ typedef struct s_var
 	int		exit_status;
 	int		exit_code;
 	char	*pwd;
-	char	*promt;
+	char	*prompt;
 	char	**env;
 	int		proc_count;
 	char	*here_doc_filename;
@@ -203,7 +203,7 @@ void		safe_dup2(int *old_fd, int new_fd, t_var *data);
 
 //init
 void		init(t_var *data);
-void		get_promt(t_var *data);
+void		get_prompt(t_var *data);
 
 char		*get_word(char *text, char *separator);
 

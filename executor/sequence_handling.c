@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sequence_handling.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/28 13:45:20 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 12:43:39 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		data->proc_count++;
 		data->pid = fork();
 		if (data->pid == -1)
+		{
+			print_error(1, "minishell: fork failed");	
 			safe_exit(data, FORK_FAIL);
+		}
 		if (data->pid == 0)
 		{
 			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
@@ -49,7 +52,10 @@ void	first_sequence(t_var *data, t_exec *exec)
 	data->proc_count++;
 	data->pid = fork();
 	if (data->pid == -1)
+	{
+		print_error(1, "minishell: fork failed");	
 		safe_exit(data, FORK_FAIL);
+	}
 	if (data->pid == 0)
 	{
 		//handle_signal_std(0, NULL, data);
@@ -69,7 +75,10 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	data->proc_count++;
 	data->pid = fork();
 	if (data->pid == -1)
+	{
+		print_error(1, "minishell: fork failed");	
 		safe_exit(data, FORK_FAIL);
+	}
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[1]);
@@ -94,7 +103,10 @@ void	last_sequence(t_var *data, t_exec *exec)
 	data->proc_count++;
 	data->pid = fork();
 	if (data->pid == -1)
+	{
+		print_error(1, "minishell: fork failed");	
 		safe_exit(data, FORK_FAIL);
+	}
 	if (data->pid == 0)
 	{
 		safe_close(&data->pipe1_fd[1]);

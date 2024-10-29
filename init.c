@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/28 13:16:05 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 14:53:37 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	init(t_var *data)
 	setup_signal(SIGPIPE, SIG_STANDARD);
 }
 
-void	get_promt(t_var *data)
+void	get_prompt(t_var *data)
 {
 	char	*home;
 	char	*tmp;
@@ -50,11 +50,11 @@ void	get_promt(t_var *data)
 		tmp = ft_strjoin("~", data->pwd + ft_strlen(home));
 		if (!tmp)
 			malloc_failed(data);
-		data->promt = ft_strjoin(tmp, "$ ");
+		data->prompt = ft_strjoin(tmp, "$ ");
 		free(tmp);
 	}
 	else
-		data->promt = ft_strjoin(data->pwd, "$ ");
-	if (!data->promt)
+		data->prompt = ft_strjoin(data->pwd, "$ ");
+	if (!data->prompt)
 		malloc_failed(data);
 }
