@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:55:59 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/29 14:53:37 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 18:02:55 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	read_input(t_var *data)
 	char	*line;
 
 	get_prompt(data);
+	//setup_signal(SIGINT, SIG_STANDARD);
 	if (isatty(STDIN_FILENO))
 		data->line = readline(data->prompt);
 	else
@@ -49,6 +50,7 @@ void	read_input(t_var *data)
 			free(line);
 		}
 	}
+	//setup_signal(SIGINT, SIG_IGNORE);
 	if (!data->line)
 	{
 		if (isatty(STDIN_FILENO))

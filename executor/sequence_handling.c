@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sequence_handling.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/29 17:20:18 by pvass            ###   ########.fr       */
+/*   Updated: 2024/10/29 17:42:12 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	only_one_sequence(t_var *data, t_exec *exec)
 {
-	//heredoc(data, exec);
 	create_cmd_list(data, exec);
 	if (!data->cmd_list || !*data->cmd_list || is_builtin(data->cmd_list[0]))
 		exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
@@ -29,18 +28,13 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		}
 		if (data->pid == 0)
 		{
-			//setup_signal(SIGINT, SIG_DEFAULT);
-			signal(SIGPIPE, SIG_IGN);
-			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
+			setup_signal(SIGINT, SIG_DEFAULT);
 			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 			safe_exit(data, data->exit_code);
 		}
 		else
 		{
-			setup_signal(SIGINT, SIG_IGNORE);
 			waitpid(data->pid, &data->exit_status, 0);
-			setup_signal(SIGINT, SIG_STANDARD);
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
 			
@@ -50,7 +44,6 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 
 void	first_sequence(t_var *data, t_exec *exec)
 {
-	//heredoc(data, exec);
 	create_cmd_list(data, exec);
 	pipe(data->pipe1_fd);
 	data->proc_count++;
@@ -62,18 +55,15 @@ void	first_sequence(t_var *data, t_exec *exec)
 	}
 	if (data->pid == 0)
 	{
-		setup_signal(SIGINT, SIG_STANDARD);
+		setup_signal(SIGINT, SIG_DEFAULT);
 		safe_close(&data->pipe1_fd[0]);
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, data->exit_code);
 	}
-	else
-		setup_signal(SIGINT, SIG_IGNORE);
 }
 
 void	middle_sequence(t_var *data, t_exec *exec)
 {
-	//heredoc(data, exec);
 	create_cmd_list(data, exec);
 	pipe(data->pipe2_fd);
 	data->proc_count++;
@@ -85,7 +75,7 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	}
 	if (data->pid == 0)
 	{
-		setup_signal(SIGINT, SIG_STANDARD);
+		setup_signal(SIGINT, SIG_DEFAULT);
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);
 		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
@@ -102,7 +92,6 @@ void	middle_sequence(t_var *data, t_exec *exec)
 
 void	last_sequence(t_var *data, t_exec *exec)
 {
-	//heredoc(data, exec);
 	create_cmd_list(data, exec);
 	data->proc_count++;
 	data->pid = fork();
@@ -113,7 +102,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 	}
 	if (data->pid == 0)
 	{
-		setup_signal(SIGINT, SIG_STANDARD);
+		setup_signal(SIGINT, SIG_DEFAULT);
 		safe_close(&data->pipe1_fd[1]);
 		exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
 		safe_exit(data, data->exit_code);
@@ -127,7 +116,6 @@ void	last_sequence(t_var *data, t_exec *exec)
 			data->exit_code = WEXITSTATUS(data->exit_status);
 		while (--data->proc_count > 0)
 			wait(NULL);
-		setup_signal(SIGINT, SIG_STANDARD);
 	}
 }
 
