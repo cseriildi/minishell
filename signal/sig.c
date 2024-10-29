@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:44:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/29 17:53:52 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 18:47:21 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,27 @@ void	handle_signal_std(int signo, siginfo_t *info, void *context)
 	{
 		if (data->is_heredoc == TRUE)
 			data->is_heredoc = FALSE;
-	if (data->pid != 0)
+		if (data->pid != 0 && (!data->cmd_list || ft_strncmp("./minishell", data->cmd_list[0], 13) != 0))
+			{
+				if (data->proc_count == 0 )
+					ioctl(STDIN_FILENO, TIOCSTI, "\n");
+				else
+					write(STDERR_FILENO, "\n", 1);
+				rl_on_new_line();
+				rl_replace_line("", 0);
+			}
+	}
+	/* else if (signo == SIGQUIT && data->pid == 0)
+	{
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+	} */
+	else if (signo == SIGQUIT)
+	{
+		if (data->pid != 0 && data->proc_count != 0 && (!data->cmd_list || ft_strncmp("./minishell", data->cmd_list[0], 13) != 0))
 		{
-			if (data->proc_count == 0 )
-				ioctl(STDIN_FILENO, TIOCSTI, "\n");
-			else
-				write(STDERR_FILENO, "\n", 1);
+			write(STDERR_FILENO, "\n", 1);
 			rl_on_new_line();
 			rl_replace_line("", 0);
 		}

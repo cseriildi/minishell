@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/29 17:42:12 by icseri           ###   ########.fr       */
+/*   Updated: 2024/10/29 18:35:30 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,19 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 		if (data->pid == 0)
 		{
 			setup_signal(SIGINT, SIG_DEFAULT);
+			setup_signal(SIGQUIT, SIG_STANDARD);
 			exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 			safe_exit(data, data->exit_code);
 		}
 		else
 		{
+			setup_signal(SIGQUIT, SIG_STANDARD);
 			waitpid(data->pid, &data->exit_status, 0);
+			setup_signal(SIGQUIT, SIG_IGNORE);
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
-			
+			else if (WIFSIGNALED(data->exit_status))
+				data->exit_code = WTERMSIG(data->exit_status) + 128;
 		}
 	}
 }
@@ -56,6 +60,7 @@ void	first_sequence(t_var *data, t_exec *exec)
 	if (data->pid == 0)
 	{
 		setup_signal(SIGINT, SIG_DEFAULT);
+		setup_signal(SIGQUIT, SIG_STANDARD);
 		safe_close(&data->pipe1_fd[0]);
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, data->exit_code);
@@ -76,6 +81,7 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	if (data->pid == 0)
 	{
 		setup_signal(SIGINT, SIG_DEFAULT);
+		setup_signal(SIGQUIT, SIG_STANDARD);
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);
 		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
@@ -103,6 +109,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 	if (data->pid == 0)
 	{
 		setup_signal(SIGINT, SIG_DEFAULT);
+		setup_signal(SIGQUIT, SIG_STANDARD);
 		safe_close(&data->pipe1_fd[1]);
 		exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
 		safe_exit(data, data->exit_code);
@@ -114,6 +121,8 @@ void	last_sequence(t_var *data, t_exec *exec)
 		waitpid(data->pid, &data->exit_status, 0);
 		if (WIFEXITED(data->exit_status))
 			data->exit_code = WEXITSTATUS(data->exit_status);
+		else if (WIFSIGNALED(data->exit_status))
+			data->exit_code = WTERMSIG(data->exit_status) + 128;
 		while (--data->proc_count > 0)
 			wait(NULL);
 	}
