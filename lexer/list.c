@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:57:32 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/24 18:45:30 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/04 18:58:51 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,14 @@ void	add_token_to_back(t_token **lst, t_token *new)
 				curr = curr->next;
 			curr->next = new;
 		}
+	}
+}
+
+void	add_token_to_front(t_token **lst, t_token *new)
+{
+	if (lst && new)
+	{
+		new->next = *lst;
+		*lst = new;
 	}
 }

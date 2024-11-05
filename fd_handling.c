@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 15:09:44 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/05 12:33:46 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,26 @@ void	safe_close(int *fd)
 
 void	delete_file(t_var *data)
 {
-	if (data->here_doc_filename == NULL
-		|| access(data->here_doc_filename, F_OK) == -1)
-		return (ft_free(&data->here_doc_filename));
-	if (unlink(data->here_doc_filename) == -1)
+	t_token	*temp;
+
+	temp = data->here_doc_filename;
+	while (temp != NULL)
 	{
-		print_error(4, "minishell: ",
-			data->here_doc_filename, ": ", strerror(errno));
-		data->exit_code = UNLINK_FAIL;
+		if (temp->content == NULL
+			|| access(temp->content, F_OK) == -1)
+		{
+			temp = temp->next;
+			continue ;
+		}
+		if (unlink(temp->content) == -1)
+		{
+			print_error(4, "minishell: ",
+				temp->content, ": ", strerror(errno));
+			data->exit_code = UNLINK_FAIL;
+		}
+		temp = temp->next;
 	}
-	ft_free(&data->here_doc_filename);
+	free_tokens(&data->here_doc_filename);
 }
 
 void	safe_dup2(int *old_fd, int new_fd, t_var *data)

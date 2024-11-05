@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 16:44:24 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/22 11:50:29 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/05 12:54:29 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ bool	exec_builtin(t_var *data)
 		ft_unset(data);
 	if (is_builtin(data->cmd_list[0]) == true)
 		return (true);
+	safe_close(&data->fd_to_write);
+	data->fd_to_write = STDOUT_FILENO;
 	return (false);
 }
 

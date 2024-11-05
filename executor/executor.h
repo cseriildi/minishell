@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 21:06:30 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/05 12:26:55 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int		get_chunk_size(char *str);
 
 t_token	*create_new_token(char *content, int type);
 void	add_token_to_back(t_token **lst, t_token *new);
+void	add_token_to_front(t_token **lst, t_token *new);
 void	fix_exec(t_var *data, t_exec *exec);
 int		add_chunk(t_var *data, char *str, bool to_join);
 t_exec	*create_exec_node(char *content);
@@ -56,5 +57,6 @@ int		join_to_last(t_token *curr, char *str);
 
 void	last_sequence_child(t_var *data, t_exec *exec);
 void	only_one_seq_child(t_var *data, t_exec *exec);
+char	*get_word(char *text, char *separator);
 
 #endif

@@ -6,19 +6,22 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 21:31:41 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/05 12:33:28 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# define _POSIX_C_SOURCE 200112L
+# define _GNU_SOURCE
+
 # include "libft/libft.h"
 # include <stdio.h> 
 # include <stdlib.h>
 # include <unistd.h>
 # include <signal.h>
-# include <wait.h>
+# include <sys/wait.h>
 # include <string.h>
 # include <errno.h>
 # include <readline/readline.h>
@@ -30,9 +33,8 @@
 # include <curses.h>
 # include <term.h>
 # include <fcntl.h>
-# include <termios.h>
-
-# define PARSING_TABLE "./parser/Makefile"
+# include <signal.h>
+# include <sys/types.h>
 
 # define READ 0
 # define CREATE 1
@@ -110,7 +112,7 @@ typedef struct s_var
 	char	*prompt;
 	char	**env;
 	int		proc_count;
-	char	*here_doc_filename;
+	t_token	*here_doc_filename;
 	bool	missing_quote;
 	int		fd_to_write;
 	int		to_join;
@@ -155,11 +157,16 @@ typedef enum e_signal_state
 	SIG_RECORD
 }	t_sig;
 
-t_exec		*exec_new(t_stack **res);
-t_exec		*create_exec_node(char *content);
+//init
+void		init(t_var *data);
+void		get_prompt(t_var *data);
 
-//read input
+//utils2
 void		read_input(t_var *data);
+void		malloc_failed(t_var *data);
+char		*ft_strjoin2(char *str1, char *str2, char *delimiter);
+int			ft_abs(char c);
+char		*read_heredoc(char *limiter, int len);
 
 //lexer
 void		lexer(t_var *data);
@@ -167,6 +174,8 @@ void		lexer(t_var *data);
 //parser
 void		parse(t_var *data);
 t_table		*create_table(void);
+t_exec		*exec_new(t_stack **res);
+t_exec		*create_exec_node(char *content);
 
 //utils
 void		free_all(t_var *data);
@@ -174,7 +183,10 @@ void		safe_exit(t_var *data, int exit_code);
 void		free_tokens(t_token **token);
 void		free_array(char ***arr);
 void		print_error(int count, ...);
+
+//expand utils
 char		**easy_split(char *str, char *delim);
+char		*get_var_name(char *str);
 
 //builtins
 bool		exec_builtin(t_var *data);
@@ -182,40 +194,24 @@ bool		is_builtin(char *cmd);
 
 //executor
 void		execute(t_var *data);
-
-//env
 void		init_env(t_var *data);
 char		*ft_getenv(t_var *data, char *var_name, bool is_safe);
-char		*ft_strjoin2(char *str1, char *str2, char *delimiter);
 
 //exec_utils
 void		free_table(t_table **p_table);
 void		free_exec_all(t_exec **exec);
 void		print_exec(t_exec *exec);
-void		init_signals(t_var *data);
 
 //fd_handling
-
 int			safe_open(char *filename, int mode, t_var *data);
 void		safe_close(int *fd);
 void		delete_file(t_var *data);
 void		safe_dup2(int *old_fd, int new_fd, t_var *data);
 
-//init
-void		init(t_var *data);
-void		get_prompt(t_var *data);
-
-char		*get_word(char *text, char *separator);
-char		*read_heredoc(char *limiter, int len);
-
+//atol itol
 long long	ft_atoll(const char *str);
 char		*ft_lltoa(long long nb);
 bool		is_ll_overflow(t_var *data, char *str);
-
-//cleanup
-void		malloc_failed(t_var *data);
-
-int			ft_abs(char c);
 
 //signal
 void		setup_signal(int signo, t_sig state);
