@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/05 12:33:28 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 11:39:58 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,5 +216,8 @@ bool		is_ll_overflow(t_var *data, char *str);
 //signal
 void		setup_signal(int signo, t_sig state);
 void		handle_signal_std(int signo, siginfo_t *info, void *context);
+
+void		print_char_array(char **array);
+char 		**path_split(char *str, char c);
 
 #endif

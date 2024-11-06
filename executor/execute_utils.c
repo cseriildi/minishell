@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:36:32 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/25 12:13:28 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/06 12:54:20 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**get_paths(t_var *data)
 	{
 		if (ft_strncmp(data->env[i], "PATH=", 5) == 0)
 		{
-			path = ft_split(data->env[i] + 5, ':');
+			path = path_split(data->env[i] + 5, ':');
 			if (!path)
 				malloc_failed(data);
 			return (path);
