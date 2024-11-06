@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sig.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:44:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/29 20:58:23 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/06 13:34:40 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,8 @@ void	handle_signal_util_2(int signo, t_var *data)
 	{
 		if (data->is_heredoc == TRUE)
 		{
-			write(STDERR_FILENO, ">   \b\b", 7);
-			rl_replace_line("", 0);
+			//write(STDERR_FILENO, ">   \b\b", 7);
+			//rl_replace_line("", 0);
 			return ;
 		}
 		if (data->pid != 0 && data->proc_count != 0

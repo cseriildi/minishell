@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:24:05 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/25 13:00:38 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 14:32:17 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ int	real_expand(t_var *data, bool is_quoted, char *var)
 	expanded_var = easy_split(var, WHITE_SPACES);
 	if (!expanded_var)
 		return (MALLOC_FAIL);
-	data->to_join = ft_strchr(WHITE_SPACES, *var) == NULL;
+	if (data->to_join)
+		data->to_join = ft_strchr(WHITE_SPACES, *var) == NULL;
 	i = -1;
 	while (expanded_var[++i])
 	{

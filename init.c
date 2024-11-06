@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/29 19:02:53 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 11:10:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@ void	init(t_var *data)
 	data->fd_to_write = STDOUT_FILENO;
 	data->to_join = 1;
 	data->has_child = 0;
-	data->pwd = getcwd(NULL, 0);
-	if (!data->pwd)
-		malloc_failed(data);
 	data->p_table = create_table();
 	if (data->p_table == NULL)
 		malloc_failed(data);
@@ -45,7 +42,11 @@ void	get_prompt(t_var *data)
 	char	*tmp;
 
 	home = ft_getenv(data, "HOME", false);
-	if (home != NULL && ft_strncmp(data->pwd, home, ft_strlen(home)) == 0)
+	if (!data->pwd)
+		data->pwd = safe_getcwd(data);
+	if (!data->pwd)
+		data->prompt = ft_strdup(".$ ");
+	else if (home != NULL && ft_strncmp(data->pwd, home, ft_strlen(home)) == 0)
 	{
 		tmp = ft_strjoin("~", data->pwd + ft_strlen(home));
 		if (!tmp)

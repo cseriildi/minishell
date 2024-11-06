@@ -3,36 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/10/29 22:21:47 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/06 13:56:11 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "builtins.h"
+#include <string.h>
 
-bool	get_dest_util(t_var *data)
+char	*safe_getcwd(t_var *data)
 {
 	char	*temp;
 
 	temp = getcwd(NULL, 0);
-	if ((ft_strncmp(data->cmd_list[1], ".", 2) == 0
-			|| ft_strncmp(data->cmd_list[1], "./", 3) == 0)
-		&& temp == NULL)
+	if (temp != NULL)
+		return (temp);
+	if (errno == EACCES || errno == ENOENT)
 	{
 		print_error(3, "cd: error retrieving current directory: ",
 			"getcwd: cannot access parent directories: ",
 			"No such file or directory");
-		return (ft_free(&temp), TRUE);
+		return (NULL);
 	}
 	else
-		return (ft_free(&temp), FALSE);
+		return(malloc_failed(data), NULL);
 }
 
 char	*get_dest(t_var *data)
 {
 	char	*dest;
+	char	*tmp;
 
 	dest = data->cmd_list[1];
 	if (!data->cmd_list[1])
@@ -50,8 +52,14 @@ char	*get_dest(t_var *data)
 			return (print_error(1, "minishell: cd: OLDPWD not set"), NULL);
 		ft_putendl_fd(dest, data->fd_to_write);
 	}
-	else if (get_dest_util(data) == TRUE)
-		return (NULL);
+	else if (ft_strncmp(data->cmd_list[1], ".", 2) == 0
+		|| ft_strncmp(data->cmd_list[1], "./", 3) == 0)
+	{
+		tmp = safe_getcwd(data);
+		if (!tmp)
+			return (NULL);
+		free(tmp);
+	}
 	return (dest);
 }
 
@@ -59,7 +67,7 @@ int	cd_in_env(t_var *data)
 {
 	char	*tmp;
 
-	tmp = ft_strjoin("OLDPWD=", data->pwd);
+	tmp = ft_strjoin("OLDPWD=", ft_getenv(data, "PWD", true));
 	if (!tmp)
 		return (MALLOC_FAIL);
 	if (replace_var(data, tmp) == false)
@@ -84,27 +92,29 @@ int	cd_in_env(t_var *data)
 	return (EXIT_SUCCESS);
 }
 
-char	*get_corrected_dest(t_var *data, char *dest)
+int retry_chdir(t_var *data, char *dest)
 {
 	int		len;
 	char	*corrected_dest;
 
-	len = ft_strlen(data->pwd) - 1;
-	if (data->pwd[len] == '/')
-		len--;
-	while (--len && data->pwd[len] != '/')
-		continue ;
 	if (ft_strncmp("..", dest, 3) == 0 || ft_strncmp("../", dest, 4) == 0)
+	{
+		len = ft_strlen(data->pwd) - 1;
+		if (data->pwd[len] == '/')
+			len--;
+		while (--len > 0 && data->pwd[len] != '/')
+			continue ;
 		corrected_dest = ft_substr(data->pwd, 0, len);
-	else
-		corrected_dest = ft_strdup(dest);
-	return (corrected_dest);
+		if (!corrected_dest)
+			malloc_failed(data);
+		return (chdir(corrected_dest));
+	}
+	return (-1);
 }
 
 void	ft_cd(t_var *data)
 {
 	char	*dest;
-	char	*corrected_dest;
 
 	data->exit_code = EXIT_SUCCESS;
 	dest = get_dest(data);
@@ -113,17 +123,13 @@ void	ft_cd(t_var *data)
 		data->exit_code = EXIT_FAILURE;
 		return ;
 	}
-	corrected_dest = get_corrected_dest(data, dest);
-	if (!corrected_dest)
-		malloc_failed(data);
-	if (chdir(corrected_dest) == -1)
+	if (chdir(dest) == -1 && ((errno == EACCES && retry_chdir(data, dest) == -1)
+		|| errno != EACCES))
 	{
 		print_error(4, "minishell: cd: ", dest, ": ", strerror(errno));
 		data->exit_code = EXIT_FAILURE;
-		ft_free(&corrected_dest);
 		return ;
 	}
-	ft_free(&corrected_dest);
 	if (cd_in_env(data) == MALLOC_FAIL)
 		malloc_failed(data);
 }

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/05 12:33:28 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 12:42:52 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ typedef struct s_var
 	char	*prompt;
 	char	**env;
 	int		proc_count;
-	t_token	*here_doc_filename;
+	char	*here_doc_filename;
 	bool	missing_quote;
 	int		fd_to_write;
 	int		to_join;
@@ -160,6 +160,7 @@ typedef enum e_signal_state
 //init
 void		init(t_var *data);
 void		get_prompt(t_var *data);
+char		*safe_getcwd(t_var *data);
 
 //utils2
 void		read_input(t_var *data);

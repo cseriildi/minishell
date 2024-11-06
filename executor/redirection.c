@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/05 12:39:18 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 13:20:33 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,10 @@ bool	open_redins(t_var *data, t_exec *exec, int *fd)
 	temp = exec;
 	while (temp != NULL)
 	{
-		if (temp->type == RED_IN)
+		if (temp->type == RED_IN || temp->type == HERE_DOC)
 		{
 			safe_close(fd);
 			*fd = safe_open(temp->data, READ, data);
-		}
-		else if (temp->type == HERE_DOC)
-		{
-			safe_close(fd);
-			*fd = safe_open(data->here_doc_filename->content, READ, data);
 		}
 		else
 		{

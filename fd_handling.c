@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/05 12:33:46 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 13:14:50 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,26 +42,34 @@ void	safe_close(int *fd)
 
 void	delete_file(t_var *data)
 {
-	t_token	*temp;
-
-	temp = data->here_doc_filename;
-	while (temp != NULL)
+	t_exec	*curr;
+	t_exec	*top;
+	
+	top = data->exec;
+	while (top)
 	{
-		if (temp->content == NULL
-			|| access(temp->content, F_OK) == -1)
+		curr = top;
+		while (curr != NULL)
 		{
-			temp = temp->next;
-			continue ;
+			if (curr->type == HERE_DOC)
+			{
+				if (curr->data == NULL
+					|| access(curr->data, F_OK) == -1)
+				{
+					curr = curr->next;
+					continue ;
+				}
+				if (unlink(curr->data) == -1)
+				{
+					print_error(4, "minishell: ",
+						curr->data, ": ", strerror(errno));
+					data->exit_code = UNLINK_FAIL;
+				}
+			}
+			curr = curr->down;
 		}
-		if (unlink(temp->content) == -1)
-		{
-			print_error(4, "minishell: ",
-				temp->content, ": ", strerror(errno));
-			data->exit_code = UNLINK_FAIL;
-		}
-		temp = temp->next;
+		top = top->next;
 	}
-	free_tokens(&data->here_doc_filename);
 }
 
 void	safe_dup2(int *old_fd, int new_fd, t_var *data)
