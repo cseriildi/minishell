@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_split.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 11:07:54 by pvass             #+#    #+#             */
-/*   Updated: 2024/11/06 14:34:57 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/06 15:57:36 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	ccc(char const *str, char c)
 	return (counter);
 }
 
-char **count_w_create(char *str, char c)
+char	**count_w_create(char *str, char c)
 {
 	int		count;
 	int		i;
@@ -58,9 +58,9 @@ char **count_w_create(char *str, char c)
 	return (words);
 }
 
-char **path_split(char *str, char c)
+char	**path_split(char *str, char c)
 {
-    char	**words;
+	char	**words;
 	int		i;
 	int		j;
 
@@ -84,15 +84,5 @@ char **path_split(char *str, char c)
 		str++;
 	}
 	words[i][j++] = *str;
-	return (words[i+1] = NULL, words);
-}
-void print_char_array(char **array)
-{
-    int i = 0;
-
-    while (array[i] != NULL)
-	{
-        printf("{%s}\n", array[i]);
-        i++;
-    }
+	return (words[i + 1] = NULL, words);
 }

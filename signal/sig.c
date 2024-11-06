@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:44:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/11/06 13:34:40 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 15:08:25 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,6 @@ void	handle_signal_util_2(int signo, t_var *data)
 {
 	if (signo == SIGQUIT)
 	{
-		if (data->is_heredoc == TRUE)
-		{
-			//write(STDERR_FILENO, ">   \b\b", 7);
-			//rl_replace_line("", 0);
-			return ;
-		}
 		if (data->pid != 0 && data->proc_count != 0
 			&& signal_homemade_check(data) == 0)
 		{
@@ -100,7 +94,8 @@ void	handle_signal_std(int signo, siginfo_t *info, void *context)
 		data = context;
 		return ;
 	}
-	data->exit_code = 128 + signo;
+	if (data->proc_count == 0)
+		data->exit_code = 128 + signo;
 	handle_signal_util_1(signo, data);
 	handle_signal_util_2(signo, data);
 	if (signo == SIGUSR1)

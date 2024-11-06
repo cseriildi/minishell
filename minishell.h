@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 14:42:02 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 16:01:57 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_var
 	t_token	*command_list;
 	t_token	*heredoc_input;
 	bool	is_heredoc;
+	char	*limiter;
 	char	**cmd_list;
 	char	*line;
 	int		index;
@@ -112,7 +113,6 @@ typedef struct s_var
 	char	*prompt;
 	char	**env;
 	int		proc_count;
-	char	*here_doc_filename;
 	bool	missing_quote;
 	int		fd_to_write;
 	int		to_join;
@@ -218,7 +218,6 @@ bool		is_ll_overflow(t_var *data, char *str);
 void		setup_signal(int signo, t_sig state);
 void		handle_signal_std(int signo, siginfo_t *info, void *context);
 
-void		print_char_array(char **array);
-char 		**path_split(char *str, char c);
+char		**path_split(char *str, char c);
 
 #endif

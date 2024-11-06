@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 13:56:11 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 16:02:21 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,11 @@ char	*safe_getcwd(t_var *data)
 		return (NULL);
 	}
 	else
-		return(malloc_failed(data), NULL);
+		return (malloc_failed(data), NULL);
 }
 
-char	*get_dest(t_var *data)
+char	*get_dest(t_var *data, char	*dest, char	*tmp)
 {
-	char	*dest;
-	char	*tmp;
-
 	dest = data->cmd_list[1];
 	if (!data->cmd_list[1])
 	{
@@ -92,7 +89,7 @@ int	cd_in_env(t_var *data)
 	return (EXIT_SUCCESS);
 }
 
-int retry_chdir(t_var *data, char *dest)
+int	retry_chdir(t_var *data, char *dest)
 {
 	int		len;
 	char	*corrected_dest;
@@ -117,14 +114,14 @@ void	ft_cd(t_var *data)
 	char	*dest;
 
 	data->exit_code = EXIT_SUCCESS;
-	dest = get_dest(data);
+	dest = get_dest(data, NULL, NULL);
 	if (!dest)
 	{
 		data->exit_code = EXIT_FAILURE;
 		return ;
 	}
 	if (chdir(dest) == -1 && ((errno == EACCES && retry_chdir(data, dest) == -1)
-		|| errno != EACCES))
+			|| errno != EACCES))
 	{
 		print_error(4, "minishell: cd: ", dest, ": ", strerror(errno));
 		data->exit_code = EXIT_FAILURE;

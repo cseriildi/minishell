@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 14:41:48 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 15:54:17 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,17 @@ void	delete_file(t_var *data)
 {
 	t_exec	*curr;
 	t_exec	*top;
-	
+
 	top = data->exec;
 	while (top)
 	{
 		curr = top;
-		while (curr != NULL)
+		while (curr)
 		{
 			if (curr->type == HERE_DOC)
 			{
-				if (curr->data == NULL
-					|| access(curr->data, F_OK) == -1)
-				{
-					curr = curr->next;
-					continue ;
-				}
-				if (unlink(curr->data) == -1)
+				if (curr->data && access(curr->data, F_OK) != -1
+					&& unlink(curr->data) == -1)
 				{
 					print_error(4, "minishell: ",
 						curr->data, ": ", strerror(errno));

@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 13:15:35 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 15:41:17 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,12 +49,13 @@ void	free_all(t_var *data)
 {
 	if (data)
 	{
+		delete_file(data);
 		free_tokens(&data->tokens);
 		free_tokens(&data->command_list);
 		free_tokens(&data->heredoc_input);
 		ft_free(&data->prompt);
 		ft_free(&data->line);
-		delete_file(data);
+		ft_free(&data->limiter);
 		free_array(&data->cmd_list);
 		free_exec_all(&(data->exec));
 		safe_close(&data->pipe1_fd[0]);
@@ -77,9 +78,8 @@ void	safe_exit(t_var *data, int exit_code)
 		free_array(&data->env);
 		free_table(&(data->p_table));
 		free_all(data);
-		//get_next_line(-1);
-		free(data);
 		get_next_line(-1);
+		free(data);
 	}
 	exit(exit_code);
 }

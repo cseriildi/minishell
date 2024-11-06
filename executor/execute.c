@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 13:43:21 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 16:02:30 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,9 @@
 void	execute(t_var *data)
 {
 	t_exec	*temp;
-	
+
 	temp = data->exec;
-	if (heredoc(data, temp) == false)
-		return ;
-	if (temp == NULL /* || heredoc(data, temp) == FALSE */)
+	if (temp == NULL || heredoc(data, temp) == false)
 		return ;
 	if (temp->next == NULL)
 		only_one_sequence(data, temp);
@@ -29,17 +27,11 @@ void	execute(t_var *data)
 		temp = temp->next;
 		while (temp->next != NULL)
 		{
-			/* if (heredoc(data, temp) == FALSE)
-				return ; */
 			middle_sequence(data, temp);
 			temp = temp->next;
 		}
 		if (temp->next == NULL)
-		{
-			/* if (heredoc(data, temp) == FALSE)
-				return ; */
 			last_sequence(data, temp);
-		}
 	}
 }
 
