@@ -6,7 +6,7 @@
 #    By: pvass <pvass@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/16 14:33:31 by icseri            #+#    #+#              #
-#    Updated: 2024/10/29 21:07:47 by pvass            ###   ########.fr        #
+#    Updated: 2024/11/06 11:38:56 by pvass            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ SRCS = main.c \
 		utils.c \
 		utils2.c \
 		init.c \
+		path_split.c \
 		exec_utils.c \
 		p_table_utils.c \
 		fd_handling.c \

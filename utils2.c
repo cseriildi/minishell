@@ -6,7 +6,7 @@
 /*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:55:59 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/10/29 22:10:15 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/06 14:36:08 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,21 @@
 
 char	*ft_strjoin2(char *str1, char *str2, char *delimiter)
 {
-	char	*tmp;
-	char	*new_str;
+	char		*tmp;
+	char		*tmp2;
+	char		*new_str;
 
 	tmp = ft_strjoin(str1, delimiter);
 	if (!tmp)
 		return (NULL);
+	if (tmp[1] == '\0')
+	{
+		tmp2 = tmp;
+		tmp = ft_strjoin(".", tmp2);
+		free(tmp2);
+		if (!tmp)
+			return (NULL);
+	}
 	new_str = ft_strjoin(tmp, str2);
 	free(tmp);
 	if (!new_str)

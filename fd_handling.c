@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 13:14:50 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/06 14:41:48 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	safe_open(char *filename, int mode, t_var *data)
 		fd = open(filename, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	else
 		return (-1);
-	if (fd == -1 && access(filename, X_OK) == -1)
+	if (fd == -1)
 	{
 		print_error(4, "minishell: ", filename, ": ", strerror(errno));
 		data->exit_code = 1;
