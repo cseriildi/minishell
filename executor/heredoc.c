@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 16:02:42 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/12 20:44:51 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,15 +80,24 @@ bool	do_heredoc(t_var *data, t_exec *exec, bool expanding)
 	generate_random_filename(data, exec);
 	fd_to_write = safe_open(exec->data, CREATE, data);
 	data->is_heredoc = true;
+	sig_hand(HEREDOC);
 	while (fd_to_write != -1)
 	{
 		line = read_heredoc(data->limiter, len);
 		if (line == NULL)
 			break ;
-		if (data->is_heredoc == FALSE)
-			return (safe_close(&fd_to_write), ft_free(&line), false);
+		if (g_sig_num == SIGINT)
+		{
+			ft_free(&line);
+			data->exit_code = 130;
+			sig_hand(MAIN);
+			data->is_heredoc = false;
+			safe_close(&fd_to_write);
+			return (false);
+		}
 		write_to_temp_heredoc(data, line, expanding, &fd_to_write);
 	}
+	sig_hand(MAIN);
 	data->is_heredoc = false;
 	safe_close(&fd_to_write);
 	return (true);

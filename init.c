@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/11/06 11:10:48 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/12 18:45:18 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ void	init(t_var *data)
 	if (data->p_table == NULL)
 		malloc_failed(data);
 	init_env(data);
-	handle_signal_std(0, NULL, data);
-	sig_setup(SIGINT, SIG_STANDARD);
-	sig_setup(SIGTERM, SIG_STANDARD);
-	sig_setup(SIGUSR1, SIG_STANDARD);
-	sig_setup(SIGQUIT, SIG_IGNORE);
-	sig_setup(SIGPIPE, SIG_STANDARD);
+//	handle_signal_std(0, NULL, data);
+	//sig_setup(SIGINT, SIG_STANDARD);
+	//sig_setup(SIGTERM, SIG_STANDARD);
+	//sig_setup(SIGUSR1, SIG_STANDARD);
+	//sig_setup(SIGQUIT, SIG_IGNORE);
+	//sig_setup(SIGPIPE, SIG_STANDARD);
 }
 
 void	get_prompt(t_var *data)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 16:01:57 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/12 20:22:44 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,15 @@
 # define CREATE_OR_APPEND 2
 # define WHITE_SPACES " \t\n\v\f\r"
 # define SEPARATORS " \t\n\v\f\r|><"
+
+extern int	g_sig_num;
+
+typedef enum s_sigstatus
+{
+	MAIN,
+	HEREDOC,
+	IN_COMMAND,
+}	t_sigstatus;
 
 typedef enum s_token_type
 {
@@ -219,5 +228,7 @@ void		sig_setup(int signo, t_sig state);
 void		handle_signal_std(int signo, siginfo_t *info, void *context);
 
 char		**path_split(char *str, char c);
+
+void		sig_hand(int type);
 
 #endif

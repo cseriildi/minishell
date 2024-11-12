@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:22 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 16:02:30 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/12 20:51:48 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,15 @@ void	execute(t_var *data)
 	t_exec	*temp;
 
 	temp = data->exec;
+	if (g_sig_num == SIGINT)
+		data->exit_code = 130;
+	sig_hand(HEREDOC);
 	if (temp == NULL || heredoc(data, temp) == false)
+	{
+		sig_hand(MAIN);
 		return ;
+	}
+	sig_hand(MAIN);
 	if (temp->next == NULL)
 		only_one_sequence(data, temp);
 	else

@@ -3,19 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   sig.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:44:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/11/06 15:08:25 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/12 18:44:32 by pvass            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "signals.h"
 
-void	sig_setup(int signo, t_sig state)
+/* void	sig_setup(int signo, t_sig state)
 {
 	struct sigaction	sa;
 
+	//sigemptyset(sa);
 	if(state == SIG_STANDARD)
 	{
 		sa.sa_flags = SA_RESTART | SA_SIGINFO;
@@ -33,8 +34,8 @@ void	sig_setup(int signo, t_sig state)
 	}
 	if (sigaction(signo, &sa, NULL) != 0)
 		print_error(1, "The signal is not supported");
-}
-
+} */
+/* 
 bool	signal_homemade_check(t_var *data)
 {
 	char	*temp;
@@ -96,9 +97,9 @@ void	handle_signal_std(int signo, siginfo_t *info, void *context)
 		data->exit_code = 128 + signo;
 	handle_signal_util_1(signo, data);
 	handle_signal_util_2(signo, data);
-	if (signo == SIGUSR1)
+	 if (signo == SIGUSR1)
 		safe_exit(data, data->exit_code);
 	else if ((signo == SIGTERM && data->pid != 0)
 		|| signo == SIGPIPE)
 		safe_exit(data, 128 + signo);
-}
+} */
