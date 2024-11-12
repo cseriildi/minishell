@@ -29,11 +29,11 @@ void	init(t_var *data)
 		malloc_failed(data);
 	init_env(data);
 	handle_signal_std(0, NULL, data);
-	setup_signal(SIGINT, SIG_STANDARD);
-	setup_signal(SIGTERM, SIG_STANDARD);
-	setup_signal(SIGUSR1, SIG_STANDARD);
-	setup_signal(SIGQUIT, SIG_IGNORE);
-	setup_signal(SIGPIPE, SIG_STANDARD);
+	sig_setup(SIGINT, SIG_STANDARD);
+	sig_setup(SIGTERM, SIG_STANDARD);
+	sig_setup(SIGUSR1, SIG_STANDARD);
+	sig_setup(SIGQUIT, SIG_IGNORE);
+	sig_setup(SIGPIPE, SIG_STANDARD);
 }
 
 void	get_prompt(t_var *data)

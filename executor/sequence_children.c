@@ -14,16 +14,16 @@
 
 void	only_one_seq_child(t_var *data, t_exec *exec)
 {
-	setup_signal(SIGINT, SIG_DEFAULT);
-	setup_signal(SIGQUIT, SIG_STANDARD);
+	sig_setup(SIGINT, SIG_DEFAULT);
+	sig_setup(SIGQUIT, SIG_STANDARD);
 	exec_sequence(data, exec, STDIN_FILENO, STDOUT_FILENO);
 	safe_exit(data, data->exit_code);
 }
 
 void	last_sequence_child(t_var *data, t_exec *exec)
 {
-	setup_signal(SIGINT, SIG_DEFAULT);
-	setup_signal(SIGQUIT, SIG_STANDARD);
+	sig_setup(SIGINT, SIG_DEFAULT);
+	sig_setup(SIGQUIT, SIG_STANDARD);
 	safe_close(&data->pipe1_fd[1]);
 	exec_sequence(data, exec, data->pipe1_fd[0], STDOUT_FILENO);
 	safe_exit(data, data->exit_code);

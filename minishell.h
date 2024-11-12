@@ -215,7 +215,7 @@ char		*ft_lltoa(long long nb);
 bool		is_ll_overflow(t_var *data, char *str);
 
 //signal
-void		setup_signal(int signo, t_sig state);
+void		sig_setup(int signo, t_sig state);
 void		handle_signal_std(int signo, siginfo_t *info, void *context);
 
 char		**path_split(char *str, char c);

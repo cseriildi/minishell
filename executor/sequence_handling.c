@@ -30,9 +30,9 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 			only_one_seq_child(data, exec);
 		else
 		{
-			setup_signal(SIGQUIT, SIG_STANDARD);
+			sig_setup(SIGQUIT, SIG_STANDARD);
 			waitpid(data->pid, &data->exit_status, 0);
-			setup_signal(SIGQUIT, SIG_IGNORE);
+			sig_setup(SIGQUIT, SIG_IGNORE);
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
 			else if (WIFSIGNALED(data->exit_status))
@@ -54,14 +54,14 @@ void	first_sequence(t_var *data, t_exec *exec)
 	}
 	if (data->pid == 0)
 	{
-		setup_signal(SIGINT, SIG_DEFAULT);
-		setup_signal(SIGQUIT, SIG_STANDARD);
+		sig_setup(SIGINT, SIG_DEFAULT);
+		sig_setup(SIGQUIT, SIG_STANDARD);
 		safe_close(&data->pipe1_fd[0]);
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, data->exit_code);
 	}
 	else
-		setup_signal(SIGQUIT, SIG_STANDARD);
+		sig_setup(SIGQUIT, SIG_STANDARD);
 }
 
 void	middle_sequence(t_var *data, t_exec *exec)
@@ -77,8 +77,8 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	}
 	if (data->pid == 0)
 	{
-		setup_signal(SIGINT, SIG_DEFAULT);
-		setup_signal(SIGQUIT, SIG_STANDARD);
+		sig_setup(SIGINT, SIG_DEFAULT);
+		sig_setup(SIGQUIT, SIG_STANDARD);
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);
 		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
@@ -116,7 +116,7 @@ void	last_sequence(t_var *data, t_exec *exec)
 			data->exit_code = WTERMSIG(data->exit_status) + 128;
 		while (--data->proc_count > 0)
 			wait(NULL);
-		setup_signal(SIGQUIT, SIG_IGNORE);
+		sig_setup(SIGQUIT, SIG_IGNORE);
 	}
 }
 
