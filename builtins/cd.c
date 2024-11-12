@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 10:52:08 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 16:02:21 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/12 16:32:42 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ char	*get_dest(t_var *data, char	*dest, char	*tmp)
 			return (print_error(1, "minishell: cd: OLDPWD not set"), NULL);
 		ft_putendl_fd(dest, data->fd_to_write);
 	}
-	else if (ft_strncmp(data->cmd_list[1], ".", 2) == 0
+	else if (!*data->cmd_list[1] || ft_strncmp(data->cmd_list[1], ".", 2) == 0
 		|| ft_strncmp(data->cmd_list[1], "./", 3) == 0)
 	{
 		tmp = safe_getcwd(data);
@@ -120,6 +120,8 @@ void	ft_cd(t_var *data)
 		data->exit_code = EXIT_FAILURE;
 		return ;
 	}
+	if (!*dest)
+		dest = ".";
 	if (chdir(dest) == -1 && ((errno == EACCES && retry_chdir(data, dest) == -1)
 			|| errno != EACCES))
 	{
