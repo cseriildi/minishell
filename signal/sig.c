@@ -12,26 +12,24 @@
 
 #include "signals.h"
 
-void	setup_signal(int signo, t_sig state)
+void	sig_setup(int signo, t_sig state)
 {
 	struct sigaction	sa;
 
-	sigemptyset(&sa.sa_mask);
-	if (state == SIG_DEFAULT || state == SIG_IGNORE)
-	{
-		sa.sa_flags = SA_RESTART;
-		if (state == SIG_DEFAULT)
-			sa.sa_handler = SIG_DFL;
-		else if (state == SIG_IGNORE)
-			sa.sa_handler = SIG_IGN;
-	}
-	else
+	if(state == SIG_STANDARD)
 	{
 		sa.sa_flags = SA_RESTART | SA_SIGINFO;
-		if (state == SIG_STANDARD)
-		{
-			sa.sa_sigaction = handle_signal_std;
-		}
+		sa.sa_sigaction = handle_signal_std;
+	}
+	else if (state == SIG_DEFAULT)
+	{
+		sa.sa_flags = SA_RESTART;
+		sa.sa_handler = SIG_DFL;
+	}
+	else if (state == SIG_IGNORE)
+	{
+		sa.sa_flags = SA_RESTART;
+		sa.sa_handler = SIG_IGN;
 	}
 	if (sigaction(signo, &sa, NULL) != 0)
 		print_error(1, "The signal is not supported");
