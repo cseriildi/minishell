@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/13 09:37:58 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/11/13 14:07:44 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	generate_random_filename(t_var *data, t_exec *exec)
 	else
 	{
 		i = 4;
-		while (++i < 24)
+		while (exec->data[++i])
 			exec->data[i] = ft_abs(exec->data[i]) % 25 + 'A';
 	}
 	safe_close(&rand_fd);
@@ -64,6 +64,7 @@ void	write_to_temp_heredoc(t_var *data, char *line, bool expanding, int *fd)
 
 void	reset(t_var *data, int *fd_to_write)
 {
+	ft_free(&data->limiter);
 	sig_hand(MAIN);
 	data->is_heredoc = false;
 	safe_close(fd_to_write);

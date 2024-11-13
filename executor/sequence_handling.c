@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   sequence_handling.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/11/13 09:11:27 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/11/13 15:56:23 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include <unistd.h>
 
 void	only_one_sequence(t_var *data, t_exec *exec)
 {
@@ -33,10 +34,7 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 			sig_hand(IN_COMMAND);
 			waitpid(data->pid, &data->exit_status, 0);
 			sig_hand(MAIN);
-			if (WIFEXITED(data->exit_status))
-				data->exit_code = WEXITSTATUS(data->exit_status);
-			else if (WIFSIGNALED(data->exit_status))
-				data->exit_code = WTERMSIG(data->exit_status) + 128;
+			check_status(data);
 		}
 	}
 }
@@ -54,7 +52,7 @@ void	first_sequence(t_var *data, t_exec *exec)
 	}
 	if (data->pid == 0)
 	{
-		sig_hand(IN_COMMAND);
+		sig_hand(CHILD);
 		safe_close(&data->pipe1_fd[0]);
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, data->exit_code);
@@ -76,7 +74,7 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	}
 	if (data->pid == 0)
 	{
-		sig_hand(IN_COMMAND);
+		sig_hand(CHILD);
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);
 		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
@@ -108,12 +106,13 @@ void	last_sequence(t_var *data, t_exec *exec)
 		safe_close(&data->pipe1_fd[0]);
 		safe_close(&data->pipe1_fd[1]);
 		waitpid(data->pid, &data->exit_status, 0);
-		if (WIFEXITED(data->exit_status))
-			data->exit_code = WEXITSTATUS(data->exit_status);
-		else if (WIFSIGNALED(data->exit_status))
-			data->exit_code = WTERMSIG(data->exit_status) + 128;
+		check_status(data);
 		while (--data->proc_count > 0)
-			wait(NULL);
+		{
+			wait(&data->exit_status);
+			if (WIFSIGNALED(data->exit_status))
+				write(STDERR_FILENO, "\n", 1);
+		}
 		sig_hand(MAIN);
 	}
 }

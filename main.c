@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:53 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/13 09:15:22 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/11/13 15:49:15 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	main(void)
 		}
 		parse(data);
 		execute(data);
+		delete_file(data);
 		free_all(data);
 	}
 }

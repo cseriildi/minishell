@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/20 11:50:26 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 15:41:17 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/13 15:48:55 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	free_all(t_var *data)
 {
 	if (data)
 	{
-		delete_file(data);
 		free_tokens(&data->tokens);
 		free_tokens(&data->command_list);
 		free_tokens(&data->heredoc_input);

@@ -6,11 +6,12 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:57:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 13:20:33 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/13 15:52:51 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+#include <unistd.h>
 
 bool	open_redins(t_var *data, t_exec *exec, int *fd)
 {
@@ -19,7 +20,12 @@ bool	open_redins(t_var *data, t_exec *exec, int *fd)
 	temp = exec;
 	while (temp != NULL)
 	{
-		if (temp->type == RED_IN || temp->type == HERE_DOC)
+		if (temp->type == RED_IN)
+		{
+			safe_close(fd);
+			*fd = safe_open(temp->data, READ, data);
+		}
+		if (temp->type == HERE_DOC && data->cmd_list && data->cmd_list[0])
 		{
 			safe_close(fd);
 			*fd = safe_open(temp->data, READ, data);

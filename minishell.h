@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/13 09:20:06 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/11/13 15:56:21 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define _POSIX_C_SOURCE 200112L
 # define _GNU_SOURCE
 
 # include "libft/libft.h"
@@ -49,6 +48,7 @@ typedef enum s_sigstatus
 	MAIN,
 	HEREDOC,
 	IN_COMMAND,
+	CHILD,
 }	t_sigstatus;
 
 typedef enum s_token_type
@@ -183,6 +183,7 @@ void		execute(t_var *data);
 void		init_env(t_var *data);
 char		*ft_getenv(t_var *data, char *var_name, bool is_safe);
 char		**path_split(char *str, char c);
+void		check_status(t_var *data);
 
 //exec_utils
 void		free_table(t_table **p_table);
@@ -206,5 +207,6 @@ void		sigint_here(int sig);
 void		sigint_in_cmd(int sig);
 void		sigquit_in_cmd(int sig);
 void		sig_hand(int type);
+bool		signal_homemade_check(t_var *data);
 
 #endif

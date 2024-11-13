@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
+/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:44:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/11/13 09:38:54 by cseriildii       ###   ########.fr       */
+/*   Updated: 2024/11/13 15:52:28 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include <signal.h>
 
 void	sigint_main(int sig)
 {
@@ -69,6 +70,11 @@ void	sig_hand(int type)
 		signal(SIGQUIT, SIG_IGN);
 	}
 	if (type == IN_COMMAND)
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, sigquit_in_cmd);
+	}
+	if (type == CHILD)
 	{
 		signal(SIGINT, sigint_in_cmd);
 		signal(SIGQUIT, sigquit_in_cmd);

@@ -6,10 +6,11 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 11:50:15 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 15:54:17 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/13 15:46:28 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft/libft.h"
 #include "minishell.h"
 
 int	safe_open(char *filename, int mode, t_var *data)
@@ -56,7 +57,7 @@ void	delete_file(t_var *data)
 				if (curr->data && access(curr->data, F_OK) != -1
 					&& unlink(curr->data) == -1)
 				{
-					print_error(4, "minishell: ",
+					print_error(4, "minishellxx: ",
 						curr->data, ": ", strerror(errno));
 					data->exit_code = UNLINK_FAIL;
 				}
