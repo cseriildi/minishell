@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 12:32:46 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/06 12:46:28 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/13 09:34:16 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ bool	is_builtin(char *cmd);
 char	**get_paths(t_var *data);
 char	*get_abs_cmd(t_var *data, char *cmd);
 void	fix_content(t_var *data, t_exec *seq, bool expandable);
-int		expand(char *content, t_var *data, bool starts_with_dollar);
+int		expand(char *content, t_var *data, bool is_quoted);
 bool	redirect_in(t_var *data, t_exec *tree, int *read_fd);
 bool	redirect_out(t_var *data, t_exec *tree, int *write_fd);
 bool	is_directory(const char *path);
@@ -37,8 +37,8 @@ bool	heredoc(t_var *data, t_exec *exec);
 int		get_chunk_size(char *str);
 
 t_token	*create_new_token(char *content, int type);
-void	add_token_to_back(t_token **lst, t_token *new);
-void	add_token_to_front(t_token **lst, t_token *new);
+void	add_token_to_back(t_token **lst, t_token *new_token);
+void	add_token_to_front(t_token **lst, t_token *new_token);
 void	fix_exec(t_var *data, t_exec *exec);
 int		add_chunk(t_var *data, char *str, bool to_join);
 t_exec	*create_exec_node(char *content);

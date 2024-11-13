@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:58:59 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/12 20:44:51 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/13 09:37:58 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,10 @@ void	generate_random_filename(t_var *data, t_exec *exec)
 	safe_close(&rand_fd);
 }
 
-void	print_heredoc(t_var *data, int fd)
+void	write_to_temp_heredoc(t_var *data, char *line, bool expanding, int *fd)
 {
 	t_token	*current;
 
-	current = data->heredoc_input;
-	while (current != NULL)
-	{
-		ft_putendl_fd(current->content, fd);
-		current = current->next;
-	}
-	free_tokens(&data->heredoc_input);
-}
-
-void	write_to_temp_heredoc(t_var *data, char *line, bool expanding, int *fd)
-{
 	if (expanding == true)
 	{
 		if (expand(line, data, false) == MALLOC_FAIL)
@@ -57,7 +46,13 @@ void	write_to_temp_heredoc(t_var *data, char *line, bool expanding, int *fd)
 			ft_free(&line);
 			malloc_failed(data);
 		}
-		print_heredoc(data, *fd);
+		current = data->heredoc_input;
+		while (current != NULL)
+		{
+			ft_putendl_fd(current->content, *fd);
+			current = current->next;
+		}
+		free_tokens(&data->heredoc_input);
 	}
 	else
 	{
@@ -65,6 +60,13 @@ void	write_to_temp_heredoc(t_var *data, char *line, bool expanding, int *fd)
 		ft_putstr_fd("\n", *fd);
 		ft_free(&line);
 	}
+}
+
+void	reset(t_var *data, int *fd_to_write)
+{
+	sig_hand(MAIN);
+	data->is_heredoc = false;
+	safe_close(fd_to_write);
 }
 
 bool	do_heredoc(t_var *data, t_exec *exec, bool expanding)
@@ -88,19 +90,12 @@ bool	do_heredoc(t_var *data, t_exec *exec, bool expanding)
 			break ;
 		if (g_sig_num == SIGINT)
 		{
-			ft_free(&line);
 			data->exit_code = 130;
-			sig_hand(MAIN);
-			data->is_heredoc = false;
-			safe_close(&fd_to_write);
-			return (false);
+			return (ft_free(&line), reset(data, &fd_to_write), false);
 		}
 		write_to_temp_heredoc(data, line, expanding, &fd_to_write);
 	}
-	sig_hand(MAIN);
-	data->is_heredoc = false;
-	safe_close(&fd_to_write);
-	return (true);
+	return (reset(data, &fd_to_write), true);
 }
 
 bool	heredoc(t_var *data, t_exec *seq)
@@ -109,6 +104,7 @@ bool	heredoc(t_var *data, t_exec *seq)
 	t_exec	*top;
 	bool	expandable;
 
+	sig_hand(HEREDOC);
 	top = seq;
 	while (top)
 	{
@@ -121,11 +117,11 @@ bool	heredoc(t_var *data, t_exec *seq)
 					&& !ft_strchr(current->data, '\"');
 				fix_content(data, current, false);
 				if (do_heredoc(data, current, expandable) == FALSE)
-					return (FALSE);
+					return (sig_hand(MAIN), false);
 			}
 			current = current->down;
 		}
 		top = top->next;
 	}
-	return (TRUE);
+	return (sig_hand(MAIN), true);
 }

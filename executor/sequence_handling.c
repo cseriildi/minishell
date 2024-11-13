@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sequence_handling.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/11/12 20:30:55 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/13 09:11:27 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,9 @@ void	only_one_sequence(t_var *data, t_exec *exec)
 			only_one_seq_child(data, exec);
 		else
 		{
-			//sig_setup(SIGQUIT, SIG_STANDARD);
 			sig_hand(IN_COMMAND);
 			waitpid(data->pid, &data->exit_status, 0);
 			sig_hand(MAIN);
-			//sig_setup(SIGQUIT, SIG_IGNORE);
 			if (WIFEXITED(data->exit_status))
 				data->exit_code = WEXITSTATUS(data->exit_status);
 			else if (WIFSIGNALED(data->exit_status))
@@ -57,8 +55,6 @@ void	first_sequence(t_var *data, t_exec *exec)
 	if (data->pid == 0)
 	{
 		sig_hand(IN_COMMAND);
-		//sig_setup(SIGINT, SIG_DEFAULT);
-		//sig_setup(SIGQUIT, SIG_STANDARD);
 		safe_close(&data->pipe1_fd[0]);
 		exec_sequence(data, exec, STDIN_FILENO, data->pipe1_fd[1]);
 		safe_exit(data, data->exit_code);
@@ -81,8 +77,6 @@ void	middle_sequence(t_var *data, t_exec *exec)
 	if (data->pid == 0)
 	{
 		sig_hand(IN_COMMAND);
-		//sig_setup(SIGINT, SIG_DEFAULT);
-		//sig_setup(SIGQUIT, SIG_STANDARD);
 		safe_close(&data->pipe1_fd[1]);
 		safe_close(&data->pipe2_fd[0]);
 		exec_sequence(data, exec, data->pipe1_fd[0], data->pipe2_fd[1]);
@@ -121,7 +115,6 @@ void	last_sequence(t_var *data, t_exec *exec)
 		while (--data->proc_count > 0)
 			wait(NULL);
 		sig_hand(MAIN);
-		//sig_setup(SIGQUIT, SIG_IGNORE);
 	}
 }
 

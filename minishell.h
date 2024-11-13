@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 14:33:28 by icseri            #+#    #+#             */
-/*   Updated: 2024/11/12 20:22:44 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/13 09:20:06 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,14 +93,6 @@ typedef struct s_exec
 	struct s_exec	*next;
 }	t_exec;
 
-typedef struct s_env
-{
-	char			*line;
-	char			*key;
-	char			*content;
-	struct s_env	*next;
-}	t_env;
-
 typedef struct s_var
 {
 	t_token	*tokens;
@@ -125,15 +117,7 @@ typedef struct s_var
 	bool	missing_quote;
 	int		fd_to_write;
 	int		to_join;
-	int		has_child;
 }	t_var;
-
-typedef struct s_signals
-{
-	t_var	*data;
-	pid_t	child_pid;
-	int		interactive;
-}	t_signals;
 
 typedef enum s_err
 {
@@ -158,14 +142,6 @@ typedef struct s_stack
 	struct s_stack	*next;
 }	t_stack;
 
-typedef enum e_signal_state
-{
-	SIG_DEFAULT		= 0,
-	SIG_IGNORE,
-	SIG_STANDARD,
-	SIG_RECORD
-}	t_sig;
-
 //init
 void		init(t_var *data);
 void		get_prompt(t_var *data);
@@ -175,7 +151,7 @@ char		*safe_getcwd(t_var *data);
 void		read_input(t_var *data);
 void		malloc_failed(t_var *data);
 char		*ft_strjoin2(char *str1, char *str2, char *delimiter);
-int			ft_abs(char c);
+int			ft_abs(int c);
 char		*read_heredoc(char *limiter, int len);
 
 //lexer
@@ -206,6 +182,7 @@ bool		is_builtin(char *cmd);
 void		execute(t_var *data);
 void		init_env(t_var *data);
 char		*ft_getenv(t_var *data, char *var_name, bool is_safe);
+char		**path_split(char *str, char c);
 
 //exec_utils
 void		free_table(t_table **p_table);
@@ -224,11 +201,10 @@ char		*ft_lltoa(long long nb);
 bool		is_ll_overflow(t_var *data, char *str);
 
 //signal
-void		sig_setup(int signo, t_sig state);
-void		handle_signal_std(int signo, siginfo_t *info, void *context);
-
-char		**path_split(char *str, char c);
-
+void		sigint_main(int sig);
+void		sigint_here(int sig);
+void		sigint_in_cmd(int sig);
+void		sigquit_in_cmd(int sig);
 void		sig_hand(int type);
 
 #endif

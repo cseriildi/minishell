@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pvass <pvass@student.42.fr>                +#+  +:+       +#+        */
+/*   By: cseriildii <cseriildii@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 13:15:09 by cseriildii        #+#    #+#             */
-/*   Updated: 2024/11/12 18:45:18 by pvass            ###   ########.fr       */
+/*   Updated: 2024/11/13 09:12:21 by cseriildii       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,10 @@ void	init(t_var *data)
 	data->pipe2_fd[1] = -1;
 	data->fd_to_write = STDOUT_FILENO;
 	data->to_join = 1;
-	data->has_child = 0;
 	data->p_table = create_table();
 	if (data->p_table == NULL)
 		malloc_failed(data);
 	init_env(data);
-//	handle_signal_std(0, NULL, data);
-	//sig_setup(SIGINT, SIG_STANDARD);
-	//sig_setup(SIGTERM, SIG_STANDARD);
-	//sig_setup(SIGUSR1, SIG_STANDARD);
-	//sig_setup(SIGQUIT, SIG_IGNORE);
-	//sig_setup(SIGPIPE, SIG_STANDARD);
 }
 
 void	get_prompt(t_var *data)
