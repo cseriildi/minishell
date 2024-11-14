@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/29 21:05:18 by pvass             #+#    #+#             */
-/*   Updated: 2024/11/13 15:56:36 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/14 12:20:39 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ void	check_status(t_var *data)
 	else if (WIFSIGNALED(data->exit_status))
 	{
 		data->exit_code = WTERMSIG(data->exit_status) + 128;
-		write(STDERR_FILENO, "\n", 1);
+		if (data->exit_code == 128 + SIGINT)
+			write(STDERR_FILENO, "\n", 1);
+		else if (WCOREDUMP(data->exit_status))
+			write(STDERR_FILENO, "Quit (core dumped)\n", 20);
 	}
 }

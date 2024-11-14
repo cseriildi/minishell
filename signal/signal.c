@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/28 10:44:14 by pvass             #+#    #+#             */
-/*   Updated: 2024/11/13 15:52:28 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/14 12:16:35 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ void	sigint_in_cmd(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(STDERR_FILENO, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		g_sig_num = sig;
@@ -50,7 +49,6 @@ void	sigquit_in_cmd(int sig)
 {
 	if (sig == SIGQUIT)
 	{
-		write(STDERR_FILENO, "Quit (core dumped)\n", 20);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 	}

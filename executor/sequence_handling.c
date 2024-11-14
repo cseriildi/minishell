@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 10:31:10 by pvass             #+#    #+#             */
-/*   Updated: 2024/11/13 15:56:23 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/14 12:50:58 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ void	last_sequence(t_var *data, t_exec *exec)
 		while (--data->proc_count > 0)
 		{
 			wait(&data->exit_status);
-			if (WIFSIGNALED(data->exit_status))
+			if (WIFSIGNALED(data->exit_status)
+				&& WTERMSIG(data->exit_status) == SIGINT)
 				write(STDERR_FILENO, "\n", 1);
 		}
 		sig_hand(MAIN);

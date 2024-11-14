@@ -6,7 +6,7 @@
 /*   By: icseri <icseri@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:38:19 by pvass             #+#    #+#             */
-/*   Updated: 2024/10/24 18:43:33 by icseri           ###   ########.fr       */
+/*   Updated: 2024/11/14 12:07:30 by icseri           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ bool	is_valid_var(t_var *data, char *line)
 	int		i;
 
 	i = 0;
-	if (line[i] && line[i] == '=')
+	if (!line[i] || line[i] == '=')
 	{
 		data->exit_code = 1;
 		print_error(3, "minishell: export: `",
